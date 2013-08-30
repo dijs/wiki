@@ -1,0 +1,63 @@
+Wiki = require "../build/wiki.min.js"
+assert = require "assert"
+
+Array.prototype.contains = (needle) ->
+	return this.indexOf(needle) isnt -1
+
+String.prototype.startsWith = (str) ->
+	return me.indexOf(str) is 0
+
+String.prototype.contains = (str) ->
+	return me.indexOf(str) isnt -1
+
+describe("Basic Tests |", () ->
+
+	it("Search should auto suggest an article", (done) ->
+		wait for results from Wiki.search "kevin bacon number"
+		assert results.contains "Six degrees of separation"
+		done()
+	)
+
+	it("Random should return the correct number of results", (done) ->
+		wait for results from Wiki.random 3
+		assert.equal results.length, 3
+		wait for results from Wiki.random()
+		assert.equal results.length, 1
+		done()
+	)
+
+	it("Get a page object from the page method", (done) ->
+		wait for page from Wiki.page "batman"
+		assert page exists
+		done()
+	)
+
+	it("Get the content from an article", (done) ->
+		wait for page from Wiki.page "world wide web"
+		wait for content from page.content()
+		assert content.contains "Tim Berners-Lee"
+		done()
+	)
+
+	it("Page should return an image list", (done) ->
+		wait for page from Wiki.page "joker comics"
+		wait for images from page.images()
+		assert images.contains "http://upload.wikimedia.org/wikipedia/en/f/f9/Manwholaughs.jpg"
+		done()
+	)
+
+	it("Page should return references", (done) ->
+		wait for page from Wiki.page "luke skywalker"
+		wait for ref from page.references()
+		assert ref.contains "http://www.starwars.com/databank/character/lukeskywalker/"
+		done()	
+	)
+
+	it("Page should return links", (done) ->
+		wait for page from Wiki.page "darth vader"
+		wait for links from page.links()
+		assert links.contains "George Lucas"
+		done()	
+	)
+
+)

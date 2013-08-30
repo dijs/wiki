@@ -1,0 +1,31 @@
+{
+  "name": "wiki",
+  "description": "Wikipedia interface for node",
+  "author": "Richard van der Dys",
+  "version": "0.0.1",
+  "licenses": [{
+    "type": "MIT",
+    "url": "https://raw.github.com/rzimmerman/kal/master/LICENSE"
+  }],
+  "engines": {
+    "node": ">=0.6.0"
+  },
+  "directories": {
+    "src": "./src"
+  },
+  "main": "./build/wiki.min.js",
+  "scripts": {
+    "grunt": "grunt"
+  },
+  "dependencies": {
+    "request": "latest"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-contrib-uglify": "latest",
+    "grunt-contrib-clean": "latest",
+    "grunt-mocha-test": "latest",
+     "grunt-bump": "latest",
+    "grunt-exec": "latest"
+  }
+}
