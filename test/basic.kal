@@ -10,7 +10,7 @@ String.prototype.startsWith = (str) ->
 String.prototype.contains = (str) ->
 	return me.indexOf(str) isnt -1
 
-describe("Basic Tests |", () ->
+describe("Basic Tests", () ->
 
 	it("Search should auto suggest an article", (done) ->
 		wait for results from Wiki.search "kevin bacon number"
