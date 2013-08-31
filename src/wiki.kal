@@ -1,7 +1,12 @@
+###
+Requires
+###
 request = require "request"
 
-API_URL = "http://en.wikipedia.org/w/api.php"
-
+###
+Defaults
+###
+DEFAULT_API_URL = "http://en.wikipedia.org/w/api.php"
 DEFAULT_LIMIT = 10
 DEFAULT_SUGGESTION = no
 DEFAULT_AUTO_SUGGEST = yes
@@ -10,25 +15,26 @@ DEFAULT_PRELOAD = no
 DEFAULT_ORIGINAL_TITLE = ""
 DEFAULT_PAGES = 1
 
-_req = task(params)
+###
+Base Wikipedia Interface
+###
+Wiki =
+
+	apiUrl: DEFAULT_API_URL
+
+###
+Basic request method
+@param {object} params - Parameters for the HTTP request
+###
+Wiki.request = task(params)
+	
 	params.format = "json"
 	params.action = "query"
-	options = 
-		uri: API_URL
+	options =
+		uri: Wiki.apiUrl
 		qs: params
-	wait for e,res,body from request.get options
+	wait for e, res, body from request.get options
 	return JSON.parse res
-
-Array.prototype.extend = (array) ->
-	me.push.apply me, array
-
-String.prototype.startsWith = (str) ->
-	return me.indexOf(str) is 0
-
-addProtocol = (url) ->
-	return url if url.startsWith("http") otherwise "http:" + url
-
-Wiki = {}
 
 ###
 Searches Wikipedia
@@ -47,7 +53,7 @@ Wiki.search = task(query, limit = DEFAULT_LIMIT, suggestion = DEFAULT_SUGGESTION
 
 	params.srinfo = "suggestion" when suggestion is yes
 
-	wait for raw from _req params
+	wait for raw from Wiki.request params
 
 	results = [item.title for item in raw.query.search]
 
@@ -67,26 +73,23 @@ Wiki.random = task(pages = DEFAULT_PAGES)
 		list: "random"
 		rnnamespace: 0
 		rnlimit: pages
-	wait for raw from _req params
+	wait for raw from Wiki.request params
 	return [page.title for page in raw.query.random]
 
 ###
 Obtain a WikiPage object by article title
 @param {string} title - Article title
 @param {boolean} autoSuggest - Allow Wikipedia to return a suggested article (Optional: Default is true)
-@param {boolean} redirect - Allow Wikipedia to redirect an article (Optional: Default is true)
 @param {function} callback - Callback with parameters (error, page)
 ###
-Wiki.page = task(title, autoSuggest = DEFAULT_AUTO_SUGGEST, redirect = DEFAULT_REDIRECT)	
+Wiki.page = task(title, autoSuggest = DEFAULT_AUTO_SUGGEST)	
 	
 	if autoSuggest is yes
 		wait for results, suggestion from Wiki.search title, 1, yes
 		try
 			title = suggestion or results[0]
-			page = new WikiPage title, redirect
-			wait for code from page.load(
-				redirect: redirect
-			)
+			page = new WikiPage title
+			wait for code from page.load()
 			return page
 		catch e
 			throw
@@ -94,56 +97,39 @@ Wiki.page = task(title, autoSuggest = DEFAULT_AUTO_SUGGEST, redirect = DEFAULT_R
 				message: title
 				original: e
 	else	
-		page = new WikiPage title, redirect
-		wait for code from page.load(
-			redirect: redirect
-		)
+		page = new WikiPage title
+		wait for code from page.load()
 		return page
 
 class WikiPage
 	
-	method initialize(title, redirect = DEFAULT_REDIRECT, preload = DEFAULT_PRELOAD, originalTitle)
+	method initialize(title, originalTitle)
+		
 		me.title = title
 		me.originalTitle = originalTitle or title
 	
-	task load(redirect, preload)
-		params =
+	task load()
+		
+		wait for raw from Wiki.request(
 			prop: "info|pageprops"
 			inprop: "url"
 			ppprop: "disambiguation"
 			titles: me.title
+		)
 
-		that = this
-
-		wait for raw from _req params
-
-		pageId = Object.keys(raw.query.pages)[0]
-		data = raw.query.pages[pageId]
-
-		if data.missing is ""
-			throw
-				name: "PageError"
-				message: me.title
-		else if data.redirect is ""
-			#might not have to handle this...
-			throw "!!! Handle Redirect"
-		else if data.pageprops exists
-			#need html parser for this...
-			throw "!!! Handle PageProps"
-		else
-			that.pageId = pageId
-			that.url = data.fullurl
+		me.pageId = Object.keys(raw.query.pages)[0]
+		me.url = raw.query.pages[me.pageId].fullurl
 
 		return yes
 
 	task _helper(name, params)
+		
 		when me[name] exists
 			return me[name]
 		otherwise
-			that = me
-			wait for raw from _req params
-			that[name] = raw.query.pages[that.pageId].extract
-			return that[name]
+			wait for raw from Wiki.request params
+			me[name] = raw.query.pages[me.pageId].extract
+			return me[name]
 
 	###
 	Get the HTML from an article
@@ -153,16 +139,15 @@ class WikiPage
 		when me._html exists
 			return me._html
 		otherwise
-			that = me
 			params = 
 				prop: "revisions"
 				rvprop: "content"
 				rvlimit: 1
 				rvparse: ""
 				titles: me.title
-			wait for raw from _req params
-			that._html = raw.query.pages[that.pageId].revisions[0]["*"]
-			return that._html
+			wait for raw from Wiki.request params
+			me._html = raw.query.pages[me.pageId].revisions[0]["*"]
+			return me._html
 
 	###
 	Get the text content from an article
@@ -197,16 +182,15 @@ class WikiPage
 		when me._images exists
 			return me._images
 		otherwise
-			that = me
-			wait for raw from _req(
+			wait for raw from Wiki.request(
 				generator: "images"
 				gimlimit: "max"
 				prop: "imageinfo"
 				iiprop: "url"
 				titles: me.title
 			)
-			that._images = [image.imageinfo[0].url for property value image in raw.query.pages]
-			return that._images
+			me._images = [image.imageinfo[0].url for property value image in raw.query.pages]
+			return me._images
 
 	###
 	Get list of reference URLs from an article
@@ -216,28 +200,26 @@ class WikiPage
 		when me._references exists
 			return me._references
 		otherwise
-			that = me
-			wait for raw from _req(
+			wait for raw from Wiki.request(
 				prop: "extlinks"
 				ellimit: "max"
 				titles: me.title
 			)
-			links = raw.query.pages[that.pageId].extlinks
-			that._references = [addProtocol(link["*"]) for link in links]
-			return that._references
+			links = raw.query.pages[me.pageId].extlinks
+			me._references = [addProtocol(link["*"]) for link in links]
+			return me._references
 
 	task addLinks(start)
-		my = me
 		params =
 			prop: "links"
 			plnamespace: 0
 			pllimit: "max"
 			titles: me.title
 		params.plcontinue = start when start isnt false
-		wait for raw from _req params
-		my._links.extend [link.title for link in raw.query.pages[my.pageId].links]
+		wait for raw from Wiki.request params
+		me._links.extend [link.title for link in raw.query.pages[me.pageId].links]
 		if raw["query-continue"] exists
-			wait for done from my.addLinks raw["query-continue"].links.plcontinue
+			wait for done from me.addLinks raw["query-continue"].links.plcontinue
 			return done
 		otherwise
 			return true
@@ -251,8 +233,16 @@ class WikiPage
 			return me._links
 		otherwise
 			me._links = []
-			my = me
 			wait for done from me.addLinks false		
-			return my._links
+			return me._links
+
+Array.prototype.extend = (array) ->
+	me.push.apply me, array
+
+String.prototype.startsWith = (str) ->
+	return me.indexOf(str) is 0
+
+addProtocol = (url) ->
+	return url if url.startsWith("http") otherwise "http:" + url
 
 module.exports = Wiki		

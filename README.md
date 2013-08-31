@@ -58,4 +58,18 @@ Wiki.random(function(err, results){
 });
 ```
 
+#### Get page from article title
+
+```
+/** 
+ * Obtain a WikiPage object by article title
+ * @param {string} title - Article title
+ * @param {boolean} autoSuggest - Allow Wikipedia to return a suggested article (Optional: Default is true
+ * @param {function} callback - Callback with parameters (error, page)
+ */
+Wiki.page("Batman", function(err, page){
+	// page = WikiPage object for 'Batman' article
+});
+```
+
 *More to come...*
