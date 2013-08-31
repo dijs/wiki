@@ -10,7 +10,10 @@ String.prototype.startsWith = (str) ->
 String.prototype.contains = (str) ->
 	return me.indexOf(str) isnt -1
 
-describe("Basic Tests", () ->
+now = () ->
+	return new Date().getTime()
+
+describe("Wiki Methods", () ->
 
 	it("Search should auto suggest an article", (done) ->
 		wait for results from Wiki.search "kevin bacon number"
@@ -32,7 +35,11 @@ describe("Basic Tests", () ->
 		done()
 	)
 
-	it("Get the content from an article", (done) ->
+)
+
+describe("Page Methods", () ->
+
+	it("Page should return the content from an article", (done) ->
 		wait for page from Wiki.page "world wide web"
 		wait for content from page.content()
 		assert content.contains "Tim Berners-Lee"
@@ -54,10 +61,36 @@ describe("Basic Tests", () ->
 	)
 
 	it("Page should return links", (done) ->
-		wait for page from Wiki.page "darth vader"
+		wait for page from Wiki.page "batman"
 		wait for links from page.links()
-		assert links.contains "George Lucas"
+		assert links.contains "Playboy"
 		done()	
+	)
+
+	it("Page should return the correct categories", (done) ->
+		wait for page from Wiki.page "albert einstein"
+		wait for list from page.categories()
+		assert list.contains "Category:American Zionists"
+		done()	
+	)
+
+	it("Page should check if it is within a category", (done) ->
+		wait for page from Wiki.page "albert einstein"
+		wait for result from page.withinCategory "Category:German physicists"
+		assert result is true
+		done()
+	)
+
+	it("Page should cache data", (done) ->
+		wait for page from Wiki.page "han solo"
+		start = now()
+		wait for list from page.categories()
+		firstTime = now() - start
+		start = now()
+		wait for cachedList from page.categories()
+		secondTime = now() - start
+		assert secondTime < firstTime
+		done()
 	)
 
 )

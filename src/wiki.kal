@@ -53,12 +53,12 @@ Wiki.search = task(query, limit = DEFAULT_LIMIT, suggestion = DEFAULT_SUGGESTION
 
 	params.srinfo = "suggestion" when suggestion is yes
 
-	wait for raw from Wiki.request params
+	wait for res from Wiki.request params
 
-	results = [item.title for item in raw.query.search]
+	results = [item.title for item in res.query.search]
 
-	when suggestion is yes and raw.query.searchinfo exists
-		return results, raw.query.searchinfo.suggestion
+	when suggestion is yes and res.query.searchinfo exists
+		return results, res.query.searchinfo.suggestion
 	
 	return results
 
@@ -73,8 +73,8 @@ Wiki.random = task(pages = DEFAULT_PAGES)
 		list: "random"
 		rnnamespace: 0
 		rnlimit: pages
-	wait for raw from Wiki.request params
-	return [page.title for page in raw.query.random]
+	wait for res from Wiki.request params
+	return [page.title for page in res.query.random]
 
 ###
 Obtain a WikiPage object by article title
@@ -110,27 +110,41 @@ class WikiPage
 	
 	task load()
 		
-		wait for raw from Wiki.request(
+		wait for res from Wiki.request(
 			prop: "info|pageprops"
 			inprop: "url"
 			ppprop: "disambiguation"
 			titles: me.title
 		)
 
-		me.pageId = Object.keys(raw.query.pages)[0]
-		me.url = raw.query.pages[me.pageId].fullurl
+		me.pageId = Object.keys(res.query.pages)[0]
+		me.url = res.query.pages[me.pageId].fullurl
 
 		return yes
+
+	###
+	Helper Functions
+	###
 
 	task _helper(name, params)
 		
 		when me[name] exists
 			return me[name]
 		otherwise
-			wait for raw from Wiki.request params
-			me[name] = raw.query.pages[me.pageId].extract
+			wait for res from Wiki.request params
+			me[name] = res.query.pages[me.pageId].extract
 			return me[name]
 
+	task queryContinue(params, continueKey, handler, start = no)
+		params[continueKey] = start when start isnt no
+		wait for res from Wiki.request params
+		handler res.query.pages[me.pageId][params.prop]
+		delete params[continueKey]
+		if res["query-continue"] exists
+			startFrom = res["query-continue"][params.prop][continueKey]
+			wait for done from me.queryContinue params, continueKey, handler, startFrom
+			return done
+	
 	###
 	Get the HTML from an article
 	@param {function} callback - Callback with parameters (error, html)
@@ -145,8 +159,8 @@ class WikiPage
 				rvlimit: 1
 				rvparse: ""
 				titles: me.title
-			wait for raw from Wiki.request params
-			me._html = raw.query.pages[me.pageId].revisions[0]["*"]
+			wait for res from Wiki.request params
+			me._html = res.query.pages[me.pageId].revisions[0]["*"]
 			return me._html
 
 	###
@@ -182,14 +196,14 @@ class WikiPage
 		when me._images exists
 			return me._images
 		otherwise
-			wait for raw from Wiki.request(
+			wait for res from Wiki.request(
 				generator: "images"
 				gimlimit: "max"
 				prop: "imageinfo"
 				iiprop: "url"
 				titles: me.title
 			)
-			me._images = [image.imageinfo[0].url for property value image in raw.query.pages]
+			me._images = [image.imageinfo[0].url for property value image in res.query.pages]
 			return me._images
 
 	###
@@ -200,29 +214,14 @@ class WikiPage
 		when me._references exists
 			return me._references
 		otherwise
-			wait for raw from Wiki.request(
+			wait for res from Wiki.request(
 				prop: "extlinks"
 				ellimit: "max"
 				titles: me.title
 			)
-			links = raw.query.pages[me.pageId].extlinks
+			links = res.query.pages[me.pageId].extlinks
 			me._references = [addProtocol(link["*"]) for link in links]
 			return me._references
-
-	task addLinks(start)
-		params =
-			prop: "links"
-			plnamespace: 0
-			pllimit: "max"
-			titles: me.title
-		params.plcontinue = start when start isnt false
-		wait for raw from Wiki.request params
-		me._links.extend [link.title for link in raw.query.pages[me.pageId].links]
-		if raw["query-continue"] exists
-			wait for done from me.addLinks raw["query-continue"].links.plcontinue
-			return done
-		otherwise
-			return true
 
 	###
 	Get list of links from an article
@@ -233,11 +232,56 @@ class WikiPage
 			return me._links
 		otherwise
 			me._links = []
-			wait for done from me.addLinks false		
+			params =
+				prop: "links"
+				plnamespace: 0
+				pllimit: "max"
+				titles: me.title
+			wait for done from me.queryContinue(params, "plcontinue", (data) ->
+				me._links.extend [ link.title for link in data ]
+			)
 			return me._links
+
+	###
+	Check if page is within a given category...
+	@param {string} category - Category to check
+	@param {function} callback - Callback with parameters (error, result)
+	###
+	task withinCategory(category)
+		when me._categories exists
+			return me._categories.contains category
+		otherwise
+			wait for res from Wiki.request(
+				prop: "categories"
+				cllimit: 1
+				clcategories: category
+				titles: me.title
+			)
+			return res.query.pages[me.pageId].categories.length is 1
+
+	###
+	Get titles of categories the page belongs to
+	@param {function} callback - Callback with parameters (error, categories)
+	###
+	task categories()
+		when me._categories exists
+			return me._categories
+		otherwise
+			me._categories = []
+			params =
+				prop: "categories"
+				cllimit: "max"
+				titles: me.title
+			wait for done from me.queryContinue(params, "clcontinue", (data) ->
+				me._categories.extend [ category.title for category in data ]
+			)
+			return me._categories
 
 Array.prototype.extend = (array) ->
 	me.push.apply me, array
+
+Array.prototype.contains = (i) ->
+	return me.indexOf(i) isnt -1
 
 String.prototype.startsWith = (str) ->
 	return me.indexOf(str) is 0
@@ -245,4 +289,4 @@ String.prototype.startsWith = (str) ->
 addProtocol = (url) ->
 	return url if url.startsWith("http") otherwise "http:" + url
 
-module.exports = Wiki		
+module.exports = Wiki
