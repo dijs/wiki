@@ -27,5 +27,11 @@
     "grunt-mocha-test": "latest",
      "grunt-bump": "latest",
     "grunt-exec": "latest"
+  },
+  "homepage":     "https://github.com/rompetoto/wiki",
+  "bugs":         "https://github.com/rompetoto/wiki/issues",
+  "repository":   {
+    "type": "git",
+    "url": "git://github.com/rompetoto/wiki.git"
   }
 }

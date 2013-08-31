@@ -14,12 +14,12 @@ DEFAULT_REDIRECT = yes
 DEFAULT_PRELOAD = no
 DEFAULT_ORIGINAL_TITLE = ""
 DEFAULT_PAGES = 1
+DEFAULT_MAX = "max"
 
 ###
 Base Wikipedia Interface
 ###
 Wiki =
-
 	apiUrl: DEFAULT_API_URL
 
 ###
@@ -27,7 +27,6 @@ Basic request method
 @param {object} params - Parameters for the HTTP request
 ###
 Wiki.request = task(params)
-	
 	params.format = "json"
 	params.action = "query"
 	options =
@@ -44,7 +43,6 @@ Searches Wikipedia
 @param {function} callback - Callback with parameters (error, results, suggestion)
 ###
 Wiki.search = task(query, limit = DEFAULT_LIMIT, suggestion = DEFAULT_SUGGESTION)
-	
 	params =
 		list: "search"
 		srprop: ""
@@ -68,7 +66,6 @@ Obtain random articles from Wikipedia
 @param {function} callback - Callback with parameters (error, results)
 ###
 Wiki.random = task(pages = DEFAULT_PAGES)
-	
 	params =
 		list: "random"
 		rnnamespace: 0
@@ -83,7 +80,6 @@ Obtain a WikiPage object by article title
 @param {function} callback - Callback with parameters (error, page)
 ###
 Wiki.page = task(title, autoSuggest = DEFAULT_AUTO_SUGGEST)	
-	
 	if autoSuggest is yes
 		wait for results, suggestion from Wiki.search title, 1, yes
 		try
@@ -109,7 +105,6 @@ class WikiPage
 		me.originalTitle = originalTitle or title
 	
 	task load()
-		
 		wait for res from Wiki.request(
 			prop: "info|pageprops"
 			inprop: "url"
@@ -127,7 +122,6 @@ class WikiPage
 	###
 
 	task _helper(name, params)
-		
 		when me[name] exists
 			return me[name]
 		otherwise
@@ -135,14 +129,17 @@ class WikiPage
 			me[name] = res.query.pages[me.pageId].extract
 			return me[name]
 
-	task queryContinue(params, continueKey, handler, start = no)
-		params[continueKey] = start when start isnt no
+	task queryContinue(params, key, limit, handler, counter = 0, start = no)
+		params[key + "continue"] = start when start isnt no
+		params[key + "limit"] = limit
 		wait for res from Wiki.request params
-		handler res.query.pages[me.pageId][params.prop]
-		delete params[continueKey]
-		if res["query-continue"] exists
-			startFrom = res["query-continue"][params.prop][continueKey]
-			wait for done from me.queryContinue params, continueKey, handler, startFrom
+		data = res.query.pages[me.pageId][params.prop]
+		counter += data.length
+		handler data
+		delete params[key + "continue"]
+		if res["query-continue"] exists and (limit is DEFAULT_MAX or counter < limit)
+			startFrom = res["query-continue"][params.prop][key + "continue"]
+			wait for done from me.queryContinue params, key, limit, handler, counter, startFrom
 			return done
 	
 	###
@@ -225,9 +222,10 @@ class WikiPage
 
 	###
 	Get list of links from an article
+	@param {number} limit - Number of results
 	@param {function} callback - Callback with parameters (error, links)
 	###
-	task links()
+	task links(limit = DEFAULT_MAX)
 		when me._links exists
 			return me._links
 		otherwise
@@ -235,9 +233,8 @@ class WikiPage
 			params =
 				prop: "links"
 				plnamespace: 0
-				pllimit: "max"
 				titles: me.title
-			wait for done from me.queryContinue(params, "plcontinue", (data) ->
+			wait for done from me.queryContinue(params, "pl", limit, (data) ->
 				me._links.extend [ link.title for link in data ]
 			)
 			return me._links
@@ -261,22 +258,78 @@ class WikiPage
 
 	###
 	Get titles of categories the page belongs to
+	@param {number} limit - Number of results
 	@param {function} callback - Callback with parameters (error, categories)
 	###
-	task categories()
+	task categories(limit = DEFAULT_MAX)
 		when me._categories exists
 			return me._categories
 		otherwise
 			me._categories = []
 			params =
 				prop: "categories"
-				cllimit: "max"
 				titles: me.title
-			wait for done from me.queryContinue(params, "clcontinue", (data) ->
+			wait for done from me.queryContinue(params, "cl", limit, (data) ->
 				me._categories.extend [ category.title for category in data ]
 			)
 			return me._categories
 
+	###
+	Get the geographical coordinates of a (location) article
+	@param {function} callback - Callback with parameters (error, coordinates)
+	###
+	task coordinates()
+		when me._coordinates exists
+			return me._coordinates
+		otherwise
+			wait for res from Wiki.request(
+				prop: "coordinates"
+				titles: me.title
+			)
+			me._coordinates = res.query.pages[me.pageId].coordinates[0]
+			return me._coordinates
+
+	###
+	Get the infobox of an article, in wikitext
+	@param {function} callback - Callback with parameters (error, wikitext)
+	###
+	task infobox()
+		when me._infobox exists
+			return me._infobox
+		otherwise
+			wait for res from Wiki.request(
+				prop: "revisions"
+				rvprop: "content"
+				rvsection: 0
+				titles: me.title
+			)
+			me._infobox = res.query.pages[me.pageId].revisions[0]["*"]
+			return me._infobox
+
+	###
+	Get the info of an article, in object form
+	@param {function} callback - Callback with parameters (error, info)
+	###
+	task info()
+		when me._info exists
+			return me._info
+		otherwise
+			me._info = {}
+			wait for text from me.infobox()
+			text = text.substring text.indexOf '|'
+			text = text.substring 0, text.lastIndexOf '}}'
+			data = text.split '\n'
+			data.forEach((e) ->
+				index = e.indexOf '='
+				if index isnt -1
+					key = e.substring(1, index).trim().replace(/\s/g, '_')
+					val = e.substring(index + 1, e.length).trim().replace(/[^\w()\s.]/g, '')
+					if key.length isnt 0 and val.length isnt 0
+						me._info[key] = val
+			)
+			delete me._info[Object.keys(me._info).pop()]
+			return me._info
+			 
 Array.prototype.extend = (array) ->
 	me.push.apply me, array
 

@@ -93,4 +93,33 @@ describe("Page Methods", () ->
 		done()
 	)
 
+	it("Page should limit category search", (done) ->
+		wait for page from Wiki.page "lightsaber"
+		wait for list from page.categories 4
+		assert list.length is 4
+		done()
+	)
+
+	it("Page should support geographical location", (done) ->
+		wait for page from Wiki.page "Texas"
+		wait for coord from page.coordinates()
+		assert coord.lat is 31 and coord.lon is -100
+		done()
+	)
+
+	it("Page should support infobox data", (done) ->
+		wait for page from Wiki.page "Bob Kane"
+		wait for text from page.infobox()
+		assert text.contains "Batman"
+		done()
+	)
+
+	it("Page should support parsed info data", (done) ->
+		wait for page from Wiki.page "Dread Pirate Roberts"
+		wait for info from page.info()
+		assert info.series is "The Princess Bride"
+		assert info.portrayer is "Cary Elwes" 
+		done()
+	)
+
 )
