@@ -1,8 +1,8 @@
 {
-  "name": "wiki",
+  "name": "wikijs",
   "description": "Wikipedia interface for node",
   "author": "Richard van der Dys",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "licenses": [{
     "type": "MIT",
     "url": "https://raw.github.com/rzimmerman/kal/master/LICENSE"

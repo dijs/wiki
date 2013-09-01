@@ -7,7 +7,7 @@ this can serve as a helpful tool for others!
 
 ## Installation
 
-In the future, install via npm...
+npm install wikijs
 
 ## Build yourself
 
