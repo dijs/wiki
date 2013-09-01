@@ -15,6 +15,7 @@ DEFAULT_PRELOAD = no
 DEFAULT_ORIGINAL_TITLE = ""
 DEFAULT_PAGES = 1
 DEFAULT_MAX = "max"
+DEFAULT_RADIUS = 1000 # 1km
 
 ###
 Base Wikipedia Interface
@@ -66,11 +67,11 @@ Obtain random articles from Wikipedia
 @param {function} callback - Callback with parameters (error, results)
 ###
 Wiki.random = task(pages = DEFAULT_PAGES)
-	params =
+	wait for res from Wiki.request(
 		list: "random"
 		rnnamespace: 0
 		rnlimit: pages
-	wait for res from Wiki.request params
+	)
 	return [page.title for page in res.query.random]
 
 ###
@@ -96,6 +97,21 @@ Wiki.page = task(title, autoSuggest = DEFAULT_AUTO_SUGGEST)
 		page = new WikiPage title
 		wait for code from page.load()
 		return page
+
+###
+Perform a search by geographical coordinate
+@param {number} lat - Latitude
+@param {number} lon - Longitude
+@param {number} radius - Radial search distance in meters (Optional: Default is 1km)
+@param {function} callback - Callback with parameters (error, results)
+###
+Wiki.geoSearch = task(lat, lon, radius = DEFAULT_RADIUS)
+	wait for res from Wiki.request(
+		list: "geosearch"
+		gsradius: radius
+		gscoord: lat + '|' + lon
+	)
+	return [ page.title for page in res.query.geosearch ]
 
 class WikiPage
 	
@@ -133,12 +149,18 @@ class WikiPage
 		params[key + "continue"] = start when start isnt no
 		params[key + "limit"] = limit
 		wait for res from Wiki.request params
-		data = res.query.pages[me.pageId][params.prop]
+		when params.list exists
+			data = res.query[params.list]
+		otherwise
+			data = res.query.pages[me.pageId][params.prop]
 		counter += data.length
 		handler data
 		delete params[key + "continue"]
 		if res["query-continue"] exists and (limit is DEFAULT_MAX or counter < limit)
-			startFrom = res["query-continue"][params.prop][key + "continue"]
+			when params.list exists
+				startFrom = res["query-continue"][params.list][key + "continue"]
+			otherwise
+				startFrom = res["query-continue"][params.prop][key + "continue"]
 			wait for done from me.queryContinue params, key, limit, handler, counter, startFrom
 			return done
 	
@@ -329,6 +351,24 @@ class WikiPage
 			)
 			delete me._info[Object.keys(me._info).pop()]
 			return me._info
+
+	###
+	Get titles of backlinks to the article
+	@param {number} limit - Number of results
+	@param {function} callback - Callback with parameters (error, backlinks)
+	###
+	task backlinks(limit = DEFAULT_MAX)
+		when me._backlinks exists
+			return me._backlinks
+		otherwise
+			me._backlinks = []
+			params =
+				list: "backlinks"
+				bltitle: me.title
+			wait for done from me.queryContinue(params, "bl", limit, (data) ->
+				me._backlinks.extend [ link.title for link in data ]
+			)
+			return me._backlinks
 			 
 Array.prototype.extend = (array) ->
 	me.push.apply me, array

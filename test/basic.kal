@@ -35,6 +35,12 @@ describe("Wiki Methods", () ->
 		done()
 	)
 
+	it("Get a page list from coordinates", (done) ->
+		wait for results from Wiki.geoSearch 32.329, -96.136
+		assert results.contains "Gun Barrel City, Texas"
+		done()
+	)
+
 )
 
 describe("Page Methods", () ->
@@ -119,6 +125,13 @@ describe("Page Methods", () ->
 		wait for info from page.info()
 		assert info.series is "The Princess Bride"
 		assert info.portrayer is "Cary Elwes" 
+		done()
+	)
+
+	it("Page should support backlinks", (done) ->
+		wait for page from Wiki.page "Robert Plant"
+		wait for links from page.backlinks()
+		assert links.contains "Led Zeppelin"
 		done()
 	)
 
