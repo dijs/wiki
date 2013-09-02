@@ -6,11 +6,12 @@ module.exports = function(grunt) {
     
     uglify: {
       options: {
-        banner: "/*! <%= pkg.name %> <%= grunt.template.today(\"yyyy-mm-dd\") %> */\n"
+        banner: "/*! <%= pkg.name %> <%= grunt.template.today(\"yyyy-mm-dd\") %> */\n",
       },
       build: {
-        src: "build/<%= pkg.name %>.js",
-        dest: "build/<%= pkg.name %>.min.js"
+        files: {
+          "./build/wiki.min.js": ["./build/wiki.js"]
+        }
       }
     },
     
@@ -36,7 +37,7 @@ module.exports = function(grunt) {
       test: {
         options: {
           reporter: "spec",
-          timeout: 10000
+          timeout: 15000
         },
         src: "test/*.js"
       }
