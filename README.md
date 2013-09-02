@@ -5,10 +5,6 @@ WikiJs is a simple node.js library which serves as an interface to Wikipedia.
 This project started as just a test application in order to learn [Kal](http://rzimmerman.github.io/kal/), but hopefully
 this can serve as a helpful tool for others!
 
-## Installation
-
-npm install wikijs
-
 ## Build yourself
 
 In order to build, you will need the latest version of Kal globally installed on your machine.
@@ -16,8 +12,8 @@ In order to build, you will need the latest version of Kal globally installed on
 After cloning the repository, you can run these commands in order to build and test WikiJs:
 
 ```
-git clone [url]
-cd WikiJs
+git clone git@github.com:rompetoto/wiki.git
+cd wiki
 npm install
 grunt
 ```
@@ -25,6 +21,7 @@ grunt
 ## Usage
 
 #### Load in library
+
 ```
 var Wiki = require("wiki");
 ```
