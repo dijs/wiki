@@ -2,5 +2,5 @@
 node_modules/
 build/
 .grunt/
-_SpecRunner.html
 test/*.js
+Gruntfile.js

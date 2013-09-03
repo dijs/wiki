@@ -2,7 +2,7 @@
   "name": "wikijs",
   "description": "Wikipedia interface for node",
   "author": "Richard van der Dys",
-  "version": "0.0.4",
+  "version": "0.0.6",
   "keywords": ["wiki", "wikipedia", "interface"],
   "licenses": [{
     "type": "MIT",
@@ -12,10 +12,6 @@
     "node": ">=0.6.0"
   },
   "main": "./build/wiki.min.js",
-  "scripts": {
-    "postinstall": "kal -o . Gruntfile.kal && grunt",
-    "test": "grunt test"
-  },
   "dependencies": {
     "request": "latest"
   },
