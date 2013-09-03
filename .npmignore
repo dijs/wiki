@@ -3,6 +3,7 @@ node_modules/
 .grunt/
 .git/
 .gitignore
+build/wiki.js
 test/
 src/
 Gruntfile.*
