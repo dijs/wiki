@@ -4,3 +4,4 @@ build/
 .grunt/
 test/*.js
 Gruntfile.js
+tester.kal

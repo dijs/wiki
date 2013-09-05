@@ -7,3 +7,4 @@ build/wiki.js
 test/
 src/
 Gruntfile.*
+tester.kal

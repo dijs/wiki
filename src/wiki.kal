@@ -16,12 +16,14 @@ DEFAULT_ORIGINAL_TITLE = ""
 DEFAULT_PAGES = 1
 DEFAULT_MAX = "max"
 DEFAULT_RADIUS = 1000 # 1km
+DEFAULT_VERBOSE = yes
 
 ###
 Base Wikipedia Interface
 ###
 Wiki =
 	apiUrl: DEFAULT_API_URL
+	verbose: DEFAULT_VERBOSE
 
 ###
 Basic request method
@@ -33,6 +35,8 @@ Wiki.request = task(params)
 	options =
 		uri: Wiki.apiUrl
 		qs: params
+		headers:
+			"User-Agent": "WikiJs/0.1 (https://github.com/rompetoto/wiki; richard.vanderdys@gmail.com)"
 	wait for e, res, body from request.get options
 	return JSON.parse res
 
@@ -51,9 +55,7 @@ Wiki.search = task(query, limit = DEFAULT_LIMIT, suggestion = DEFAULT_SUGGESTION
 		srsearch: query
 
 	params.srinfo = "suggestion" when suggestion is yes
-
 	wait for res from Wiki.request params
-
 	results = [item.title for item in res.query.search]
 
 	when suggestion is yes and res.query.searchinfo exists
@@ -381,5 +383,8 @@ String.prototype.startsWith = (str) ->
 
 addProtocol = (url) ->
 	return url if url.startsWith("http") otherwise "http:" + url
+
+log = (x) ->
+	console.log x when Wiki.verbose is yes	
 
 module.exports = Wiki
