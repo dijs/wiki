@@ -1,6 +1,6 @@
 .DS_Store
 node_modules/
-build/
+build/wiki.js
 .grunt/
 test/*.js
 Gruntfile.js
