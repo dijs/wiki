@@ -1,3 +1,5 @@
+![Build Status](https://api.travis-ci.org/rompetoto/wiki.png)
+
 # WikiJs
 
 WikiJs is a simple node.js library which serves as an interface to Wikipedia.

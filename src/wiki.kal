@@ -157,7 +157,7 @@ class WikiPage
 			data = res.query.pages[me.pageId][params.prop]
 		counter += data.length
 		handler data
-		delete params[key + "continue"]
+		params[key + "continue"] = null
 		if res["query-continue"] exists and (limit is DEFAULT_MAX or counter < limit)
 			when params.list exists
 				startFrom = res["query-continue"][params.list][key + "continue"]
@@ -351,7 +351,7 @@ class WikiPage
 					if key.length isnt 0 and val.length isnt 0
 						me._info[key] = val
 			)
-			delete me._info[Object.keys(me._info).pop()]
+			me._info[Object.keys(me._info).pop()] = null
 			return me._info
 
 	###
