@@ -9,7 +9,7 @@
     "url": "https://raw.github.com/rompetoto/wiki/master/LICENSE"
   }],
   "engines": {
-    "node": ">=0.6.0"
+    "node": ">=0.8.0"
   },
   "main": "./build/wiki.min.js",
   "dependencies": {
@@ -23,6 +23,9 @@
     "grunt-bump": "latest",
     "grunt-exec": "latest",
     "kal": "latest"
+  },
+  "scripts": {
+    "test": "grunt test"
   },
   "homepage": "https://github.com/rompetoto/wiki",
   "bugs": "https://github.com/rompetoto/wiki/issues",
