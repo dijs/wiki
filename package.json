@@ -2,7 +2,7 @@
   "name": "wikijs",
   "description": "Wikipedia interface for node",
   "author": "Richard van der Dys",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "keywords": ["wiki", "wikipedia", "interface"],
   "licenses": [{
     "type": "MIT",
@@ -21,11 +21,10 @@
     "grunt-contrib-clean": "latest",
     "grunt-mocha-test": "latest",
     "grunt-bump": "latest",
-    "grunt-exec": "latest",
-    "kal": "latest"
+    "grunt-exec": "latest"
   },
   "scripts": {
-    "test": "grunt test"
+    "test": "kal -o . Gruntfile.kal && grunt"
   },
   "homepage": "https://github.com/rompetoto/wiki",
   "bugs": "https://github.com/rompetoto/wiki/issues",
