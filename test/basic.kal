@@ -135,4 +135,12 @@ describe("Page Methods", () ->
 		done()
 	)
 
+	it "Page sould handle pages which do not exist", (done) ->
+		try
+			wait for page from Wiki.page "the slow motion version CSUCI"
+		catch error
+			assert error.name is "NoArticle"
+			assert error.suggestion is "the slow motion version CSI"
+		done()
+
 )

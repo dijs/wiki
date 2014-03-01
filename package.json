@@ -2,12 +2,18 @@
   "name": "wikijs",
   "description": "Wikipedia interface for node",
   "author": "Richard van der Dys",
-  "version": "0.0.9",
-  "keywords": ["wiki", "wikipedia", "interface"],
-  "licenses": [{
-    "type": "MIT",
-    "url": "https://raw.github.com/rompetoto/wiki/master/LICENSE"
-  }],
+  "version": "0.0.10",
+  "keywords": [
+    "wiki",
+    "wikipedia",
+    "interface"
+  ],
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://raw.github.com/rompetoto/wiki/master/LICENSE"
+    }
+  ],
   "engines": {
     "node": ">=0.8.0"
   },

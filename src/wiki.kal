@@ -85,6 +85,11 @@ Obtain a WikiPage object by article title
 Wiki.page = task(title, autoSuggest = DEFAULT_AUTO_SUGGEST)	
 	if autoSuggest is yes
 		wait for results, suggestion from Wiki.search title, 1, yes
+		if results.length is 0
+			throw
+				name: "NoArticle"
+				message: "Article doesnt exist"
+				suggestion: suggestion
 		try
 			title = suggestion or results[0]
 			page = new WikiPage title
