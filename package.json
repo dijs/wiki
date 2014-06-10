@@ -2,7 +2,7 @@
   "name": "wikijs",
   "description": "Wikipedia interface for node",
   "author": "Richard van der Dys",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "keywords": [
     "wiki",
     "wikipedia",
@@ -22,7 +22,7 @@
     "request": "latest"
   },
   "devDependencies": {
-    "grunt": "~0.4.1",
+    "grunt": "latest",
     "grunt-contrib-uglify": "latest",
     "grunt-contrib-clean": "latest",
     "grunt-mocha-test": "latest",
