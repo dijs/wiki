@@ -157,4 +157,10 @@ describe("Page Methods", () ->
 		assert.equal ids.toString(), _ids.toString() 
 		done()
 
+	it "should handle pages without images", (done) ->
+		wait for page from Wiki.page 'Accenture top 50 business intellectuals'
+		wait for images from page.images()
+		assert.equal images.length, 0
+		done()
+		
 )

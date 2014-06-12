@@ -229,7 +229,7 @@ class WikiPage
 				iiprop: "url"
 				titles: me.title
 			)
-			me._images = [image.imageinfo[0].url for property value image in res.query.pages]
+			me._images = [image.imageinfo[0].url for property value image in res.query.pages] if res.query otherwise []
 			return me._images
 
 	###
