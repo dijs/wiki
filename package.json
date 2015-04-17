@@ -32,7 +32,7 @@
   },
   "scripts": {
     "install": "node_modules/gulp/bin/gulp.js",
-    "test": "node_modules/mocha/bin/mocha dist"
+    "test": "node_modules/mocha/bin/mocha --timeout 5000 dist"
   },
   "homepage": "https://github.com/dijs/wiki",
   "bugs": "https://github.com/dijs/wiki/issues",

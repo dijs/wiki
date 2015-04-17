@@ -5,8 +5,6 @@ let wiki = new Wiki();
 
 describe('Wiki Methods', () => {
 
-	this.timeout(5000);
-
 	it('Search should find an article', () => {
 		return wiki.search('kevin bacon number').should.eventually.have.property('results').containEql('Six degrees of separation');
 	});
@@ -31,8 +29,6 @@ describe('Wiki Methods', () => {
 
 describe('Page Methods', () => {
 	
-	this.timeout(5000);
-
 	let page;
 
 	before((done) => {
