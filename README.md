@@ -1,4 +1,4 @@
-![Build Status](https://api.travis-ci.org/rompetoto/wiki.png)
+![Build Status](https://api.travis-ci.org/dijs/wiki.png)
 
 # WikiJs
 

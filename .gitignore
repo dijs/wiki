@@ -1,7 +1,3 @@
 .DS_Store
 node_modules/
-build/wiki.js
-.grunt/
-test/*.js
-Gruntfile.js
-tester.kal
+dist/

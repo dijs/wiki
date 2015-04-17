@@ -2,7 +2,7 @@
   "name": "wikijs",
   "description": "Wikipedia interface for node",
   "author": "Richard van der Dys",
-  "version": "0.0.12",
+  "version": "0.1.0",
   "keywords": [
     "wiki",
     "wikipedia",
@@ -11,31 +11,33 @@
   "licenses": [
     {
       "type": "MIT",
-      "url": "https://raw.github.com/rompetoto/wiki/master/LICENSE"
+      "url": "https://raw.github.com/dijs/wiki/master/LICENSE"
     }
   ],
   "engines": {
     "node": ">=0.10.4"
   },
-  "main": "./build/wiki.min.js",
+  "main": "./dist/wiki.js",
   "dependencies": {
-    "request": "latest"
+    "request-promise": "^0.4.2",
+    "underscore": "^1.8.3",
+    "gulp": "^3.8.11",
+    "gulp-babel": "^5.1.0"
   },
   "devDependencies": {
-    "grunt": "latest",
-    "grunt-contrib-uglify": "latest",
-    "grunt-contrib-clean": "latest",
-    "grunt-mocha-test": "latest",
-    "grunt-bump": "latest",
-    "grunt-exec": "latest"
+    "eslint": "^0.19.0",
+    "mocha": "^2.2.4",
+    "should": "^6.0.1",
+    "should-promised": "^0.2.0"
   },
   "scripts": {
-    "test": "kal -o . Gruntfile.kal && grunt"
+    "install": "node_modules/gulp/bin/gulp.js",
+    "test": "node_modules/mocha/bin/mocha dist"
   },
-  "homepage": "https://github.com/rompetoto/wiki",
-  "bugs": "https://github.com/rompetoto/wiki/issues",
+  "homepage": "https://github.com/dijs/wiki",
+  "bugs": "https://github.com/dijs/wiki/issues",
   "repository": {
     "type": "git",
-    "url": "git://github.com/rompetoto/wiki.git"
+    "url": "git://github.com/dijs/wiki.git"
   }
 }
