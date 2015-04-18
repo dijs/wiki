@@ -32,6 +32,7 @@ You can run these commands in order to build and test WikiJs:
 git clone git@github.com:dijs/wiki.git
 cd wiki
 npm install
+npm run build
 npm test
 ```
 
