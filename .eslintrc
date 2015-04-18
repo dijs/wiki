@@ -1,0 +1,25 @@
+{
+  "env": {
+    "node": 1,
+    "es6": 1
+  },
+  "globals": {
+    "exampleGlobalVariable": true
+  },
+  "rules": {
+    "quotes": [2, "single", "avoid-escape"],
+    "eqeqeq": 0,
+    "eol-last": 0,
+    "no-nested-ternary": 1,
+    "padded-blocks": [1, "never"],
+    "space-after-function-name": [1, "never"],
+    "space-before-blocks": [1, "always"],
+    "mocha/no-exclusive-tests": 2
+  },
+  "ecmaFeatures": {
+    "modules": true
+  },
+  "plugins": [
+    "mocha"
+  ]
+}
