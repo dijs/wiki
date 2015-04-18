@@ -37,7 +37,8 @@
   "scripts": {
     "build": "node_modules/gulp/bin/gulp.js",
     "test": "istanbul cover -- ./node_modules/mocha/bin/_mocha --timeout 5000 --report lcov dist/spec.js",
-    "docs": "node_modules/.bin/jsdoc --configure .jsdoc.json --verbose"
+    "docs": "node_modules/.bin/jsdoc --configure .jsdoc.json --verbose",
+    "coveralls": "gulp coveralls"
   },
   "homepage": "https://github.com/dijs/wiki",
   "bugs": "https://github.com/dijs/wiki/issues",
