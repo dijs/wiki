@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>wiki.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Wiki.html">Wiki</a><ul class='methods'><li data-type='method'><a href="Wiki.html#geoSearch">geoSearch</a></li><li data-type='method'><a href="Wiki.html#page">page</a></li><li data-type='method'><a href="Wiki.html#random">random</a></li><li data-type='method'><a href="Wiki.html#search">search</a></li></ul></li><li><a href="WikiPage.html">WikiPage</a><ul class='methods'><li data-type='method'><a href="WikiPage.html#backlinks">backlinks</a></li><li data-type='method'><a href="WikiPage.html#categories">categories</a></li><li data-type='method'><a href="WikiPage.html#content">content</a></li><li data-type='method'><a href="WikiPage.html#coordinates">coordinates</a></li><li data-type='method'><a href="WikiPage.html#html">html</a></li><li data-type='method'><a href="WikiPage.html#images">images</a></li><li data-type='method'><a href="WikiPage.html#info">info</a></li><li data-type='method'><a href="WikiPage.html#links">links</a></li><li data-type='method'><a href="WikiPage.html#references">references</a></li><li data-type='method'><a href="WikiPage.html#summary">summary</a></li></ul></li></ul><h3>Modules</h3><ul><li><a href="module-Wiki.html">Wiki</a></li></ul><h3>Namespaces</h3><ul><li><a href="defaultOptions.html">defaultOptions</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">wiki.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>'use strict';
+
+var _interopRequireWildcard = function (obj) { return obj &amp;&amp; obj.__esModule ? obj : { 'default': obj }; };
+
+var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } };
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i &lt; props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+Object.defineProperty(exports, '__esModule', {
+	value: true
+});
+
+var _request = require('request-promise');
+
+var _request2 = _interopRequireWildcard(_request);
+
+var _import = require('underscore');
+
+var _import2 = _interopRequireWildcard(_import);
+
+var _markupParser = require('./wiki-markup-parser');
+
+var _markupParser2 = _interopRequireWildcard(_markupParser);
+
+'use strict';
+
+/**
+ * @namespace
+ * @property {string} apiUrl - URL of Wikipedia API
+ */
+var defaultOptions = {
+	apiUrl: 'http://en.wikipedia.org/w/api.php'
+};
+
+/**
+* Wiki
+* @class
+* @param  {Object} [options] - override options for API (only apiUrl for now)
+* @return {Wiki}
+*/
+
+var Wiki = (function () {
+	function Wiki(options) {
+		_classCallCheck(this, Wiki);
+
+		this.options = _import2['default'].extend(options || {}, defaultOptions);
+	}
+
+	_createClass(Wiki, [{
+		key: 'api',
+		value: function api(params) {
+			var _this = this;
+
+			return new Promise(function (resolve, reject) {
+				_request2['default'].get({
+					uri: _this.options.apiUrl,
+					qs: _import2['default'].extend(params, {
+						format: 'json',
+						action: 'query'
+					}),
+					headers: {
+						'User-Agent': 'WikiJs/0.1 (https://github.com/dijs/wiki; richard.vanderdys@gmail.com)'
+					}
+				}).then(function (res) {
+					return resolve(JSON.parse(res));
+				})['catch'](reject);
+			});
+		}
+	}, {
+		key: 'pagination',
+		value: function pagination(params, parseResults) {
+			var _this2 = this;
+
+			return new Promise(function (resolve, reject) {
+				_this2.api(params).then(function (res) {
+					var resolution = {};
+					resolution.results = parseResults(res);
+					if (res['query-continue']) {
+						var type = Object.keys(res['query-continue'])[0];
+						var continueKey = Object.keys(res['query-continue'][type])[0];
+						params[continueKey] = res['query-continue'][type][continueKey];
+						resolution.next = function () {
+							return _this2.pagination(params, parseResults);
+						};
+					}
+					resolve(resolution);
+				})['catch'](reject);
+			});
+		}
+	}, {
+		key: 'aggregatePagination',
+		value: function aggregatePagination(pagination) {
+			var _this3 = this;
+
+			var allResults = arguments[1] === undefined ? [] : arguments[1];
+
+			return new Promise(function (resolve, reject) {
+				pagination.then(function (res) {
+					res.results.forEach(function (result) {
+						return allResults.push(result);
+					});
+					if (res.next) {
+						resolve(_this3.aggregatePagination(res.next(), allResults));
+					} else {
+						resolve(allResults);
+					}
+				})['catch'](reject);
+			});
+		}
+	}, {
+		key: 'search',
+
+		/**
+   * Search articles
+   * @example
+   * new Wiki().search('star wars').then((data) => console.log(data.results.length));
+   * @example
+   * new Wiki().search('star wars').then((data) => {
+   * 	data.next().then(...);
+   * });
+   * @method Wiki#search
+   * @param  {string} query - keyword query
+   * @param  {Number} [limit] - limits the number of results
+   * @return {Promise} - pagination promise with results and next page function
+   */
+		value: function search(query) {
+			var limit = arguments[1] === undefined ? 50 : arguments[1];
+
+			return this.pagination({
+				list: 'search',
+				srsearch: query,
+				srlimit: limit
+			}, function (res) {
+				return _import2['default'].pluck(res.query.search, 'title');
+			});
+		}
+	}, {
+		key: 'random',
+
+		/**
+   * Random articles
+   * @method Wiki#random
+   * @param  {Number} [limit] - limits the number of random articles
+   * @return {Promise}
+   */
+		value: function random() {
+			var _this4 = this;
+
+			var limit = arguments[0] === undefined ? 1 : arguments[0];
+
+			return new Promise(function (resolve, reject) {
+				_this4.api({
+					list: 'random',
+					rnnamespace: 0,
+					rnlimit: limit
+				}).then(function (res) {
+					return resolve(_import2['default'].pluck(res.query.random, 'title'));
+				})['catch'](reject);
+			});
+		}
+	}, {
+		key: 'page',
+
+		/**
+   * Create Page Interface
+   * @example
+   * new Wiki().page('Batman').then((page) => console.log(page.pageid));
+   * @method Wiki#page
+   * @param  {string} title - title of article 
+   * @return {Promise}
+   */
+		value: function page(title) {
+			var _this5 = this;
+
+			return new Promise(function (resolve, reject) {
+				_this5.api({
+					prop: 'info|pageprops',
+					inprop: 'url',
+					ppprop: 'disambiguation',
+					titles: title
+				}).then(function (res) {
+					var id = _import2['default'].findKey(res.query.pages, function (page) {
+						return page.title === title;
+					});
+					if (!id) {
+						reject(new Error('No article found'));
+					} else {
+						resolve(new WikiPage(res.query.pages[id], _this5));
+					}
+				})['catch'](reject);
+			});
+		}
+	}, {
+		key: 'geoSearch',
+
+		/**
+   * Geographical Search
+   * @method Wiki#geoSearch
+   * @param  {Number} lat - latitude
+   * @param  {Number} lon - longitude
+   * @param  {Number} [radius] - search radius in kilometers
+   * @return {Promise}
+   */
+		value: function geoSearch(lat, lon) {
+			var _this6 = this;
+
+			var radius = arguments[2] === undefined ? 1000 : arguments[2];
+			// 1km
+			return new Promise(function (resolve, reject) {
+				_this6.api({
+					list: 'geosearch',
+					gsradius: radius,
+					gscoord: lat + '|' + lon
+				}).then(function (res) {
+					return resolve(_import2['default'].pluck(res.query.geosearch, 'title'));
+				})['catch'](reject);
+			});
+		}
+	}]);
+
+	return Wiki;
+})();
+
+/**
+* Page Interface
+* @class WikiPage
+* @param  {Object} [props] - page properties from API page query
+* @return {WikiPage}
+*/
+
+var WikiPage = (function () {
+	function WikiPage(props, wiki) {
+		_classCallCheck(this, WikiPage);
+
+		this.wiki = wiki;
+		_import2['default'].extend(this, props);
+	}
+
+	_createClass(WikiPage, [{
+		key: 'html',
+
+		/**
+   * HTML from page
+   * @method WikiPage#html
+   * @return {Promise}
+   */
+		value: function html() {
+			var _this7 = this;
+
+			return new Promise(function (resolve, reject) {
+				_this7.wiki.api({
+					prop: 'revisions',
+					rvprop: 'content',
+					rvlimit: 1,
+					rvparse: '',
+					titles: _this7.title
+				}).then(function (res) {
+					return resolve(res.query.pages[_this7.pageid].revisions[0]['*']);
+				})['catch'](reject);
+			});
+		}
+	}, {
+		key: 'content',
+
+		/**
+   * Text content from page
+   * @method WikiPage#content
+   * @return {Promise}
+   */
+		value: function content() {
+			var _this8 = this;
+
+			return new Promise(function (resolve, reject) {
+				_this8.wiki.api({
+					prop: 'extracts',
+					explaintext: '',
+					titles: _this8.title
+				}).then(function (res) {
+					return resolve(res.query.pages[_this8.pageid].extract);
+				})['catch'](reject);
+			});
+		}
+	}, {
+		key: 'summary',
+
+		/**
+   * Text summary from page
+   * @method WikiPage#summary
+   * @return {Promise}
+   */
+		value: function summary() {
+			var _this9 = this;
+
+			return new Promise(function (resolve, reject) {
+				_this9.wiki.api({
+					prop: 'extracts',
+					explaintext: '',
+					exintro: '',
+					titles: _this9.title
+				}).then(function (res) {
+					return resolve(res.query.pages[_this9.pageid].extract);
+				})['catch'](reject);
+			});
+		}
+	}, {
+		key: 'images',
+
+		/**
+   * Image URL's from page
+   * @method WikiPage#images
+   * @return {Promise}
+   */
+		value: function images() {
+			var _this10 = this;
+
+			return new Promise(function (resolve, reject) {
+				_this10.wiki.api({
+					generator: 'images',
+					gimlimit: 'max',
+					prop: 'imageinfo',
+					iiprop: 'url',
+					titles: _this10.title
+				}).then(function (res) {
+					return resolve(_import2['default'].chain(res.query.pages).pluck('imageinfo').flatten().pluck('url').value());
+				})['catch'](reject);
+			});
+		}
+	}, {
+		key: 'references',
+
+		/**
+   * References from page
+   * @method WikiPage#references
+   * @return {Promise}
+   */
+		value: function references() {
+			var _this11 = this;
+
+			return new Promise(function (resolve, reject) {
+				_this11.wiki.api({
+					prop: 'extlinks',
+					ellimit: 'max',
+					titles: _this11.title
+				}).then(function (res) {
+					return resolve(_import2['default'].pluck(res.query.pages[_this11.pageid].extlinks, '*'));
+				})['catch'](reject);
+			});
+		}
+	}, {
+		key: 'links',
+
+		/**
+   * Paginated links from page
+   * @method WikiPage#links
+   * @param  {Boolean} [aggregated] - return all links (default is true)
+   * @param  {Number} [limit] - number of links per page
+   * @return {Promise} - includes results [and next function for more results if not aggregated]
+   */
+		value: function links() {
+			var _this12 = this;
+
+			var aggregated = arguments[0] === undefined ? true : arguments[0];
+			var limit = arguments[1] === undefined ? 100 : arguments[1];
+
+			var pagination = this.wiki.pagination({
+				prop: 'links',
+				plnamespace: 0,
+				pllimit: limit,
+				titles: this.title
+			}, function (res) {
+				return _import2['default'].pluck(res.query.pages[_this12.pageid].links, 'title');
+			});
+			if (aggregated) {
+				return this.wiki.aggregatePagination(pagination);
+			} else {
+				return pagination;
+			}
+		}
+	}, {
+		key: 'categories',
+
+		/**
+   * Paginated categories from page
+   * @method WikiPage#categories
+   * @param  {Boolean} [aggregated] - return all categories (default is true)
+   * @param  {Number} [limit] - number of categories per page
+   * @return {Promise} - includes results [and next function for more results if not aggregated]
+   */
+		value: function categories() {
+			var _this13 = this;
+
+			var aggregated = arguments[0] === undefined ? true : arguments[0];
+			var limit = arguments[1] === undefined ? 100 : arguments[1];
+
+			var pagination = this.wiki.pagination({
+				prop: 'categories',
+				pllimit: limit,
+				titles: this.title
+			}, function (res) {
+				return _import2['default'].pluck(res.query.pages[_this13.pageid].categories, 'title');
+			});
+			if (aggregated) {
+				return this.wiki.aggregatePagination(pagination);
+			} else {
+				return pagination;
+			}
+		}
+	}, {
+		key: 'coordinates',
+
+		/**
+   * Geographical coordinates from page
+   * @method WikiPage#coordinates
+   * @return {Promise}
+   */
+		value: function coordinates() {
+			var _this14 = this;
+
+			return new Promise(function (resolve, reject) {
+				_this14.wiki.api({
+					prop: 'coordinates',
+					titles: _this14.title
+				}).then(function (res) {
+					return resolve(res.query.pages[_this14.pageid].coordinates[0]);
+				})['catch'](reject);
+			});
+		}
+	}, {
+		key: 'info',
+
+		/**
+   * Get info from page
+   * @method WikiPage#info
+   * @return {Promise} - info Object contains key/value pairs of infobox data
+   */
+		value: function info() {
+			var _this15 = this;
+
+			return new Promise(function (resolve, reject) {
+				_this15.wiki.api({
+					prop: 'revisions',
+					rvprop: 'content',
+					rvsection: 0,
+					titles: _this15.title
+				}).then(function (res) {
+					return resolve(_markupParser2['default'](res.query.pages[_this15.pageid].revisions[0]['*']));
+				})['catch'](reject);
+			});
+		}
+	}, {
+		key: 'backlinks',
+
+		/**
+   * Paginated backlinks from page
+   * @method WikiPage#backlinks
+   * @param  {Boolean} [aggregated] - return all backlinks (default is true)
+   * @param  {Number} [limit] - number of backlinks per page
+   * @return {Promise} - includes results [and next function for more results if not aggregated]
+   */
+		value: function backlinks() {
+			var aggregated = arguments[0] === undefined ? true : arguments[0];
+			var limit = arguments[1] === undefined ? 100 : arguments[1];
+
+			var pagination = this.wiki.pagination({
+				list: 'backlinks',
+				bllimit: limit,
+				bltitle: this.title
+			}, function (res) {
+				return _import2['default'].pluck(res.query.backlinks, 'title');
+			});
+			if (aggregated) {
+				return this.wiki.aggregatePagination(pagination);
+			} else {
+				return pagination;
+			}
+		}
+	}]);
+
+	return WikiPage;
+})();
+
+/**
+ * @module Wiki
+ */
+exports['default'] = Wiki;
+module.exports = exports['default'];</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta3</a> on Fri Apr 17 2015 20:13:45 GMT-0500 (CDT) using the Minami theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>
