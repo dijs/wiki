@@ -29,45 +29,52 @@ describe('Wiki Methods', () => {
 
 describe('Page Methods', () => {
 	
-	let page;
+	let luke;
 
 	before((done) => {
-		wiki.page('Luke Skywalker').then((p) => {
-			page = p;
+		wiki.page('Luke Skywalker').then((page) => {
+			luke = page;
 			done();
 		});
 	});
 
 	it('should get html from an article', () => {
-		return page.html().should.eventually.containEql('<b>Luke Skywalker</b>');
+		return luke.html().should.eventually.containEql('<b>Luke Skywalker</b>');
 	});
 
 	it('should get content from an article', () => {
-		return page.content().should.eventually.containEql('Star Wars');
+		return luke.content().should.eventually.containEql('Star Wars');
 	});
 
 	it('should get summary from an article', () => {
-		return page.summary().should.eventually.containEql('Mark Hamill');
+		return luke.summary().should.eventually.containEql('Mark Hamill');
 	});
 
 	it('should get images from an article', () => {
-		return page.images().should.eventually.containEql('http://upload.wikimedia.org/wikipedia/en/9/9b/Luke_Skywalker.png');
+		return luke.images().should.eventually.containEql('http://upload.wikimedia.org/wikipedia/en/9/9b/Luke_Skywalker.png');
 	});
 
 	it('should get references from an article', () => {
-		return page.references().should.eventually.containEql('http://www.starwars.com/databank/luke-skywalker');
+		return luke.references().should.eventually.containEql('http://www.starwars.com/databank/luke-skywalker');
 	});
 
 	it('should get links from an article', () => {
-		return page.links().should.eventually.containEql('Jedi');
+		return luke.links().should.eventually.containEql('Jedi');
 	});
 
 	it('should get categories from an article', () => {
-		return page.categories().should.eventually.containEql('Category:Fictional farmers');
+		return luke.categories().should.eventually.containEql('Category:Fictional farmers');
 	});
 
 	it('should get backlinks from an article', () => {
-		return page.backlinks().should.eventually.containEql('Jedi');
+		return luke.backlinks().should.eventually.containEql('Jedi');
+	});
+
+	it('should get info', () => {
+		return luke.info().should.eventually.have.properties({
+			gender: 'Male',
+			species: 'Human'
+		});
 	});
 
 	it('should get coordinates from an article', (done) => {
@@ -82,10 +89,9 @@ describe('Page Methods', () => {
 		});
 	});
 
-	it('should get info', () => {
-		return page.info().should.eventually.have.properties({
-			gender: 'Male',
-			species: 'Human'
+	it('should know who batman is', (done) => {
+		wiki.page('Batman').then((batman) => {
+			done(null, batman.info().should.eventually.have.property('alter_ego', 'Bruce Wayne'));
 		});
 	});
 

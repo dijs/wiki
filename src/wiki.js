@@ -4,10 +4,20 @@ import request from 'request-promise';
 import _ from 'underscore';
 import markupParser from './wiki-markup-parser';
 
+/**
+ * @namespace
+ * @property {string} apiUrl - URL of Wikipedia API
+ */
 let defaultOptions = {
 	apiUrl: 'http://en.wikipedia.org/w/api.php'
 };
 
+/**
+* Wiki
+* @class
+* @param  {Object} [options] - override options for API (only apiUrl for now)
+* @return {Wiki}
+*/
 class Wiki {
 	constructor(options) {
 		this.options = _.extend(options || {}, defaultOptions);
@@ -59,6 +69,19 @@ class Wiki {
 				.catch(reject);
 		});
 	}
+	/**
+	 * Search articles
+	 * @example
+	 * new Wiki().search('star wars').then((data) => console.log(data.results.length));
+	 * @example
+	 * new Wiki().search('star wars').then((data) => {
+	 * 	data.next().then(...);
+	 * });
+	 * @method Wiki#search
+	 * @param  {string} query - keyword query
+	 * @param  {Number} [limit] - limits the number of results
+	 * @return {Promise} - pagination promise with results and next page function
+	 */
 	search(query, limit = 50) {
 		return this.pagination({
 			list: 'search',
@@ -66,6 +89,12 @@ class Wiki {
 			srlimit: limit
 		}, (res) => _.pluck(res.query.search, 'title'));
 	}
+	/**
+	 * Random articles
+	 * @method Wiki#random
+	 * @param  {Number} [limit] - limits the number of random articles
+	 * @return {Promise}
+	 */
 	random(limit = 1) {
 		return new Promise((resolve, reject) => {
 			this.api({
@@ -77,6 +106,14 @@ class Wiki {
 				.catch(reject);
 		});
 	}
+	/**
+	 * Create Page Interface
+	 * @example
+	 * new Wiki().page('Batman').then((page) => console.log(page.pageid));
+	 * @method Wiki#page
+	 * @param  {string} title - title of article 
+	 * @return {Promise}
+	 */
 	page(title) {
 		return new Promise((resolve, reject) => {
 			this.api({
@@ -96,6 +133,14 @@ class Wiki {
 				.catch(reject);
 		});
 	}
+	/**
+	 * Geographical Search
+	 * @method Wiki#geoSearch
+	 * @param  {Number} lat - latitude
+	 * @param  {Number} lon - longitude
+	 * @param  {Number} [radius] - search radius in kilometers
+	 * @return {Promise}
+	 */
 	geoSearch(lat, lon, radius = 1000) { // 1km
 		return new Promise((resolve, reject) => {
 			this.api({
@@ -109,11 +154,22 @@ class Wiki {
 	}
 }
 
+/**
+* Page Interface
+* @class WikiPage
+* @param  {Object} [props] - page properties from API page query
+* @return {WikiPage}
+*/
 class WikiPage {
 	constructor(props, wiki) {
 		this.wiki = wiki;
 		_.extend(this, props);
 	}
+	/**
+	 * HTML from page
+	 * @method WikiPage#html
+	 * @return {Promise}
+	 */
 	html() {
 		return new Promise((resolve, reject) => {
 			this.wiki.api({
@@ -127,6 +183,11 @@ class WikiPage {
 				.catch(reject);
 		});
 	}
+	/**
+	 * Text content from page
+	 * @method WikiPage#content
+	 * @return {Promise}
+	 */
 	content() {
 		return new Promise((resolve, reject) => {
 			this.wiki.api({
@@ -138,6 +199,11 @@ class WikiPage {
 				.catch(reject);
 		});
 	}
+	/**
+	 * Text summary from page
+	 * @method WikiPage#summary
+	 * @return {Promise}
+	 */
 	summary() {
 		return new Promise((resolve, reject) => {
 			this.wiki.api({
@@ -150,6 +216,11 @@ class WikiPage {
 				.catch(reject);
 		});
 	}
+	/**
+	 * Image URL's from page
+	 * @method WikiPage#images
+	 * @return {Promise}
+	 */
 	images() {
 		return new Promise((resolve, reject) => {
 			this.wiki.api({
@@ -163,6 +234,11 @@ class WikiPage {
 				.catch(reject);
 		});
 	}
+	/**
+	 * References from page
+	 * @method WikiPage#references
+	 * @return {Promise}
+	 */
 	references() {
 		return new Promise((resolve, reject) => {
 			this.wiki.api({
@@ -174,6 +250,13 @@ class WikiPage {
 				.catch(reject);
 		});
 	}
+	/**
+	 * Paginated links from page
+	 * @method WikiPage#links
+	 * @param  {Boolean} [aggregated] - return all links (default is true)
+	 * @param  {Number} [limit] - number of links per page
+	 * @return {Promise} - includes results [and next function for more results if not aggregated]
+	 */
 	links(aggregated = true, limit = 100) {
 		let pagination = this.wiki.pagination({
 			prop: 'links',
@@ -187,6 +270,13 @@ class WikiPage {
 			return pagination;
 		}
 	}
+	/**
+	 * Paginated categories from page
+	 * @method WikiPage#categories
+	 * @param  {Boolean} [aggregated] - return all categories (default is true)
+	 * @param  {Number} [limit] - number of categories per page
+	 * @return {Promise} - includes results [and next function for more results if not aggregated]
+	 */
 	categories(aggregated = true, limit = 100) {
 		let pagination = this.wiki.pagination({
 			prop: 'categories',
@@ -199,6 +289,11 @@ class WikiPage {
 			return pagination;
 		}
 	}
+	/**
+	 * Geographical coordinates from page
+	 * @method WikiPage#coordinates
+	 * @return {Promise}
+	 */
 	coordinates() {
 		return new Promise((resolve, reject) => {
 			this.wiki.api({
@@ -209,6 +304,11 @@ class WikiPage {
 				.catch(reject);
 		});
 	}
+	/**
+	 * Get info from page
+	 * @method WikiPage#info
+	 * @return {Promise} - info Object contains key/value pairs of infobox data
+	 */
 	info() {
 		return new Promise((resolve, reject) => {
 			this.wiki.api({
@@ -221,6 +321,13 @@ class WikiPage {
 				.catch(reject);
 		});
 	}
+	/**
+	 * Paginated backlinks from page
+	 * @method WikiPage#backlinks
+	 * @param  {Boolean} [aggregated] - return all backlinks (default is true)
+	 * @param  {Number} [limit] - number of backlinks per page
+	 * @return {Promise} - includes results [and next function for more results if not aggregated]
+	 */
 	backlinks(aggregated = true, limit = 100) {
 		let pagination = this.wiki.pagination({
 			list: 'backlinks',
@@ -235,4 +342,7 @@ class WikiPage {
 	}
 }
 
+/**
+ * @module Wiki
+ */
 export default Wiki;
