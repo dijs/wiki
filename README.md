@@ -16,7 +16,7 @@ WikiJs is a node.js library which serves as an interface to Wikipedia (or any Me
 
 ## Documentation
 
-<http://dijs.github.io/wikijs>
+<https://dijs.github.io/wiki>
 
 ## Install
 
