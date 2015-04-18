@@ -1,5 +1,6 @@
 [![NPM Version](https://img.shields.io/npm/v/wikijs.svg)](https://www.npmjs.com/package/wikijs)
 [![Build Status](https://travis-ci.org/dijs/wiki.svg)](https://travis-ci.org/dijs/wiki)
+[![Coverage Status](https://coveralls.io/repos/dijs/wiki/badge.svg)](https://coveralls.io/r/dijs/wiki)
 
 # WikiJs
 
@@ -20,7 +21,7 @@ WikiJs is a node.js library which serves as an interface to Wikipedia (or any Me
 
 ## Install
 
-```
+```bash
 npm install wikijs
 ```
 
@@ -28,7 +29,7 @@ npm install wikijs
 
 You can run these commands in order to build and test WikiJs:
 
-```
+```bash
 git clone git@github.com:dijs/wiki.git
 cd wiki
 npm install
@@ -38,7 +39,7 @@ npm test
 
 ## Usage
 
-```
+```javascript
 var Wiki = require('wikijs');
 
 var wiki = new Wiki();

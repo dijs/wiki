@@ -2,4 +2,6 @@ language: node_js
 node_js:
   - "0.12"
 before_script:
-  - "npm run build"
+  - npm run build
+after_script:
+  - npm run coveralls
