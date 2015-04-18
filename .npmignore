@@ -10,3 +10,4 @@ test/
 .jsdoc.json
 .travis.yml
 gulpfile.js
+TODO.md
