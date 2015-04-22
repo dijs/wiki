@@ -5,7 +5,9 @@ var coveralls = require('gulp-coveralls');
 gulp.task('compile', function() {
 	return gulp
 		.src(['src/*.js', 'test/spec.js'])
-		.pipe(babel())
+		.pipe(babel({
+			optional: ['runtime']
+		}))
 		.pipe(gulp.dest('dist'));
 });
 

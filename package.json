@@ -19,6 +19,7 @@
   },
   "main": "./dist/wiki.js",
   "dependencies": {
+    "babel-runtime": "^5.1.11",
     "request-promise": "^0.4.2",
     "underscore": "^1.8.3"
   },
