@@ -95,4 +95,9 @@ describe('Page Methods', () => {
 		});
 	});
 
+	it('should handle empty images properly', () => {
+		const searchImages = term => wiki.page(term).then(page => page.images());
+		return searchImages('The Future Kings of England').should.eventually.have.property('length', 0);
+	});
+
 });

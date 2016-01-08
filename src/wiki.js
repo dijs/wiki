@@ -232,7 +232,19 @@ class WikiPage {
 					iiprop: 'url',
 					titles: this.title
 				})
-				.then((res) => resolve(_.chain(res.query.pages).pluck('imageinfo').flatten().pluck('url').value()))
+				.then(res => {
+					let urls = null;
+					if (res.query) {
+						urls = _.chain(res.query.pages)
+							.pluck('imageinfo')
+							.flatten()
+							.pluck('url')
+							.value();
+					} else {
+						urls = [];
+					}
+					resolve(urls);
+				})
 				.catch(reject);
 		});
 	}
