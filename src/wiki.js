@@ -44,10 +44,12 @@ class Wiki {
 				.then((res) => {
 					let resolution = {};
 					resolution.results = parseResults(res);
-					if (res['query-continue']) {
-						let type = Object.keys(res['query-continue'])[0];
-						let continueKey = Object.keys(res['query-continue'][type])[0];
-						params[continueKey] = res['query-continue'][type][continueKey];
+					if (res['continue']) {
+						const continueType = Object
+							.keys(res['continue'])
+							.filter(key => key !== 'continue')[0];
+						const continueKey = res['continue'][continueType];
+						params[continueType] = continueKey;
 						resolution.next = () => this.pagination(params, parseResults);
 					}
 					resolve(resolution);
@@ -55,15 +57,15 @@ class Wiki {
 				.catch(reject);
 		});
 	}
-	aggregatePagination(pagination, allResults = []) {
+	aggregatePagination(pagination, previousResults = []) {
 		return new Promise((resolve, reject) => {
 			pagination
-				.then((res) => {
-					res.results.forEach((result) => allResults.push(result));
+				.then(res => {
+					const results = previousResults.concat(res.results);
 					if (res.next) {
-						resolve(this.aggregatePagination(res.next(), allResults));
+						resolve(this.aggregatePagination(res.next(), results));
 					} else {
-						resolve(allResults);
+						resolve(results);
 					}
 				})
 				.catch(reject);
@@ -111,7 +113,7 @@ class Wiki {
 	 * @example
 	 * new Wiki().page('Batman').then((page) => console.log(page.pageid));
 	 * @method Wiki#page
-	 * @param  {string} title - title of article 
+	 * @param  {string} title - title of article
 	 * @return {Promise}
 	 */
 	page(title) {

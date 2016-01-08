@@ -28,7 +28,7 @@ describe('Wiki Methods', () => {
 });
 
 describe('Page Methods', () => {
-	
+
 	let luke;
 
 	before((done) => {
@@ -51,7 +51,7 @@ describe('Page Methods', () => {
 	});
 
 	it('should get images from an article', () => {
-		return luke.images().should.eventually.containEql('http://upload.wikimedia.org/wikipedia/en/9/9b/Luke_Skywalker.png');
+		return luke.images().should.eventually.containEql('https://upload.wikimedia.org/wikipedia/en/9/9b/Luke_Skywalker.png');
 	});
 
 	it('should get references from an article', () => {
