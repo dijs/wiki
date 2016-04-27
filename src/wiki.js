@@ -20,7 +20,7 @@ let defaultOptions = {
 */
 class Wiki {
 	constructor(options) {
-		this.options = _.extend(options || {}, defaultOptions);
+		this.options = Object.assign({}, defaultOptions, options || {});
 	}
 	api(params) {
 		return new Promise((resolve, reject) => {
