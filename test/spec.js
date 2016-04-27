@@ -1,28 +1,33 @@
 import 'should-promised';
 import Wiki from './wiki';
 
-let wiki = new Wiki();
-
 describe('Wiki Methods', () => {
 
 	it('Search should find an article', () => {
-		return wiki.search('kevin bacon number').should.eventually.have.property('results').containEql('Six degrees of separation');
+		return new Wiki().search('kevin bacon number').should.eventually.have.property('results').containEql('Six degrees of separation');
 	});
 
 	it('Search should limit properly', () => {
-		return wiki.search('batman', 7).should.eventually.have.property('results').with.length(7);
+		return new Wiki().search('batman', 7).should.eventually.have.property('results').with.length(7);
 	});
 
 	it('Random should return the correct number of results', () => {
-		return wiki.random(3).should.eventually.have.length(3);
+		return new Wiki().random(3).should.eventually.have.length(3);
 	});
 
 	it('Should return correct page', () => {
-		return wiki.page('Batman').should.eventually.have.property('pageid', 4335);
+		return new Wiki().page('Batman').should.eventually.have.property('pageid', 4335);
 	});
 
 	it('Should return page from coordinates', () => {
-		return wiki.geoSearch(32.329, -96.136).should.eventually.containEql('Gun Barrel City, Texas');
+		return new Wiki().geoSearch(32.329, -96.136).should.eventually.containEql('Gun Barrel City, Texas');
+	});
+
+	it('Should be able to choose wikipedia language', () => {
+		return new Wiki({ apiUrl: 'http://fr.wikipedia.org/w/api.php' })
+			.page('France')
+			.then(page => page.summary())
+			.should.eventually.containEql('La France, officiellement République française');
 	});
 
 });
@@ -32,7 +37,7 @@ describe('Page Methods', () => {
 	let luke;
 
 	before((done) => {
-		wiki.page('Luke Skywalker').then((page) => {
+		new Wiki().page('Luke Skywalker').then(page => {
 			luke = page;
 			done();
 		});
@@ -78,7 +83,7 @@ describe('Page Methods', () => {
 	});
 
 	it('should get coordinates from an article', (done) => {
-		wiki.page('Texas').then((texas) => {
+		new Wiki().page('Texas').then((texas) => {
 			texas.coordinates().then((coords) => {
 				coords.should.have.properties({
 					lat: 31,
@@ -90,13 +95,13 @@ describe('Page Methods', () => {
 	});
 
 	it('should know who batman is', (done) => {
-		wiki.page('Batman').then((batman) => {
+		new Wiki().page('Batman').then((batman) => {
 			done(null, batman.info().should.eventually.have.property('alter_ego', 'Bruce Wayne'));
 		});
 	});
 
 	it('should handle empty images properly', () => {
-		const searchImages = term => wiki.page(term).then(page => page.images());
+		const searchImages = term => new Wiki().page(term).then(page => page.images());
 		return searchImages('The Future Kings of England').should.eventually.have.property('length', 0);
 	});
 
