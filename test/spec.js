@@ -1,5 +1,5 @@
 import 'should-promised';
-import Wiki from './wiki';
+import Wiki from '../dist/wiki';
 
 describe('Wiki Methods', () => {
 
