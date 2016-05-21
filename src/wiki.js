@@ -1,6 +1,7 @@
 'use strict';
 
-import request from 'request-promise';
+import 'babel-polyfill';
+import fetch from 'isomorphic-fetch';
 import _ from 'underscore';
 import markupParser from './wiki-markup-parser';
 
@@ -10,6 +11,13 @@ import markupParser from './wiki-markup-parser';
  */
 let defaultOptions = {
 	apiUrl: 'http://en.wikipedia.org/w/api.php'
+};
+
+const fetchOptions = {
+	method: 'GET',
+	headers: {
+		'User-Agent': 'WikiJs/0.1 (https://github.com/dijs/wiki; richard.vanderdys@gmail.com)'
+	}
 };
 
 /**
@@ -22,21 +30,15 @@ class Wiki {
 	constructor(options) {
 		this.options = Object.assign({}, defaultOptions, options || {});
 	}
-	api(params) {
-		return new Promise((resolve, reject) => {
-			request.get({
-					uri: this.options.apiUrl,
-					qs: _.extend(params, {
-						format: 'json',
-						action: 'query'
-					}),
-					headers: {
-						'User-Agent': 'WikiJs/0.1 (https://github.com/dijs/wiki; richard.vanderdys@gmail.com)'
-					}
-				})
-				.then((res) => resolve(JSON.parse(res)))
-				.catch(reject);
+	api(params = {}) {
+		const qs = _.extend(params, {
+			format: 'json',
+			action: 'query'
 		});
+		const queryString = Object.keys(qs)
+			.map(key => `${key}=${qs[key]}`).join('&');
+		const url = `${this.options.apiUrl}?${queryString}`;
+		return fetch(url, fetchOptions).then(res => res.json());
 	}
 	pagination(params, parseResults) {
 		return new Promise((resolve, reject) => {
