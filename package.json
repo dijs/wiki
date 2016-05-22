@@ -30,7 +30,7 @@
     "eslint": "^2.10.2",
     "gulp": "^3.8.11",
     "gulp-coveralls": "^0.1.3",
-    "istanbul": "^0.3.13",
+    "istanbul": "^1.0.0-alpha.2",
     "jsdoc": "^3.3.0-beta3",
     "minami": "^1.1.0",
     "mocha": "^2.2.4",

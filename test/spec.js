@@ -1,5 +1,5 @@
 import 'should-promised';
-import Wiki from '../dist/wiki';
+import Wiki from '../src/wiki';
 import nock from 'nock';
 import fs from 'fs';
 
