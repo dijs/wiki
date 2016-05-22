@@ -1,0 +1,26 @@
+{
+   "batchcomplete": "",
+   "continue": {
+      "rncontinue": "0.055119879594|0.055121012992|33056490|0",
+      "continue": "-||"
+   },
+   "query": {
+      "random": [
+         {
+            "id": 27321302,
+            "ns": 0,
+            "title": "Portalia"
+         },
+         {
+            "id": 237327,
+            "ns": 0,
+            "title": "Mary Travers (disambiguation)"
+         },
+         {
+            "id": 44531906,
+            "ns": 0,
+            "title": "Landzeal Group Ltd v Kyne"
+         }
+      ]
+   }
+}

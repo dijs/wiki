@@ -1,0 +1,34 @@
+{
+   "batchcomplete": "",
+   "query": {
+      "pages": {
+         "53602": {
+            "pageid": 53602,
+            "ns": 0,
+            "title": "Luke Skywalker",
+            "links": [
+               {
+                  "ns": 0,
+                  "title": "Yoda"
+               },
+               {
+                  "ns": 0,
+                  "title": "Yoda (song)"
+               },
+               {
+                  "ns": 0,
+                  "title": "Yuuzhan Vong"
+               },
+               {
+                  "ns": 0,
+                  "title": "Zonama Sekot"
+               },
+               {
+                  "ns": 0,
+                  "title": "Zorba the Hutt's Revenge"
+               }
+            ]
+         }
+      }
+   }
+}

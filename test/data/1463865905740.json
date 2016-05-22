@@ -1,0 +1,512 @@
+{
+   "batchcomplete": "",
+   "continue": {
+      "blcontinue": "1|398180",
+      "continue": "-||"
+   },
+   "query": {
+      "backlinks": [
+         {
+            "pageid": 6879,
+            "ns": 0,
+            "title": "Cyborgs in fiction"
+         },
+         {
+            "pageid": 6890,
+            "ns": 1,
+            "title": "Talk:Cyborgs in fiction"
+         },
+         {
+            "pageid": 8569,
+            "ns": 0,
+            "title": "Duke Nukem 3D"
+         },
+         {
+            "pageid": 8860,
+            "ns": 0,
+            "title": "Dubbing (filmmaking)"
+         },
+         {
+            "pageid": 15043,
+            "ns": 0,
+            "title": "International Space Station"
+         },
+         {
+            "pageid": 16315,
+            "ns": 0,
+            "title": "Joseph Campbell"
+         },
+         {
+            "pageid": 16379,
+            "ns": 0,
+            "title": "Jedi"
+         },
+         {
+            "pageid": 18085,
+            "ns": 0,
+            "title": "Luke (name)"
+         },
+         {
+            "pageid": 26424,
+            "ns": 1,
+            "title": "Talk:Retroactive continuity"
+         },
+         {
+            "pageid": 26678,
+            "ns": 0,
+            "title": "Star Wars"
+         },
+         {
+            "pageid": 40132,
+            "ns": 0,
+            "title": "The Muppet Show"
+         },
+         {
+            "pageid": 43373,
+            "ns": 0,
+            "title": "Clint Eastwood"
+         },
+         {
+            "pageid": 48687,
+            "ns": 0,
+            "title": "Star Wars Jedi Knight II: Jedi Outcast"
+         },
+         {
+            "pageid": 50020,
+            "ns": 0,
+            "title": "Hope"
+         },
+         {
+            "pageid": 50744,
+            "ns": 0,
+            "title": "Return of the Jedi"
+         },
+         {
+            "pageid": 50778,
+            "ns": 0,
+            "title": "Jar Jar Binks"
+         },
+         {
+            "pageid": 50781,
+            "ns": 0,
+            "title": "Wedge Antilles"
+         },
+         {
+            "pageid": 50784,
+            "ns": 0,
+            "title": "Princess Leia"
+         },
+         {
+            "pageid": 50785,
+            "ns": 0,
+            "title": "Lando Calrissian"
+         },
+         {
+            "pageid": 50786,
+            "ns": 0,
+            "title": "Boba Fett"
+         },
+         {
+            "pageid": 50790,
+            "ns": 0,
+            "title": "Star Destroyer"
+         },
+         {
+            "pageid": 50793,
+            "ns": 0,
+            "title": "Star Wars: Episode I – The Phantom Menace"
+         },
+         {
+            "pageid": 50799,
+            "ns": 0,
+            "title": "Y-wing"
+         },
+         {
+            "pageid": 50801,
+            "ns": 0,
+            "title": "X-wing fighter"
+         },
+         {
+            "pageid": 50957,
+            "ns": 0,
+            "title": "Star Wars: Episode II – Attack of the Clones"
+         },
+         {
+            "pageid": 52549,
+            "ns": 0,
+            "title": "Star Wars (film)"
+         },
+         {
+            "pageid": 53862,
+            "ns": 0,
+            "title": "Darth Vader"
+         },
+         {
+            "pageid": 53888,
+            "ns": 0,
+            "title": "Death Star"
+         },
+         {
+            "pageid": 53964,
+            "ns": 0,
+            "title": "The Empire Strikes Back"
+         },
+         {
+            "pageid": 55447,
+            "ns": 0,
+            "title": "Star Wars: Episode III – Revenge of the Sith"
+         },
+         {
+            "pageid": 56196,
+            "ns": 0,
+            "title": "Obi-Wan Kenobi"
+         },
+         {
+            "pageid": 56197,
+            "ns": 0,
+            "title": "Warp Drive"
+         },
+         {
+            "pageid": 56295,
+            "ns": 0,
+            "title": "Dagobah"
+         },
+         {
+            "pageid": 58909,
+            "ns": 0,
+            "title": "Naboo"
+         },
+         {
+            "pageid": 61082,
+            "ns": 0,
+            "title": "MacGuffin"
+         },
+         {
+            "pageid": 61179,
+            "ns": 0,
+            "title": "The Last Command (novel)"
+         },
+         {
+            "pageid": 62948,
+            "ns": 0,
+            "title": "Count Dooku"
+         },
+         {
+            "pageid": 62952,
+            "ns": 0,
+            "title": "Qui-Gon Jinn"
+         },
+         {
+            "pageid": 63166,
+            "ns": 0,
+            "title": "R2-D2"
+         },
+         {
+            "pageid": 63170,
+            "ns": 0,
+            "title": "C-3PO"
+         },
+         {
+            "pageid": 63171,
+            "ns": 0,
+            "title": "Yoda"
+         },
+         {
+            "pageid": 63225,
+            "ns": 0,
+            "title": "Star Wars/Luke Skywalker",
+            "redirect": ""
+         },
+         {
+            "pageid": 68124,
+            "ns": 0,
+            "title": "American Graffiti"
+         },
+         {
+            "pageid": 68430,
+            "ns": 0,
+            "title": "Galactic Empire (Star Wars)"
+         },
+         {
+            "pageid": 71789,
+            "ns": 0,
+            "title": "Mara Jade"
+         },
+         {
+            "pageid": 73499,
+            "ns": 0,
+            "title": "Grand Admiral Thrawn"
+         },
+         {
+            "pageid": 73637,
+            "ns": 0,
+            "title": "Grand Moff Tarkin"
+         },
+         {
+            "pageid": 75222,
+            "ns": 0,
+            "title": "Spaceballs"
+         },
+         {
+            "pageid": 77861,
+            "ns": 0,
+            "title": "Tatooine"
+         },
+         {
+            "pageid": 80570,
+            "ns": 0,
+            "title": "Rogue Squadron"
+         },
+         {
+            "pageid": 80579,
+            "ns": 0,
+            "title": "Droid (robot)"
+         },
+         {
+            "pageid": 95868,
+            "ns": 0,
+            "title": "Rebel Alliance"
+         },
+         {
+            "pageid": 100280,
+            "ns": 0,
+            "title": "Lightsaber"
+         },
+         {
+            "pageid": 143890,
+            "ns": 0,
+            "title": "SpaceCamp"
+         },
+         {
+            "pageid": 147640,
+            "ns": 0,
+            "title": "Kashyyyk"
+         },
+         {
+            "pageid": 154554,
+            "ns": 0,
+            "title": "John Williams"
+         },
+         {
+            "pageid": 159606,
+            "ns": 0,
+            "title": "Greedo"
+         },
+         {
+            "pageid": 163017,
+            "ns": 0,
+            "title": "Admiral Ackbar"
+         },
+         {
+            "pageid": 164997,
+            "ns": 0,
+            "title": "Jacen Solo"
+         },
+         {
+            "pageid": 167395,
+            "ns": 0,
+            "title": "Wilhelm scream"
+         },
+         {
+            "pageid": 171360,
+            "ns": 5,
+            "title": "Wikipedia talk:Writing better articles/Check your fiction"
+         },
+         {
+            "pageid": 171478,
+            "ns": 0,
+            "title": "Batman: The Animated Series"
+         },
+         {
+            "pageid": 176945,
+            "ns": 0,
+            "title": "Film score"
+         },
+         {
+            "pageid": 183440,
+            "ns": 0,
+            "title": "Star Wars (radio)"
+         },
+         {
+            "pageid": 183467,
+            "ns": 0,
+            "title": "Transformers (toy line)"
+         },
+         {
+            "pageid": 185264,
+            "ns": 0,
+            "title": "Star Wars Holiday Special"
+         },
+         {
+            "pageid": 206328,
+            "ns": 0,
+            "title": "Michael A. Stackpole"
+         },
+         {
+            "pageid": 240712,
+            "ns": 0,
+            "title": "Lisa's Rival"
+         },
+         {
+            "pageid": 240763,
+            "ns": 0,
+            "title": "Coruscant"
+         },
+         {
+            "pageid": 242303,
+            "ns": 0,
+            "title": "Watto"
+         },
+         {
+            "pageid": 242925,
+            "ns": 0,
+            "title": "Skywalker family"
+         },
+         {
+            "pageid": 246485,
+            "ns": 0,
+            "title": "Yuuzhan Vong"
+         },
+         {
+            "pageid": 250531,
+            "ns": 0,
+            "title": "Mr. Potato Head"
+         },
+         {
+            "pageid": 253726,
+            "ns": 0,
+            "title": "Luther Campbell"
+         },
+         {
+            "pageid": 261660,
+            "ns": 0,
+            "title": "Hoth"
+         },
+         {
+            "pageid": 288515,
+            "ns": 0,
+            "title": "Clone Wars (Star Wars)"
+         },
+         {
+            "pageid": 288520,
+            "ns": 0,
+            "title": "Galactic Civil War"
+         },
+         {
+            "pageid": 290608,
+            "ns": 0,
+            "title": "Tusken Raiders"
+         },
+         {
+            "pageid": 296295,
+            "ns": 0,
+            "title": "Guybrush Threepwood"
+         },
+         {
+            "pageid": 297239,
+            "ns": 0,
+            "title": "The Hero with a Thousand Faces"
+         },
+         {
+            "pageid": 301456,
+            "ns": 0,
+            "title": "Happy ending"
+         },
+         {
+            "pageid": 303197,
+            "ns": 0,
+            "title": "List of Star Wars characters"
+         },
+         {
+            "pageid": 305404,
+            "ns": 0,
+            "title": "Fox McCloud"
+         },
+         {
+            "pageid": 311217,
+            "ns": 0,
+            "title": "Physics and Star Wars"
+         },
+         {
+            "pageid": 321092,
+            "ns": 0,
+            "title": "Star Wars Customizable Card Game"
+         },
+         {
+            "pageid": 330873,
+            "ns": 0,
+            "title": "Star Wars Jedi Knight: Jedi Academy"
+         },
+         {
+            "pageid": 333681,
+            "ns": 0,
+            "title": "Star Wars Galaxies"
+         },
+         {
+            "pageid": 335019,
+            "ns": 0,
+            "title": "Falco Lombardi"
+         },
+         {
+            "pageid": 362748,
+            "ns": 0,
+            "title": "Bespin"
+         },
+         {
+            "pageid": 363661,
+            "ns": 0,
+            "title": "List of Star Wars comic books"
+         },
+         {
+            "pageid": 367841,
+            "ns": 0,
+            "title": "The New Jedi Order"
+         },
+         {
+            "pageid": 373711,
+            "ns": 0,
+            "title": "The Truce at Bakura"
+         },
+         {
+            "pageid": 374803,
+            "ns": 0,
+            "title": "Balance Point"
+         },
+         {
+            "pageid": 375813,
+            "ns": 0,
+            "title": "Nebulon-B frigate"
+         },
+         {
+            "pageid": 380358,
+            "ns": 0,
+            "title": "Star Wars sources and analogues"
+         },
+         {
+            "pageid": 380400,
+            "ns": 1,
+            "title": "Talk:Star Wars sources and analogues"
+         },
+         {
+            "pageid": 381411,
+            "ns": 0,
+            "title": "Vector Prime"
+         },
+         {
+            "pageid": 386988,
+            "ns": 0,
+            "title": "Star by Star"
+         },
+         {
+            "pageid": 397758,
+            "ns": 0,
+            "title": "Alignment (role-playing games)"
+         },
+         {
+            "pageid": 398165,
+            "ns": 0,
+            "title": "Sebastian Shaw (actor)"
+         }
+      ]
+   }
+}

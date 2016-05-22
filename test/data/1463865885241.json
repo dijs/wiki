@@ -1,0 +1,16 @@
+{
+   "batchcomplete": "",
+   "query": {
+      "geosearch": [
+         {
+            "pageid": 136057,
+            "ns": 0,
+            "title": "Gun Barrel City, Texas",
+            "lat": 32.328888888889,
+            "lon": -96.136388888889,
+            "dist": 38.6,
+            "primary": ""
+         }
+      ]
+   }
+}

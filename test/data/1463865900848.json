@@ -1,0 +1,62 @@
+{
+   "warnings": {
+      "main": {
+         "*": "Unrecognized parameter: 'pllimit'"
+      }
+   },
+   "continue": {
+      "clcontinue": "53602|Wikipedia_protected_pages_without_expiry",
+      "continue": "||"
+   },
+   "query": {
+      "pages": {
+         "53602": {
+            "pageid": 53602,
+            "ns": 0,
+            "title": "Luke Skywalker",
+            "categories": [
+               {
+                  "ns": 14,
+                  "title": "Category:Fictional hermits"
+               },
+               {
+                  "ns": 14,
+                  "title": "Category:Fictional mechanics"
+               },
+               {
+                  "ns": 14,
+                  "title": "Category:Fictional revolutionaries"
+               },
+               {
+                  "ns": 14,
+                  "title": "Category:Fictional twins"
+               },
+               {
+                  "ns": 14,
+                  "title": "Category:Jedi characters"
+               },
+               {
+                  "ns": 14,
+                  "title": "Category:Science fiction soldiers"
+               },
+               {
+                  "ns": 14,
+                  "title": "Category:Star Wars Transformers characters"
+               },
+               {
+                  "ns": 14,
+                  "title": "Category:Star Wars characters"
+               },
+               {
+                  "ns": 14,
+                  "title": "Category:Use mdy dates from June 2013"
+               },
+               {
+                  "ns": 14,
+                  "title": "Category:Wikipedia pending changes protected pages (level 1)"
+               }
+            ]
+         }
+      }
+   }
+}

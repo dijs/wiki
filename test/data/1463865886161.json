@@ -1,0 +1,22 @@
+{
+   "batchcomplete": "",
+   "query": {
+      "pages": {
+         "1095": {
+            "pageid": 1095,
+            "ns": 0,
+            "title": "France",
+            "contentmodel": "wikitext",
+            "pagelanguage": "fr",
+            "pagelanguagehtmlcode": "fr",
+            "pagelanguagedir": "ltr",
+            "touched": "2016-05-21T19:21:18Z",
+            "lastrevid": 126377578,
+            "length": 290870,
+            "fullurl": "https://fr.wikipedia.org/wiki/France",
+            "editurl": "https://fr.wikipedia.org/w/index.php?title=France&action=edit",
+            "canonicalurl": "https://fr.wikipedia.org/wiki/France"
+         }
+      }
+   }
+}

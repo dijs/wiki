@@ -1,0 +1,512 @@
+{
+   "batchcomplete": "",
+   "continue": {
+      "blcontinue": "0|3137992",
+      "continue": "-||"
+   },
+   "query": {
+      "backlinks": [
+         {
+            "pageid": 1759525,
+            "ns": 0,
+            "title": "Jean-Claude Mézières"
+         },
+         {
+            "pageid": 1774646,
+            "ns": 0,
+            "title": "Star Wars: Rebel Assault"
+         },
+         {
+            "pageid": 1774751,
+            "ns": 0,
+            "title": "Fashion (band)"
+         },
+         {
+            "pageid": 1792215,
+            "ns": 0,
+            "title": "Mayored to the Mob"
+         },
+         {
+            "pageid": 1795193,
+            "ns": 0,
+            "title": "Super Star Wars"
+         },
+         {
+            "pageid": 1796472,
+            "ns": 0,
+            "title": "Super Star Wars: The Empire Strikes Back"
+         },
+         {
+            "pageid": 1796504,
+            "ns": 0,
+            "title": "Super Star Wars: Return of the Jedi"
+         },
+         {
+            "pageid": 1797243,
+            "ns": 0,
+            "title": "I, Jedi"
+         },
+         {
+            "pageid": 1799136,
+            "ns": 0,
+            "title": "Star Wars: Yoda Stories"
+         },
+         {
+            "pageid": 1839977,
+            "ns": 0,
+            "title": "Figrin D'an and the Modal Nodes"
+         },
+         {
+            "pageid": 1846990,
+            "ns": 0,
+            "title": "Information flow"
+         },
+         {
+            "pageid": 1850044,
+            "ns": 1,
+            "title": "Talk:List of minor Star Wars villains"
+         },
+         {
+            "pageid": 1850963,
+            "ns": 0,
+            "title": "Empire of Dreams"
+         },
+         {
+            "pageid": 1855744,
+            "ns": 0,
+            "title": "Star Wars: Rebellion"
+         },
+         {
+            "pageid": 1860874,
+            "ns": 100,
+            "title": "Portal:Star Wars"
+         },
+         {
+            "pageid": 1877852,
+            "ns": 0,
+            "title": "Nien Nunb"
+         },
+         {
+            "pageid": 1880186,
+            "ns": 0,
+            "title": "Matthew Stover"
+         },
+         {
+            "pageid": 1911591,
+            "ns": 0,
+            "title": "Alderaan"
+         },
+         {
+            "pageid": 1923790,
+            "ns": 2,
+            "title": "User:UsaSatsui"
+         },
+         {
+            "pageid": 1932418,
+            "ns": 2,
+            "title": "User:Johhny-turbo"
+         },
+         {
+            "pageid": 1939628,
+            "ns": 0,
+            "title": "Hutt (Star Wars)"
+         },
+         {
+            "pageid": 1941493,
+            "ns": 4,
+            "title": "Wikipedia:Articles for deletion/Log/2005 May 26"
+         },
+         {
+            "pageid": 1941777,
+            "ns": 4,
+            "title": "Wikipedia:Articles for deletion/Mia Celchu"
+         },
+         {
+            "pageid": 1951598,
+            "ns": 4,
+            "title": "Wikipedia:Articles for deletion/Log/2005 May 28"
+         },
+         {
+            "pageid": 1953187,
+            "ns": 4,
+            "title": "Wikipedia:Articles for deletion/2005 New England Patriots Schedule"
+         },
+         {
+            "pageid": 1956876,
+            "ns": 0,
+            "title": "Star Wars Infinities"
+         },
+         {
+            "pageid": 1965591,
+            "ns": 0,
+            "title": "Star Wars: Battlefront II"
+         },
+         {
+            "pageid": 1968775,
+            "ns": 0,
+            "title": "Phil Brown (actor)"
+         },
+         {
+            "pageid": 1981180,
+            "ns": 0,
+            "title": "Specter of the Past"
+         },
+         {
+            "pageid": 2013037,
+            "ns": 0,
+            "title": "Jedi Search"
+         },
+         {
+            "pageid": 2013055,
+            "ns": 0,
+            "title": "Jedi Academy trilogy"
+         },
+         {
+            "pageid": 2015589,
+            "ns": 0,
+            "title": "Dark Apprentice"
+         },
+         {
+            "pageid": 2018105,
+            "ns": 0,
+            "title": "List of songs recorded by \"Weird Al\" Yankovic"
+         },
+         {
+            "pageid": 2026009,
+            "ns": 0,
+            "title": "Dark Empire I"
+         },
+         {
+            "pageid": 2026018,
+            "ns": 0,
+            "title": "Dark Empire II"
+         },
+         {
+            "pageid": 2026023,
+            "ns": 0,
+            "title": "Empire's End"
+         },
+         {
+            "pageid": 2028864,
+            "ns": 2,
+            "title": "User:Nightscream"
+         },
+         {
+            "pageid": 2068329,
+            "ns": 0,
+            "title": "List of fictional plants"
+         },
+         {
+            "pageid": 2070258,
+            "ns": 0,
+            "title": "The Cleveland–Loretta Quagmire"
+         },
+         {
+            "pageid": 2077605,
+            "ns": 3,
+            "title": "User talk:George Leung"
+         },
+         {
+            "pageid": 2081720,
+            "ns": 0,
+            "title": "Star Wars: Masters of Teräs Käsi"
+         },
+         {
+            "pageid": 2083963,
+            "ns": 0,
+            "title": "Star Wars: X-Wing"
+         },
+         {
+            "pageid": 2087912,
+            "ns": 0,
+            "title": "Annandale High School"
+         },
+         {
+            "pageid": 2094505,
+            "ns": 0,
+            "title": "John Morton (actor)"
+         },
+         {
+            "pageid": 2111799,
+            "ns": 0,
+            "title": "Max Rebo Band"
+         },
+         {
+            "pageid": 2113592,
+            "ns": 1,
+            "title": "Talk:List of minor Star Wars Rebel characters"
+         },
+         {
+            "pageid": 2119164,
+            "ns": 0,
+            "title": "Bonnie Piesse"
+         },
+         {
+            "pageid": 2154783,
+            "ns": 0,
+            "title": "Least I Could Do"
+         },
+         {
+            "pageid": 2156758,
+            "ns": 0,
+            "title": "List of Samurai Jack episodes"
+         },
+         {
+            "pageid": 2170052,
+            "ns": 0,
+            "title": "Return of the Ewok"
+         },
+         {
+            "pageid": 2170969,
+            "ns": 0,
+            "title": "Supernatural (U.S. TV series)"
+         },
+         {
+            "pageid": 2203622,
+            "ns": 6,
+            "title": "File:Maralukeben.jpg"
+         },
+         {
+            "pageid": 2226187,
+            "ns": 0,
+            "title": "Star Wars: Shadows of the Empire (video game)"
+         },
+         {
+            "pageid": 2236626,
+            "ns": 0,
+            "title": "HD 188753"
+         },
+         {
+            "pageid": 2246736,
+            "ns": 0,
+            "title": "List of fictional revolutions and coups"
+         },
+         {
+            "pageid": 2319914,
+            "ns": 2,
+            "title": "User:Ecthelion"
+         },
+         {
+            "pageid": 2323997,
+            "ns": 0,
+            "title": "Matmata, Tunisia"
+         },
+         {
+            "pageid": 2339977,
+            "ns": 0,
+            "title": "Peter Diamond (actor)"
+         },
+         {
+            "pageid": 2351995,
+            "ns": 0,
+            "title": "Prosthetics in fiction"
+         },
+         {
+            "pageid": 2418494,
+            "ns": 0,
+            "title": "Eric Bauza"
+         },
+         {
+            "pageid": 2445038,
+            "ns": 0,
+            "title": "STS-120"
+         },
+         {
+            "pageid": 2468362,
+            "ns": 0,
+            "title": "All About Steve (American Dad!)"
+         },
+         {
+            "pageid": 2479295,
+            "ns": 0,
+            "title": "The Glove of Darth Vader"
+         },
+         {
+            "pageid": 2482601,
+            "ns": 0,
+            "title": "Star Wars: The Roleplaying Game"
+         },
+         {
+            "pageid": 2486724,
+            "ns": 0,
+            "title": "Darth Vader's Psychic Hotline"
+         },
+         {
+            "pageid": 2487170,
+            "ns": 0,
+            "title": "Troops (film)"
+         },
+         {
+            "pageid": 2496167,
+            "ns": 1,
+            "title": "Talk:Darth Vader/Archive 3"
+         },
+         {
+            "pageid": 2528569,
+            "ns": 0,
+            "title": "Bob Bergen"
+         },
+         {
+            "pageid": 2563343,
+            "ns": 0,
+            "title": "When You Wish Upon a Weinstein"
+         },
+         {
+            "pageid": 2613095,
+            "ns": 4,
+            "title": "Wikipedia:Templates for discussion/Log/Deleted/September 2005"
+         },
+         {
+            "pageid": 2685914,
+            "ns": 0,
+            "title": "Young Jedi Knights"
+         },
+         {
+            "pageid": 2747486,
+            "ns": 0,
+            "title": "Delta Squad"
+         },
+         {
+            "pageid": 2748491,
+            "ns": 0,
+            "title": "Star Wars: Behind the Magic"
+         },
+         {
+            "pageid": 2759797,
+            "ns": 0,
+            "title": "The Dark Nest trilogy"
+         },
+         {
+            "pageid": 2759840,
+            "ns": 0,
+            "title": "The Joiner King"
+         },
+         {
+            "pageid": 2768880,
+            "ns": 0,
+            "title": "The Unseen Queen"
+         },
+         {
+            "pageid": 2769039,
+            "ns": 0,
+            "title": "The Swarm War"
+         },
+         {
+            "pageid": 2771968,
+            "ns": 0,
+            "title": "Legacy of the Force"
+         },
+         {
+            "pageid": 2771999,
+            "ns": 0,
+            "title": "Betrayal (Star Wars novel)"
+         },
+         {
+            "pageid": 2772027,
+            "ns": 0,
+            "title": "Bloodlines (Star Wars novel)"
+         },
+         {
+            "pageid": 2775510,
+            "ns": 1,
+            "title": "Talk:Starfighter (science fiction)"
+         },
+         {
+            "pageid": 2815243,
+            "ns": 0,
+            "title": "Star Wars sequel trilogy"
+         },
+         {
+            "pageid": 2824118,
+            "ns": 0,
+            "title": "Allegiance (novel)"
+         },
+         {
+            "pageid": 2824482,
+            "ns": 4,
+            "title": "Wikipedia:Reference desk archive/Language/October 2005"
+         },
+         {
+            "pageid": 2826174,
+            "ns": 0,
+            "title": "Survivor's Quest"
+         },
+         {
+            "pageid": 2885266,
+            "ns": 0,
+            "title": "Star Wars: The Empire Strikes Back (1985 video game)"
+         },
+         {
+            "pageid": 2903013,
+            "ns": 1,
+            "title": "Talk:Good Times with Weapons"
+         },
+         {
+            "pageid": 2913358,
+            "ns": 1,
+            "title": "Talk:Star Wars/Archive 2"
+         },
+         {
+            "pageid": 2914015,
+            "ns": 0,
+            "title": "Ahn Ji-hwan"
+         },
+         {
+            "pageid": 2937482,
+            "ns": 3,
+            "title": "User talk:209.43.33.205"
+         },
+         {
+            "pageid": 2964604,
+            "ns": 3,
+            "title": "User talk:Anagnorisis"
+         },
+         {
+            "pageid": 3006526,
+            "ns": 0,
+            "title": "Music of Star Wars"
+         },
+         {
+            "pageid": 3021683,
+            "ns": 0,
+            "title": "John Shelton Lawrence"
+         },
+         {
+            "pageid": 3049605,
+            "ns": 0,
+            "title": "Luke Starkiller",
+            "redirect": ""
+         },
+         {
+            "pageid": 3069423,
+            "ns": 0,
+            "title": "Corvette Summer"
+         },
+         {
+            "pageid": 3075908,
+            "ns": 0,
+            "title": "Mascarita Sagrada"
+         },
+         {
+            "pageid": 3084226,
+            "ns": 6,
+            "title": "File:Vaderdies.jpg"
+         },
+         {
+            "pageid": 3086859,
+            "ns": 0,
+            "title": "Han shot first"
+         },
+         {
+            "pageid": 3091032,
+            "ns": 0,
+            "title": "Tempest (novel)"
+         },
+         {
+            "pageid": 3094478,
+            "ns": 0,
+            "title": "Star Wars: Return of the Jedi: Ewok Adventure"
+         }
+      ]
+   }
+}

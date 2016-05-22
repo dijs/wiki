@@ -1,8 +1,10 @@
 'use strict';
 
-import request from 'request-promise';
+import 'babel-polyfill';
+import fetch from 'isomorphic-fetch';
 import _ from 'underscore';
-import markupParser from './wiki-markup-parser';
+import wikiInfoboxParser from 'wiki-infobox-parser/lib/parser';
+import querystring from 'querystring';
 
 /**
  * @namespace
@@ -11,6 +13,25 @@ import markupParser from './wiki-markup-parser';
 let defaultOptions = {
 	apiUrl: 'http://en.wikipedia.org/w/api.php'
 };
+
+const fetchOptions = {
+	method: 'GET',
+	headers: {
+		'User-Agent': 'WikiJs/0.1 (https://github.com/dijs/wiki; richard.vanderdys@gmail.com)'
+	}
+};
+
+function markupParser(data) {
+	return new Promise((resolve, reject) => {
+		wikiInfoboxParser(data, (err, resultString) => {
+			if (err) {
+				reject(err);
+			} else {
+				resolve(JSON.parse(resultString));
+			}
+		});
+	});
+}
 
 /**
 * Wiki
@@ -22,54 +43,40 @@ class Wiki {
 	constructor(options) {
 		this.options = Object.assign({}, defaultOptions, options || {});
 	}
-	api(params) {
-		return new Promise((resolve, reject) => {
-			request.get({
-					uri: this.options.apiUrl,
-					qs: _.extend(params, {
-						format: 'json',
-						action: 'query'
-					}),
-					headers: {
-						'User-Agent': 'WikiJs/0.1 (https://github.com/dijs/wiki; richard.vanderdys@gmail.com)'
-					}
-				})
-				.then((res) => resolve(JSON.parse(res)))
-				.catch(reject);
+	api(params = {}) {
+		const qs = _.extend(params, {
+			format: 'json',
+			action: 'query'
 		});
+		const url = `${this.options.apiUrl}?${querystring.stringify(qs)}`;
+		return fetch(url, fetchOptions).then(res => res.json());
 	}
 	pagination(params, parseResults) {
-		return new Promise((resolve, reject) => {
-			this.api(params)
-				.then((res) => {
-					let resolution = {};
-					resolution.results = parseResults(res);
-					if (res['continue']) {
-						const continueType = Object
-							.keys(res['continue'])
-							.filter(key => key !== 'continue')[0];
-						const continueKey = res['continue'][continueType];
-						params[continueType] = continueKey;
-						resolution.next = () => this.pagination(params, parseResults);
-					}
-					resolve(resolution);
-				})
-				.catch(reject);
-		});
+		return this.api(params)
+			.then((res) => {
+				let resolution = {};
+				resolution.results = parseResults(res);
+				if (res['continue']) {
+					const continueType = Object
+						.keys(res['continue'])
+						.filter(key => key !== 'continue')[0];
+					const continueKey = res['continue'][continueType];
+					params[continueType] = continueKey;
+					resolution.next = () => this.pagination(params, parseResults);
+				}
+				return resolution;
+			});
 	}
 	aggregatePagination(pagination, previousResults = []) {
-		return new Promise((resolve, reject) => {
-			pagination
-				.then(res => {
-					const results = previousResults.concat(res.results);
-					if (res.next) {
-						resolve(this.aggregatePagination(res.next(), results));
-					} else {
-						resolve(results);
-					}
-				})
-				.catch(reject);
-		});
+		return pagination
+			.then(res => {
+				const results = previousResults.concat(res.results);
+				if (res.next) {
+					return this.aggregatePagination(res.next(), results);
+				} else {
+					return results;
+				}
+			});
 	}
 	/**
 	 * Search articles
@@ -98,15 +105,12 @@ class Wiki {
 	 * @return {Promise}
 	 */
 	random(limit = 1) {
-		return new Promise((resolve, reject) => {
-			this.api({
-					list: 'random',
-					rnnamespace: 0,
-					rnlimit: limit
-				})
-				.then((res) => resolve(_.pluck(res.query.random, 'title')))
-				.catch(reject);
-		});
+		return this.api({
+				list: 'random',
+				rnnamespace: 0,
+				rnlimit: limit
+			})
+			.then(res => _.pluck(res.query.random, 'title'));
 	}
 	/**
 	 * Create Page Interface
@@ -117,23 +121,20 @@ class Wiki {
 	 * @return {Promise}
 	 */
 	page(title) {
-		return new Promise((resolve, reject) => {
-			this.api({
-					prop: 'info|pageprops',
-					inprop: 'url',
-					ppprop: 'disambiguation',
-					titles: title
-				})
-				.then((res) => {
-					let id = _.findKey(res.query.pages, (page) => page.title === title);
-					if (!id) {
-						reject(new Error('No article found'));
-					} else {
-						resolve(new WikiPage(res.query.pages[id], this));
-					}
-				})
-				.catch(reject);
-		});
+		return this.api({
+				prop: 'info|pageprops',
+				inprop: 'url',
+				ppprop: 'disambiguation',
+				titles: title
+			})
+			.then(res => {
+				let id = _.findKey(res.query.pages, (page) => page.title === title);
+				if (!id) {
+					throw new Error('No article found');
+				} else {
+					return new WikiPage(res.query.pages[id], this);
+				}
+			});
 	}
 	/**
 	 * Geographical Search
@@ -144,15 +145,12 @@ class Wiki {
 	 * @return {Promise}
 	 */
 	geoSearch(lat, lon, radius = 1000) { // 1km
-		return new Promise((resolve, reject) => {
-			this.api({
-					list: 'geosearch',
-					gsradius: radius,
-					gscoord: lat + '|' + lon
-				})
-				.then((res) => resolve(_.pluck(res.query.geosearch, 'title')))
-				.catch(reject);
-		});
+		return this.api({
+				list: 'geosearch',
+				gsradius: radius,
+				gscoord: lat + '|' + lon
+			})
+			.then(res => _.pluck(res.query.geosearch, 'title'));
 	}
 }
 
@@ -173,17 +171,14 @@ class WikiPage {
 	 * @return {Promise}
 	 */
 	html() {
-		return new Promise((resolve, reject) => {
-			this.wiki.api({
-					prop: 'revisions',
-					rvprop: 'content',
-					rvlimit: 1,
-					rvparse: '',
-					titles: this.title
-				})
-				.then((res) => resolve(res.query.pages[this.pageid].revisions[0]['*']))
-				.catch(reject);
-		});
+		return this.wiki.api({
+				prop: 'revisions',
+				rvprop: 'content',
+				rvlimit: 1,
+				rvparse: '',
+				titles: this.title
+			})
+			.then(res => res.query.pages[this.pageid].revisions[0]['*']);
 	}
 	/**
 	 * Text content from page
@@ -191,15 +186,12 @@ class WikiPage {
 	 * @return {Promise}
 	 */
 	content() {
-		return new Promise((resolve, reject) => {
-			this.wiki.api({
-					prop: 'extracts',
-					explaintext: '',
-					titles: this.title
-				})
-				.then((res) => resolve(res.query.pages[this.pageid].extract))
-				.catch(reject);
-		});
+		return this.wiki.api({
+				prop: 'extracts',
+				explaintext: '',
+				titles: this.title
+			})
+			.then(res => res.query.pages[this.pageid].extract);
 	}
 	/**
 	 * Text summary from page
@@ -207,16 +199,13 @@ class WikiPage {
 	 * @return {Promise}
 	 */
 	summary() {
-		return new Promise((resolve, reject) => {
-			this.wiki.api({
-					prop: 'extracts',
-					explaintext: '',
-					exintro: '',
-					titles: this.title
-				})
-				.then((res) => resolve(res.query.pages[this.pageid].extract))
-				.catch(reject);
-		});
+		return this.wiki.api({
+				prop: 'extracts',
+				explaintext: '',
+				exintro: '',
+				titles: this.title
+			})
+			.then(res => res.query.pages[this.pageid].extract);
 	}
 	/**
 	 * Image URL's from page
@@ -224,29 +213,26 @@ class WikiPage {
 	 * @return {Promise}
 	 */
 	images() {
-		return new Promise((resolve, reject) => {
-			this.wiki.api({
-					generator: 'images',
-					gimlimit: 'max',
-					prop: 'imageinfo',
-					iiprop: 'url',
-					titles: this.title
-				})
-				.then(res => {
-					let urls = null;
-					if (res.query) {
-						urls = _.chain(res.query.pages)
-							.pluck('imageinfo')
-							.flatten()
-							.pluck('url')
-							.value();
-					} else {
-						urls = [];
-					}
-					resolve(urls);
-				})
-				.catch(reject);
-		});
+		return this.wiki.api({
+				generator: 'images',
+				gimlimit: 'max',
+				prop: 'imageinfo',
+				iiprop: 'url',
+				titles: this.title
+			})
+			.then(res => {
+				let urls = null;
+				if (res.query) {
+					urls = _.chain(res.query.pages)
+						.pluck('imageinfo')
+						.flatten()
+						.pluck('url')
+						.value();
+				} else {
+					urls = [];
+				}
+				return urls;
+			});
 	}
 	/**
 	 * References from page
@@ -254,15 +240,12 @@ class WikiPage {
 	 * @return {Promise}
 	 */
 	references() {
-		return new Promise((resolve, reject) => {
-			this.wiki.api({
-					prop: 'extlinks',
-					ellimit: 'max',
-					titles: this.title
-				})
-				.then((res) => resolve(_.pluck(res.query.pages[this.pageid].extlinks, '*')))
-				.catch(reject);
-		});
+		return this.wiki.api({
+				prop: 'extlinks',
+				ellimit: 'max',
+				titles: this.title
+			})
+			.then(res => _.pluck(res.query.pages[this.pageid].extlinks, '*'));
 	}
 	/**
 	 * Paginated links from page
@@ -309,14 +292,11 @@ class WikiPage {
 	 * @return {Promise}
 	 */
 	coordinates() {
-		return new Promise((resolve, reject) => {
-			this.wiki.api({
-					prop: 'coordinates',
-					titles: this.title
-				})
-				.then((res) => resolve(res.query.pages[this.pageid].coordinates[0]))
-				.catch(reject);
-		});
+		return this.wiki.api({
+				prop: 'coordinates',
+				titles: this.title
+			})
+			.then(res => res.query.pages[this.pageid].coordinates[0]);
 	}
 	/**
 	 * Get info from page
@@ -324,16 +304,13 @@ class WikiPage {
 	 * @return {Promise} - info Object contains key/value pairs of infobox data
 	 */
 	info() {
-		return new Promise((resolve, reject) => {
-			this.wiki.api({
-					prop: 'revisions',
-					rvprop: 'content',
-					rvsection: 0,
-					titles: this.title
-				})
-				.then((res) => resolve(markupParser(res.query.pages[this.pageid].revisions[0]['*'])))
-				.catch(reject);
-		});
+		return this.wiki.api({
+				prop: 'revisions',
+				rvprop: 'content',
+				rvsection: 0,
+				titles: this.title
+			})
+			.then(res => markupParser(JSON.stringify(res)));
 	}
 	/**
 	 * Paginated backlinks from page

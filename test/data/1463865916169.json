@@ -1,0 +1,22 @@
+{
+   "batchcomplete": "",
+   "query": {
+      "pages": {
+         "29810": {
+            "pageid": 29810,
+            "ns": 0,
+            "title": "Texas",
+            "contentmodel": "wikitext",
+            "pagelanguage": "en",
+            "pagelanguagehtmlcode": "en",
+            "pagelanguagedir": "ltr",
+            "touched": "2016-05-20T14:38:55Z",
+            "lastrevid": 720960928,
+            "length": 184268,
+            "fullurl": "https://en.wikipedia.org/wiki/Texas",
+            "editurl": "https://en.wikipedia.org/w/index.php?title=Texas&action=edit",
+            "canonicalurl": "https://en.wikipedia.org/wiki/Texas"
+         }
+      }
+   }
+}

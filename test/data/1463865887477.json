@@ -1,0 +1,22 @@
+{
+   "batchcomplete": "",
+   "query": {
+      "pages": {
+         "53602": {
+            "pageid": 53602,
+            "ns": 0,
+            "title": "Luke Skywalker",
+            "contentmodel": "wikitext",
+            "pagelanguage": "en",
+            "pagelanguagehtmlcode": "en",
+            "pagelanguagedir": "ltr",
+            "touched": "2016-05-21T08:31:01Z",
+            "lastrevid": 720127600,
+            "length": 38074,
+            "fullurl": "https://en.wikipedia.org/wiki/Luke_Skywalker",
+            "editurl": "https://en.wikipedia.org/w/index.php?title=Luke_Skywalker&action=edit",
+            "canonicalurl": "https://en.wikipedia.org/wiki/Luke_Skywalker"
+         }
+      }
+   }
+}
