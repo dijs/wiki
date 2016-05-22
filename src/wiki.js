@@ -4,6 +4,7 @@ import 'babel-polyfill';
 import fetch from 'isomorphic-fetch';
 import _ from 'underscore';
 import markupParser from './wiki-markup-parser';
+import querystring from 'querystring';
 
 /**
  * @namespace
@@ -35,9 +36,7 @@ class Wiki {
 			format: 'json',
 			action: 'query'
 		});
-		const queryString = Object.keys(qs)
-			.map(key => `${key}=${qs[key]}`).join('&');
-		const url = `${this.options.apiUrl}?${queryString}`;
+		const url = `${this.options.apiUrl}?${querystring.stringify(qs)}`;
 		return fetch(url, fetchOptions).then(res => res.json());
 	}
 	pagination(params, parseResults) {
