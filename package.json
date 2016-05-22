@@ -27,9 +27,8 @@
   "devDependencies": {
     "babel-cli": "^6.9.0",
     "babel-preset-es2015": "^6.9.0",
+    "coveralls": "^2.11.9",
     "eslint": "^2.10.2",
-    "gulp": "^3.8.11",
-    "gulp-coveralls": "^0.1.3",
     "istanbul": "^1.0.0-alpha.2",
     "jsdoc": "^3.3.0-beta3",
     "minami": "^1.1.0",
@@ -39,9 +38,9 @@
   },
   "scripts": {
     "build": "babel src --out-dir dist --source-maps inline",
-    "test": "babel-node ./node_modules/istanbul/lib/cli cover node_modules/.bin/_mocha --",
+    "test": "babel-node ./node_modules/istanbul/lib/cli cover node_modules/.bin/_mocha",
     "docs": "node_modules/.bin/jsdoc --configure .jsdoc.json --verbose",
-    "coveralls": "gulp coveralls"
+    "coveralls": "cat ./coverage/lcov.info | coveralls"
   },
   "homepage": "https://github.com/dijs/wiki",
   "bugs": "https://github.com/dijs/wiki/issues",
