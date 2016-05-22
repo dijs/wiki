@@ -1,0 +1,23 @@
+{
+   "warnings": {
+      "main": {
+         "*": "Unrecognized parameter: 'pllimit'"
+      }
+   },
+   "batchcomplete": "",
+   "query": {
+      "pages": {
+         "53602": {
+            "pageid": 53602,
+            "ns": 0,
+            "title": "Luke Skywalker",
+            "categories": [
+               {
+                  "ns": 14,
+                  "title": "Category:Wikipedia protected pages without expiry"
+               }
+            ]
+         }
+      }
+   }
+}

@@ -1,0 +1,70 @@
+{
+   "batchcomplete": "",
+   "continue": {
+      "sroffset": 7,
+      "continue": "-||"
+   },
+   "query": {
+      "searchinfo": {
+         "totalhits": 14794
+      },
+      "search": [
+         {
+            "ns": 0,
+            "title": "Batman",
+            "snippet": "article is about the fictional character. For other uses, see <span class=\"searchmatch\">Batman</span> (disambiguation). <span class=\"searchmatch\">Batman</span> is a fictional superhero appearing in American comic books",
+            "size": 130358,
+            "wordcount": 16190,
+            "timestamp": "2016-05-13T17:31:56Z"
+         },
+         {
+            "ns": 0,
+            "title": "BATMAN",
+            "snippet": "<span class=\"searchmatch\">Batman</span> may refer to: <span class=\"searchmatch\">Batman</span> B.A.T.M.A.N. - a routing protocol",
+            "size": 389,
+            "wordcount": 14,
+            "timestamp": "2016-02-13T00:01:56Z"
+         },
+         {
+            "ns": 0,
+            "title": "Batman in film",
+            "snippet": "1940s, <span class=\"searchmatch\">Batman</span> and <span class=\"searchmatch\">Batman</span> and Robin. The character also appeared in the 1966 film <span class=\"searchmatch\">Batman</span>, which was a feature film adaptation of the 1960s <span class=\"searchmatch\">Batman</span> TV series",
+            "size": 91138,
+            "wordcount": 8121,
+            "timestamp": "2016-05-17T21:44:38Z"
+         },
+         {
+            "ns": 0,
+            "title": "Batman: Arkham City",
+            "snippet": "<span class=\"searchmatch\">Batman</span>: Arkham City is a 2011 action-adventure video game developed by Rocksteady Studios and released by Warner Bros. Interactive Entertainment for the",
+            "size": 174672,
+            "wordcount": 15526,
+            "timestamp": "2016-05-21T16:40:37Z"
+         },
+         {
+            "ns": 0,
+            "title": "Batman: Arkham Asylum",
+            "snippet": "House on Serious Earth. <span class=\"searchmatch\">Batman</span>: Arkham Asylum is a 2009 action-adventure video game based on the DC Comics superhero <span class=\"searchmatch\">Batman</span>. It was developed by Rocksteady",
+            "size": 117051,
+            "wordcount": 10683,
+            "timestamp": "2016-05-21T16:42:26Z"
+         },
+         {
+            "ns": 0,
+            "title": "Batman (1989 film)",
+            "snippet": "<span class=\"searchmatch\">Batman</span> is a 1989 American superhero film directed by Tim Burton and produced by Jon Peters, based on the DC Comics character of the same name. It is the",
+            "size": 64153,
+            "wordcount": 7554,
+            "timestamp": "2016-05-15T20:32:50Z"
+         },
+         {
+            "ns": 0,
+            "title": "The Batman Adventures",
+            "snippet": "The <span class=\"searchmatch\">Batman</span> Adventures was a DC Comics comic book series featuring <span class=\"searchmatch\">Batman</span>. It is different from other <span class=\"searchmatch\">Batman</span> titles in that it is set in the continuity",
+            "size": 13160,
+            "wordcount": 1388,
+            "timestamp": "2016-04-13T20:09:38Z"
+         }
+      ]
+   }
+}

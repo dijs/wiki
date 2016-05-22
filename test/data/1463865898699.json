@@ -1,0 +1,62 @@
+{
+   "warnings": {
+      "main": {
+         "*": "Unrecognized parameter: 'pllimit'"
+      }
+   },
+   "continue": {
+      "clcontinue": "53602|Fictional_hermits",
+      "continue": "||"
+   },
+   "query": {
+      "pages": {
+         "53602": {
+            "pageid": 53602,
+            "ns": 0,
+            "title": "Luke Skywalker",
+            "categories": [
+               {
+                  "ns": 14,
+                  "title": "Category:Action heroes"
+               },
+               {
+                  "ns": 14,
+                  "title": "Category:CS1 maint: Multiple names: authors list"
+               },
+               {
+                  "ns": 14,
+                  "title": "Category:Fictional adoptees"
+               },
+               {
+                  "ns": 14,
+                  "title": "Category:Fictional amputees"
+               },
+               {
+                  "ns": 14,
+                  "title": "Category:Fictional aviators"
+               },
+               {
+                  "ns": 14,
+                  "title": "Category:Fictional characters introduced in 1977"
+               },
+               {
+                  "ns": 14,
+                  "title": "Category:Fictional characters with precognition"
+               },
+               {
+                  "ns": 14,
+                  "title": "Category:Fictional commanders"
+               },
+               {
+                  "ns": 14,
+                  "title": "Category:Fictional cyborgs"
+               },
+               {
+                  "ns": 14,
+                  "title": "Category:Fictional farmers"
+               }
+            ]
+         }
+      }
+   }
+}

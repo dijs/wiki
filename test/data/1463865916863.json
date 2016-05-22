@@ -1,0 +1,20 @@
+{
+   "batchcomplete": "",
+   "query": {
+      "pages": {
+         "29810": {
+            "pageid": 29810,
+            "ns": 0,
+            "title": "Texas",
+            "coordinates": [
+               {
+                  "lat": 31,
+                  "lon": -100,
+                  "primary": "",
+                  "globe": "earth"
+               }
+            ]
+         }
+      }
+   }
+}

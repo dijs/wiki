@@ -1,0 +1,114 @@
+{
+   "batchcomplete": "",
+   "limits": {
+      "images": 500
+   },
+   "query": {
+      "pages": {
+         "23473511": {
+            "pageid": 23473511,
+            "ns": 6,
+            "title": "File:Folder Hexagonal Icon.svg",
+            "imagerepository": "local",
+            "imageinfo": [
+               {
+                  "url": "https://upload.wikimedia.org/wikipedia/en/4/48/Folder_Hexagonal_Icon.svg",
+                  "descriptionurl": "https://en.wikipedia.org/wiki/File:Folder_Hexagonal_Icon.svg",
+                  "descriptionshorturl": "https://en.wikipedia.org/w/index.php?curid=23473511"
+               }
+            ]
+         },
+         "33285257": {
+            "pageid": 33285257,
+            "ns": 6,
+            "title": "File:Portal-puzzle.svg",
+            "imagerepository": "local",
+            "imageinfo": [
+               {
+                  "url": "https://upload.wikimedia.org/wikipedia/en/f/fd/Portal-puzzle.svg",
+                  "descriptionurl": "https://en.wikipedia.org/wiki/File:Portal-puzzle.svg",
+                  "descriptionshorturl": "https://en.wikipedia.org/w/index.php?curid=33285257"
+               }
+            ]
+         },
+         "38400241": {
+            "pageid": 38400241,
+            "ns": 6,
+            "title": "File:Luke Skywalker.png",
+            "imagerepository": "local",
+            "imageinfo": [
+               {
+                  "url": "https://upload.wikimedia.org/wikipedia/en/9/9b/Luke_Skywalker.png",
+                  "descriptionurl": "https://en.wikipedia.org/wiki/File:Luke_Skywalker.png",
+                  "descriptionshorturl": "https://en.wikipedia.org/w/index.php?curid=38400241"
+               }
+            ]
+         },
+         "-1": {
+            "ns": 6,
+            "title": "File:Friendly stickman.svg",
+            "missing": "",
+            "imagerepository": "shared",
+            "imageinfo": [
+               {
+                  "url": "https://upload.wikimedia.org/wikipedia/commons/d/dd/Friendly_stickman.svg",
+                  "descriptionurl": "https://commons.wikimedia.org/wiki/File:Friendly_stickman.svg",
+                  "descriptionshorturl": "https://commons.wikimedia.org/w/index.php?curid=5521126"
+               }
+            ]
+         },
+         "-2": {
+            "ns": 6,
+            "title": "File:Lightsaber blue.svg",
+            "missing": "",
+            "imagerepository": "shared",
+            "imageinfo": [
+               {
+                  "url": "https://upload.wikimedia.org/wikipedia/commons/6/67/Lightsaber_blue.svg",
+                  "descriptionurl": "https://commons.wikimedia.org/wiki/File:Lightsaber_blue.svg",
+                  "descriptionshorturl": "https://commons.wikimedia.org/w/index.php?curid=9380236"
+               }
+            ]
+         },
+         "-3": {
+            "ns": 6,
+            "title": "File:Padlock-silver-light.svg",
+            "missing": "",
+            "imagerepository": "shared",
+            "imageinfo": [
+               {
+                  "url": "https://upload.wikimedia.org/wikipedia/commons/2/28/Padlock-silver-light.svg",
+                  "descriptionurl": "https://commons.wikimedia.org/wiki/File:Padlock-silver-light.svg",
+                  "descriptionshorturl": "https://commons.wikimedia.org/w/index.php?curid=1843291"
+               }
+            ]
+         },
+         "-4": {
+            "ns": 6,
+            "title": "File:People icon.svg",
+            "missing": "",
+            "imagerepository": "shared",
+            "imageinfo": [
+               {
+                  "url": "https://upload.wikimedia.org/wikipedia/commons/3/37/People_icon.svg",
+                  "descriptionurl": "https://commons.wikimedia.org/wiki/File:People_icon.svg",
+                  "descriptionshorturl": "https://commons.wikimedia.org/w/index.php?curid=824285"
+               }
+            ]
+         },
+         "-5": {
+            "ns": 6,
+            "title": "File:Symbol book class2.svg",
+            "missing": "",
+            "imagerepository": "shared",
+            "imageinfo": [
+               {
+                  "url": "https://upload.wikimedia.org/wikipedia/commons/8/89/Symbol_book_class2.svg",
+                  "descriptionurl": "https://commons.wikimedia.org/wiki/File:Symbol_book_class2.svg",
+                  "descriptionshorturl": "https://commons.wikimedia.org/w/index.php?curid=8459010"
+               }
+            ]
+         }
+      }
+   }
+}

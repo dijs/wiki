@@ -1,0 +1,22 @@
+{
+   "batchcomplete": "",
+   "query": {
+      "pages": {
+         "4335": {
+            "pageid": 4335,
+            "ns": 0,
+            "title": "Batman",
+            "contentmodel": "wikitext",
+            "pagelanguage": "en",
+            "pagelanguagehtmlcode": "en",
+            "pagelanguagedir": "ltr",
+            "touched": "2016-05-18T01:16:25Z",
+            "lastrevid": 720090379,
+            "length": 130358,
+            "fullurl": "https://en.wikipedia.org/wiki/Batman",
+            "editurl": "https://en.wikipedia.org/w/index.php?title=Batman&action=edit",
+            "canonicalurl": "https://en.wikipedia.org/wiki/Batman"
+         }
+      }
+   }
+}

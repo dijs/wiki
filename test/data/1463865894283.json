@@ -1,0 +1,417 @@
+{
+   "continue": {
+      "plcontinue": "53602|0|Skywalker_family",
+      "continue": "||"
+   },
+   "query": {
+      "pages": {
+         "53602": {
+            "pageid": 53602,
+            "ns": 0,
+            "title": "Luke Skywalker",
+            "links": [
+               {
+                  "ns": 0,
+                  "title": "Jango Fett"
+               },
+               {
+                  "ns": 0,
+                  "title": "Jar Jar Binks"
+               },
+               {
+                  "ns": 0,
+                  "title": "Jawa (Star Wars)"
+               },
+               {
+                  "ns": 0,
+                  "title": "Jedi"
+               },
+               {
+                  "ns": 0,
+                  "title": "Jedi Academy"
+               },
+               {
+                  "ns": 0,
+                  "title": "Jedi Academy Trilogy"
+               },
+               {
+                  "ns": 0,
+                  "title": "Jedi Council"
+               },
+               {
+                  "ns": 0,
+                  "title": "Jedi Knight: Jedi Academy"
+               },
+               {
+                  "ns": 0,
+                  "title": "Jedi Knight II: Jedi Outcast"
+               },
+               {
+                  "ns": 0,
+                  "title": "Jedi Prince series"
+               },
+               {
+                  "ns": 0,
+                  "title": "Jedi Starfighter"
+               },
+               {
+                  "ns": 0,
+                  "title": "Jedi Temple"
+               },
+               {
+                  "ns": 0,
+                  "title": "Jobal Naberrie"
+               },
+               {
+                  "ns": 0,
+                  "title": "Joruus C'Baoth"
+               },
+               {
+                  "ns": 0,
+                  "title": "Joseph Campbell"
+               },
+               {
+                  "ns": 0,
+                  "title": "Journey to Star Wars: The Force Awakens"
+               },
+               {
+                  "ns": 0,
+                  "title": "Kashyyyk"
+               },
+               {
+                  "ns": 0,
+                  "title": "Kreia"
+               },
+               {
+                  "ns": 0,
+                  "title": "Kyle Katarn"
+               },
+               {
+                  "ns": 0,
+                  "title": "Kylo Ren"
+               },
+               {
+                  "ns": 0,
+                  "title": "Kyp Durron"
+               },
+               {
+                  "ns": 0,
+                  "title": "Lambda-class shuttle"
+               },
+               {
+                  "ns": 0,
+                  "title": "Lando Calrissian"
+               },
+               {
+                  "ns": 0,
+                  "title": "Landspeeder"
+               },
+               {
+                  "ns": 0,
+                  "title": "Lawrence Kasdan"
+               },
+               {
+                  "ns": 0,
+                  "title": "Legacy of the Force"
+               },
+               {
+                  "ns": 0,
+                  "title": "Lego Star Wars: Droid Tales"
+               },
+               {
+                  "ns": 0,
+                  "title": "Lego Star Wars: The Empire Strikes Out"
+               },
+               {
+                  "ns": 0,
+                  "title": "Lego Star Wars: The Force Awakens"
+               },
+               {
+                  "ns": 0,
+                  "title": "Lego Star Wars: The Yoda Chronicles"
+               },
+               {
+                  "ns": 0,
+                  "title": "Lego Star Wars (video game series)"
+               },
+               {
+                  "ns": 0,
+                  "title": "Lightsaber"
+               },
+               {
+                  "ns": 0,
+                  "title": "List of Star Wars: Knights of the Old Republic characters"
+               },
+               {
+                  "ns": 0,
+                  "title": "List of Star Wars air vehicles"
+               },
+               {
+                  "ns": 0,
+                  "title": "List of Star Wars characters"
+               },
+               {
+                  "ns": 0,
+                  "title": "List of Star Wars races (K-O)"
+               },
+               {
+                  "ns": 0,
+                  "title": "List of Star Wars species"
+               },
+               {
+                  "ns": 0,
+                  "title": "List of accolades received by Star Wars: The Force Awakens"
+               },
+               {
+                  "ns": 0,
+                  "title": "List of box office records set by Star Wars: The Force Awakens"
+               },
+               {
+                  "ns": 0,
+                  "title": "Lloyd Floyd"
+               },
+               {
+                  "ns": 0,
+                  "title": "Lomi Plo"
+               },
+               {
+                  "ns": 0,
+                  "title": "Lowbacca"
+               },
+               {
+                  "ns": 0,
+                  "title": "LucasFilm"
+               },
+               {
+                  "ns": 0,
+                  "title": "Lumiya"
+               },
+               {
+                  "ns": 0,
+                  "title": "Luther Campbell"
+               },
+               {
+                  "ns": 0,
+                  "title": "Mace Windu"
+               },
+               {
+                  "ns": 0,
+                  "title": "Mandalorian"
+               },
+               {
+                  "ns": 0,
+                  "title": "Mara Jade"
+               },
+               {
+                  "ns": 0,
+                  "title": "Mark Hamill"
+               },
+               {
+                  "ns": 0,
+                  "title": "Marvel Comics"
+               },
+               {
+                  "ns": 0,
+                  "title": "Matt Lanter"
+               },
+               {
+                  "ns": 0,
+                  "title": "Max Rebo Band"
+               },
+               {
+                  "ns": 0,
+                  "title": "May the Force be with you"
+               },
+               {
+                  "ns": 0,
+                  "title": "Maz Kanata"
+               },
+               {
+                  "ns": 0,
+                  "title": "Michael Arndt"
+               },
+               {
+                  "ns": 0,
+                  "title": "Millennium Falcon"
+               },
+               {
+                  "ns": 0,
+                  "title": "Mission from Mount Yoda"
+               },
+               {
+                  "ns": 0,
+                  "title": "Moisture farm"
+               },
+               {
+                  "ns": 0,
+                  "title": "Mon Calamari cruiser"
+               },
+               {
+                  "ns": 0,
+                  "title": "Mos Eisley"
+               },
+               {
+                  "ns": 0,
+                  "title": "Mustafar"
+               },
+               {
+                  "ns": 0,
+                  "title": "Naboo"
+               },
+               {
+                  "ns": 0,
+                  "title": "Nebulon-B frigate"
+               },
+               {
+                  "ns": 0,
+                  "title": "New Jedi Order"
+               },
+               {
+                  "ns": 0,
+                  "title": "New Republic (Star Wars)"
+               },
+               {
+                  "ns": 0,
+                  "title": "Nien Nunb"
+               },
+               {
+                  "ns": 0,
+                  "title": "Obi-Wan Kenobi"
+               },
+               {
+                  "ns": 0,
+                  "title": "Original Star Wars trilogy"
+               },
+               {
+                  "ns": 0,
+                  "title": "Owen Lars"
+               },
+               {
+                  "ns": 0,
+                  "title": "Padmé Amidala"
+               },
+               {
+                  "ns": 0,
+                  "title": "Palpatine"
+               },
+               {
+                  "ns": 0,
+                  "title": "Paul Davids"
+               },
+               {
+                  "ns": 0,
+                  "title": "Phineas and Ferb: Star Wars"
+               },
+               {
+                  "ns": 0,
+                  "title": "Plot device"
+               },
+               {
+                  "ns": 0,
+                  "title": "Poe Dameron"
+               },
+               {
+                  "ns": 0,
+                  "title": "Princess Leia"
+               },
+               {
+                  "ns": 0,
+                  "title": "Princess Leia's bikini"
+               },
+               {
+                  "ns": 0,
+                  "title": "Prophecy"
+               },
+               {
+                  "ns": 0,
+                  "title": "Prophets of the Dark Side"
+               },
+               {
+                  "ns": 0,
+                  "title": "Prosthetics in fiction"
+               },
+               {
+                  "ns": 0,
+                  "title": "Pseudonym"
+               },
+               {
+                  "ns": 0,
+                  "title": "Queen of the Empire"
+               },
+               {
+                  "ns": 0,
+                  "title": "Qui-Gon Jinn"
+               },
+               {
+                  "ns": 0,
+                  "title": "R2-D2"
+               },
+               {
+                  "ns": 0,
+                  "title": "Rancor"
+               },
+               {
+                  "ns": 0,
+                  "title": "Rebel Alliance"
+               },
+               {
+                  "ns": 0,
+                  "title": "Return of the Jedi"
+               },
+               {
+                  "ns": 0,
+                  "title": "Return of the Jedi: Death Star Battle"
+               },
+               {
+                  "ns": 0,
+                  "title": "Return of the Jedi (novel)"
+               },
+               {
+                  "ns": 0,
+                  "title": "Return of the Jedi (soundtrack)"
+               },
+               {
+                  "ns": 0,
+                  "title": "Revan"
+               },
+               {
+                  "ns": 0,
+                  "title": "Revelation (Star Wars novel)"
+               },
+               {
+                  "ns": 0,
+                  "title": "Rey (Star Wars)"
+               },
+               {
+                  "ns": 0,
+                  "title": "Robot Chicken"
+               },
+               {
+                  "ns": 0,
+                  "title": "Rogue Squadron"
+               },
+               {
+                  "ns": 0,
+                  "title": "Ruwee Naberrie"
+               },
+               {
+                  "ns": 0,
+                  "title": "Sacrifice (novel)"
+               },
+               {
+                  "ns": 0,
+                  "title": "Sarlacc"
+               },
+               {
+                  "ns": 0,
+                  "title": "Shmi Skywalker"
+               },
+               {
+                  "ns": 0,
+                  "title": "Sith"
+               }
+            ]
+         }
+      }
+   }
+}
