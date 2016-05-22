@@ -3,7 +3,7 @@
 import 'babel-polyfill';
 import fetch from 'isomorphic-fetch';
 import _ from 'underscore';
-import markupParser from './wiki-markup-parser';
+import wikiInfoboxParser from 'wiki-infobox-parser/lib/parser';
 import querystring from 'querystring';
 
 /**
@@ -20,6 +20,18 @@ const fetchOptions = {
 		'User-Agent': 'WikiJs/0.1 (https://github.com/dijs/wiki; richard.vanderdys@gmail.com)'
 	}
 };
+
+function markupParser(data) {
+	return new Promise((resolve, reject) => {
+		wikiInfoboxParser(data, (err, resultString) => {
+			if (err) {
+				reject(err);
+			} else {
+				resolve(JSON.parse(resultString));
+			}
+		});
+	});
+}
 
 /**
 * Wiki
@@ -298,7 +310,7 @@ class WikiPage {
 				rvsection: 0,
 				titles: this.title
 			})
-			.then(res => markupParser(res.query.pages[this.pageid].revisions[0]['*']));
+			.then(res => markupParser(JSON.stringify(res)));
 	}
 	/**
 	 * Paginated backlinks from page
