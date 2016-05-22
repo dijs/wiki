@@ -33,6 +33,7 @@
     "jsdoc": "^3.3.0-beta3",
     "minami": "^1.1.0",
     "mocha": "^2.2.4",
+    "nock": "^8.0.0",
     "should": "^6.0.1",
     "should-promised": "^0.2.0"
   },
