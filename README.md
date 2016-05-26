@@ -10,7 +10,7 @@ WikiJs is a node.js library which serves as an interface to Wikipedia (or any Me
 
 - Search wiki articles
 - Fetch article content
-- Find all links/images/categories in a article page 
+- Find all links/images/categories in a article page
 - Get parsed information about articles
 - Find articles by geographical location
 - and much more!
@@ -50,4 +50,15 @@ wiki.page('Batman').then(function(page) {
 	});
 });
 
+```
+
+## Usage with webpack
+
+In order for webpack to build wikijs properly, you must add an option to
+your webpack configuration file. [Documentation](https://webpack.github.io/docs/configuration.html#externals)
+
+```json
+externals: {
+  "isomorphic-fetch": "fetch"
+}
 ```
