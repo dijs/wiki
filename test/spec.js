@@ -1,4 +1,4 @@
-import 'should-promised';
+import 'should';
 import Wiki from '../src/wiki';
 import nock from 'nock';
 import fs from 'fs';
