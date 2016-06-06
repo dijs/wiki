@@ -21,7 +21,8 @@
   "dependencies": {
     "babel-polyfill": "^6.9.0",
     "isomorphic-fetch": "^2.2.1",
-    "underscore": "^1.8.3"
+    "underscore": "^1.8.3",
+    "wiki-infobox-parser-core": "0.0.1"
   },
   "devDependencies": {
     "babel-cli": "^6.9.0",

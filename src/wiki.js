@@ -3,7 +3,7 @@
 import 'babel-polyfill';
 import fetch from 'isomorphic-fetch';
 import _ from 'underscore';
-import wikiInfoboxParser from './parser';
+import wikiInfoboxParser from 'wiki-infobox-parser-core';
 import querystring from 'querystring';
 
 /**
