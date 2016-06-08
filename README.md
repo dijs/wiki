@@ -40,16 +40,13 @@ npm test
 ## Usage
 
 ```javascript
-var Wiki = require('wikijs');
+import Wiki from 'wikijs';
 
-var wiki = new Wiki();
+const wiki = new Wiki();
 
-wiki.page('Batman').then(function(page) {
-	page.info().then(function(info) {
-		console.log(info['alter_ego']); // Bruce Wayne
-	});
-});
-
+wiki.page('Batman')
+	.then(page => page.info('alter_ego'))
+	.then(console.log); // Bruce Wayne
 ```
 
 ## Usage with webpack
