@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>wiki.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Wiki.html">Wiki</a><ul class='methods'><li data-type='method'><a href="Wiki.html#geoSearch">geoSearch</a></li><li data-type='method'><a href="Wiki.html#page">page</a></li><li data-type='method'><a href="Wiki.html#random">random</a></li><li data-type='method'><a href="Wiki.html#search">search</a></li></ul></li><li><a href="WikiPage.html">WikiPage</a><ul class='methods'><li data-type='method'><a href="WikiPage.html#backlinks">backlinks</a></li><li data-type='method'><a href="WikiPage.html#categories">categories</a></li><li data-type='method'><a href="WikiPage.html#content">content</a></li><li data-type='method'><a href="WikiPage.html#coordinates">coordinates</a></li><li data-type='method'><a href="WikiPage.html#html">html</a></li><li data-type='method'><a href="WikiPage.html#images">images</a></li><li data-type='method'><a href="WikiPage.html#info">info</a></li><li data-type='method'><a href="WikiPage.html#links">links</a></li><li data-type='method'><a href="WikiPage.html#references">references</a></li><li data-type='method'><a href="WikiPage.html#summary">summary</a></li></ul></li></ul><h3>Modules</h3><ul><li><a href="module-Wiki.html">Wiki</a></li></ul><h3>Namespaces</h3><ul><li><a href="defaultOptions.html">defaultOptions</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">wiki.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i &lt; props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+require('babel-polyfill');
+
+var _isomorphicFetch = require('isomorphic-fetch');
+
+var _isomorphicFetch2 = _interopRequireDefault(_isomorphicFetch);
+
+var _underscore = require('underscore');
+
+var _underscore2 = _interopRequireDefault(_underscore);
+
+var _wikiInfoboxParserCore = require('wiki-infobox-parser-core');
+
+var _wikiInfoboxParserCore2 = _interopRequireDefault(_wikiInfoboxParserCore);
+
+var _querystring = require('querystring');
+
+var _querystring2 = _interopRequireDefault(_querystring);
+
+var _determiners = require('./determiners');
+
+var _determiners2 = _interopRequireDefault(_determiners);
+
+function _interopRequireDefault(obj) { return obj &amp;&amp; obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * @namespace
+ * @property {string} apiUrl - URL of Wikipedia API
+ */
+var defaultOptions = {
+	apiUrl: 'http://en.wikipedia.org/w/api.php'
+};
+
+var fetchOptions = {
+	method: 'GET',
+	headers: {
+		'User-Agent': 'WikiJs/0.1 (https://github.com/dijs/wiki; richard.vanderdys@gmail.com)'
+	}
+};
+
+function markupParser(data) {
+	return new Promise(function (resolve, reject) {
+		(0, _wikiInfoboxParserCore2.default)(data, function (err, resultString) {
+			if (err) {
+				reject(err);
+			} else {
+				resolve(JSON.parse(resultString));
+			}
+		});
+	});
+}
+
+/**
+* Wiki
+* @class
+* @param  {Object} [options] - override options for API (only apiUrl for now)
+* @return {Wiki}
+*/
+
+var Wiki = function () {
+	function Wiki(options) {
+		_classCallCheck(this, Wiki);
+
+		this.options = Object.assign({}, defaultOptions, options || {});
+	}
+
+	_createClass(Wiki, [{
+		key: 'api',
+		value: function api() {
+			var params = arguments.length &lt;= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+			var qs = _underscore2.default.extend(params, {
+				format: 'json',
+				action: 'query'
+			});
+			var url = this.options.apiUrl + '?' + _querystring2.default.stringify(qs);
+			return (0, _isomorphicFetch2.default)(url, fetchOptions).then(function (res) {
+				return res.json();
+			});
+		}
+	}, {
+		key: 'pagination',
+		value: function pagination(params, parseResults) {
+			var _this = this;
+
+			return this.api(params).then(function (res) {
+				var resolution = {};
+				resolution.results = parseResults(res);
+				if (res['continue']) {
+					var continueType = Object.keys(res['continue']).filter(function (key) {
+						return key !== 'continue';
+					})[0];
+					var continueKey = res['continue'][continueType];
+					params[continueType] = continueKey;
+					resolution.next = function () {
+						return _this.pagination(params, parseResults);
+					};
+				}
+				return resolution;
+			});
+		}
+	}, {
+		key: 'aggregatePagination',
+		value: function aggregatePagination(pagination) {
+			var _this2 = this;
+
+			var previousResults = arguments.length &lt;= 1 || arguments[1] === undefined ? [] : arguments[1];
+
+			return pagination.then(function (res) {
+				var results = previousResults.concat(res.results);
+				if (res.next) {
+					return _this2.aggregatePagination(res.next(), results);
+				} else {
+					return results;
+				}
+			});
+		}
+		/**
+   * Search articles
+   * @example
+   * new Wiki().search('star wars').then((data) => console.log(data.results.length));
+   * @example
+   * new Wiki().search('star wars').then((data) => {
+   * 	data.next().then(...);
+   * });
+   * @method Wiki#search
+   * @param  {string} query - keyword query
+   * @param  {Number} [limit] - limits the number of results
+   * @return {Promise} - pagination promise with results and next page function
+   */
+
+	}, {
+		key: 'search',
+		value: function search(query) {
+			var limit = arguments.length &lt;= 1 || arguments[1] === undefined ? 50 : arguments[1];
+
+			return this.pagination({
+				list: 'search',
+				srsearch: query,
+				srlimit: limit
+			}, function (res) {
+				return _underscore2.default.pluck(res.query.search, 'title');
+			});
+		}
+		/**
+   * Random articles
+   * @method Wiki#random
+   * @param  {Number} [limit] - limits the number of random articles
+   * @return {Promise}
+   */
+
+	}, {
+		key: 'random',
+		value: function random() {
+			var limit = arguments.length &lt;= 0 || arguments[0] === undefined ? 1 : arguments[0];
+
+			return this.api({
+				list: 'random',
+				rnnamespace: 0,
+				rnlimit: limit
+			}).then(function (res) {
+				return _underscore2.default.pluck(res.query.random, 'title');
+			});
+		}
+		/**
+   * Create Page Interface
+   * @example
+   * new Wiki().page('Batman').then((page) => console.log(page.pageid));
+   * @method Wiki#page
+   * @param  {string} title - title of article
+   * @return {Promise}
+   */
+
+	}, {
+		key: 'page',
+		value: function page(title) {
+			var _this3 = this;
+
+			return this.api({
+				prop: 'info|pageprops',
+				inprop: 'url',
+				ppprop: 'disambiguation',
+				titles: title
+			}).then(function (res) {
+				var id = _underscore2.default.findKey(res.query.pages, function (page) {
+					return page.title === title;
+				});
+				if (!id) {
+					throw new Error('No article found');
+				} else {
+					return new WikiPage(res.query.pages[id], _this3);
+				}
+			});
+		}
+		/**
+   * Geographical Search
+   * @method Wiki#geoSearch
+   * @param  {Number} lat - latitude
+   * @param  {Number} lon - longitude
+   * @param  {Number} [radius] - search radius in kilometers
+   * @return {Promise}
+   */
+
+	}, {
+		key: 'geoSearch',
+		value: function geoSearch(lat, lon) {
+			var radius = arguments.length &lt;= 2 || arguments[2] === undefined ? 1000 : arguments[2];
+			// 1km
+			return this.api({
+				list: 'geosearch',
+				gsradius: radius,
+				gscoord: lat + '|' + lon
+			}).then(function (res) {
+				return _underscore2.default.pluck(res.query.geosearch, 'title');
+			});
+		}
+	}]);
+
+	return Wiki;
+}();
+
+/**
+* Page Interface
+* @class WikiPage
+* @param  {Object} [props] - page properties from API page query
+* @return {WikiPage}
+*/
+
+
+var WikiPage = function () {
+	function WikiPage(props, wiki) {
+		_classCallCheck(this, WikiPage);
+
+		this.wiki = wiki;
+		_underscore2.default.extend(this, props);
+	}
+	/**
+  * HTML from page
+  * @method WikiPage#html
+  * @return {Promise}
+  */
+
+
+	_createClass(WikiPage, [{
+		key: 'html',
+		value: function html() {
+			var _this4 = this;
+
+			return this.wiki.api({
+				prop: 'revisions',
+				rvprop: 'content',
+				rvlimit: 1,
+				rvparse: '',
+				titles: this.title
+			}).then(function (res) {
+				return res.query.pages[_this4.pageid].revisions[0]['*'];
+			});
+		}
+		/**
+   * Text content from page
+   * @method WikiPage#content
+   * @return {Promise}
+   */
+
+	}, {
+		key: 'content',
+		value: function content() {
+			var _this5 = this;
+
+			return this.wiki.api({
+				prop: 'extracts',
+				explaintext: '',
+				titles: this.title
+			}).then(function (res) {
+				return res.query.pages[_this5.pageid].extract;
+			});
+		}
+		/**
+   * Text summary from page
+   * @method WikiPage#summary
+   * @return {Promise}
+   */
+
+	}, {
+		key: 'summary',
+		value: function summary() {
+			var _this6 = this;
+
+			return this.wiki.api({
+				prop: 'extracts',
+				explaintext: '',
+				exintro: '',
+				titles: this.title
+			}).then(function (res) {
+				return res.query.pages[_this6.pageid].extract;
+			});
+		}
+		/**
+   * Image URL's from page
+   * @method WikiPage#images
+   * @return {Promise}
+   */
+
+	}, {
+		key: 'images',
+		value: function images() {
+			return this.wiki.api({
+				generator: 'images',
+				gimlimit: 'max',
+				prop: 'imageinfo',
+				iiprop: 'url',
+				titles: this.title
+			}).then(function (res) {
+				var urls = null;
+				if (res.query) {
+					urls = _underscore2.default.chain(res.query.pages).pluck('imageinfo').flatten().pluck('url').value();
+				} else {
+					urls = [];
+				}
+				return urls;
+			});
+		}
+		/**
+   * References from page
+   * @method WikiPage#references
+   * @return {Promise}
+   */
+
+	}, {
+		key: 'references',
+		value: function references() {
+			var _this7 = this;
+
+			return this.wiki.api({
+				prop: 'extlinks',
+				ellimit: 'max',
+				titles: this.title
+			}).then(function (res) {
+				return _underscore2.default.pluck(res.query.pages[_this7.pageid].extlinks, '*');
+			});
+		}
+		/**
+   * Paginated links from page
+   * @method WikiPage#links
+   * @param  {Boolean} [aggregated] - return all links (default is true)
+   * @param  {Number} [limit] - number of links per page
+   * @return {Promise} - includes results [and next function for more results if not aggregated]
+   */
+
+	}, {
+		key: 'links',
+		value: function links() {
+			var _this8 = this;
+
+			var aggregated = arguments.length &lt;= 0 || arguments[0] === undefined ? true : arguments[0];
+			var limit = arguments.length &lt;= 1 || arguments[1] === undefined ? 100 : arguments[1];
+
+			var pagination = this.wiki.pagination({
+				prop: 'links',
+				plnamespace: 0,
+				pllimit: limit,
+				titles: this.title
+			}, function (res) {
+				return _underscore2.default.pluck(res.query.pages[_this8.pageid].links, 'title');
+			});
+			if (aggregated) {
+				return this.wiki.aggregatePagination(pagination);
+			} else {
+				return pagination;
+			}
+		}
+		/**
+   * Paginated categories from page
+   * @method WikiPage#categories
+   * @param  {Boolean} [aggregated] - return all categories (default is true)
+   * @param  {Number} [limit] - number of categories per page
+   * @return {Promise} - includes results [and next function for more results if not aggregated]
+   */
+
+	}, {
+		key: 'categories',
+		value: function categories() {
+			var _this9 = this;
+
+			var aggregated = arguments.length &lt;= 0 || arguments[0] === undefined ? true : arguments[0];
+			var limit = arguments.length &lt;= 1 || arguments[1] === undefined ? 100 : arguments[1];
+
+			var pagination = this.wiki.pagination({
+				prop: 'categories',
+				pllimit: limit,
+				titles: this.title
+			}, function (res) {
+				return _underscore2.default.pluck(res.query.pages[_this9.pageid].categories, 'title');
+			});
+			if (aggregated) {
+				return this.wiki.aggregatePagination(pagination);
+			} else {
+				return pagination;
+			}
+		}
+		/**
+   * Geographical coordinates from page
+   * @method WikiPage#coordinates
+   * @return {Promise}
+   */
+
+	}, {
+		key: 'coordinates',
+		value: function coordinates() {
+			var _this10 = this;
+
+			return this.wiki.api({
+				prop: 'coordinates',
+				titles: this.title
+			}).then(function (res) {
+				return res.query.pages[_this10.pageid].coordinates[0];
+			});
+		}
+		/**
+   * Get information from page
+   * @example
+   * new Wiki().page('Batman').then(page => page.info('alter_ego'));
+   * @method WikiPage#info
+   * @param  {String} [key] - Information key
+   * @return {Promise} - info Object contains key/value pairs of infobox data, or specific value if key given
+   */
+
+	}, {
+		key: 'info',
+		value: function info(key) {
+			return this.wiki.api({
+				prop: 'revisions',
+				rvprop: 'content',
+				rvsection: 0,
+				titles: this.title
+			}).then(function (res) {
+				return markupParser(JSON.stringify(res));
+			}).then(function (metadata) {
+				if (!key) {
+					return metadata;
+				}
+				if (metadata.hasOwnProperty(key)) {
+					return metadata[key];
+				}
+				if (_determiners2.default.hasOwnProperty(key)) {
+					var value = _determiners2.default[key](metadata);
+					if (value) {
+						return value;
+					}
+				}
+				return undefined;
+			});
+		}
+		/**
+   * Paginated backlinks from page
+   * @method WikiPage#backlinks
+   * @param  {Boolean} [aggregated] - return all backlinks (default is true)
+   * @param  {Number} [limit] - number of backlinks per page
+   * @return {Promise} - includes results [and next function for more results if not aggregated]
+   */
+
+	}, {
+		key: 'backlinks',
+		value: function backlinks() {
+			var aggregated = arguments.length &lt;= 0 || arguments[0] === undefined ? true : arguments[0];
+			var limit = arguments.length &lt;= 1 || arguments[1] === undefined ? 100 : arguments[1];
+
+			var pagination = this.wiki.pagination({
+				list: 'backlinks',
+				bllimit: limit,
+				bltitle: this.title
+			}, function (res) {
+				return _underscore2.default.pluck(res.query.backlinks, 'title');
+			});
+			if (aggregated) {
+				return this.wiki.aggregatePagination(pagination);
+			} else {
+				return pagination;
+			}
+		}
+	}]);
+
+	return WikiPage;
+}();
+
+/**
+ * @module Wiki
+ */
+
+
+exports.default = Wiki;
+//# sourceMappingURL=data:application/json;base64,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VztBQUduQixlQUFXLENBSFE7QUFJbkIsWUFBUSxLQUFLO0FBSk0sSUFBZCxFQU1MLElBTkssQ0FNQTtBQUFBLFdBQU8sYUFBYSxLQUFLLFNBQUwsQ0FBZSxHQUFmLENBQWIsQ0FBUDtBQUFBLElBTkEsRUFPTCxJQVBLLENBT0Esb0JBQVk7QUFDakIsUUFBSSxDQUFDLEdBQUwsRUFBVTtBQUNULFlBQU8sUUFBUDtBQUNBO0FBQ0QsUUFBSSxTQUFTLGNBQVQsQ0FBd0IsR0FBeEIsQ0FBSixFQUFrQztBQUNqQyxZQUFPLFNBQVMsR0FBVCxDQUFQO0FBQ0E7QUFDRCxRQUFJLHNCQUFZLGNBQVosQ0FBMkIsR0FBM0IsQ0FBSixFQUFxQztBQUNwQyxTQUFNLFFBQVEsc0JBQVksR0FBWixFQUFpQixRQUFqQixDQUFkO0FBQ0EsU0FBSSxLQUFKLEVBQVc7QUFDVixhQUFPLEtBQVA7QUFDQTtBQUNEO0FBQ0QsV0FBTyxTQUFQO0FBQ0EsSUFyQkssQ0FBUDtBQXNCQTs7Ozs7Ozs7Ozs7OEJBUXlDO0FBQUEsT0FBaEMsVUFBZ0MseURBQW5CLElBQW1CO0FBQUEsT0FBYixLQUFhLHlEQUFMLEdBQUs7O0FBQ3pDLE9BQUksYUFBYSxLQUFLLElBQUwsQ0FBVSxVQUFWLENBQXFCO0FBQ3JDLFVBQU0sV0FEK0I7QUFFckMsYUFBUyxLQUY0QjtBQUdyQyxhQUFTLEtBQUs7QUFIdUIsSUFBckIsRUFJZCxVQUFDLEdBQUQ7QUFBQSxXQUFTLHFCQUFFLEtBQUYsQ0FBUSxJQUFJLEtBQUosQ0FBVSxTQUFsQixFQUE2QixPQUE3QixDQUFUO0FBQUEsSUFKYyxDQUFqQjtBQUtBLE9BQUksVUFBSixFQUFnQjtBQUNmLFdBQU8sS0FBSyxJQUFMLENBQVUsbUJBQVYsQ0FBOEIsVUFBOUIsQ0FBUDtBQUNBLElBRkQsTUFFTztBQUNOLFdBQU8sVUFBUDtBQUNBO0FBQ0Q7Ozs7Ozs7Ozs7O2tCQU1hLEkiLCJmaWxlIjoid2lraS5qcyIsInNvdXJjZXNDb250ZW50IjpbIid1c2Ugc3RyaWN0JztcblxuaW1wb3J0ICdiYWJlbC1wb2x5ZmlsbCc7XG5pbXBvcnQgZmV0Y2ggZnJvbSAnaXNvbW9ycGhpYy1mZXRjaCc7XG5pbXBvcnQgXyBmcm9tICd1bmRlcnNjb3JlJztcbmltcG9ydCB3aWtpSW5mb2JveFBhcnNlciBmcm9tICd3aWtpLWluZm9ib3gtcGFyc2VyLWNvcmUnO1xuaW1wb3J0IHF1ZXJ5c3RyaW5nIGZyb20gJ3F1ZXJ5c3RyaW5nJztcbmltcG9ydCBkZXRlcm1pbmVycyBmcm9tICcuL2RldGVybWluZXJzJztcblxuLyoqXG4gKiBAbmFtZXNwYWNlXG4gKiBAcHJvcGVydHkge3N0cmluZ30gYXBpVXJsIC0gVVJMIG9mIFdpa2lwZWRpYSBBUElcbiAqL1xubGV0IGRlZmF1bHRPcHRpb25zID0ge1xuXHRhcGlVcmw6ICdodHRwOi8vZW4ud2lraXBlZGlhLm9yZy93L2FwaS5waHAnXG59O1xuXG5jb25zdCBmZXRjaE9wdGlvbnMgPSB7XG5cdG1ldGhvZDogJ0dFVCcsXG5cdGhlYWRlcnM6IHtcblx0XHQnVXNlci1BZ2VudCc6ICdXaWtpSnMvMC4xIChodHRwczovL2dpdGh1Yi5jb20vZGlqcy93aWtpOyByaWNoYXJkLnZhbmRlcmR5c0BnbWFpbC5jb20pJ1xuXHR9XG59O1xuXG5mdW5jdGlvbiBtYXJrdXBQYXJzZXIoZGF0YSkge1xuXHRyZXR1cm4gbmV3IFByb21pc2UoKHJlc29sdmUsIHJlamVjdCkgPT4ge1xuXHRcdHdpa2lJbmZvYm94UGFyc2VyKGRhdGEsIChlcnIsIHJlc3VsdFN0cmluZykgPT4ge1xuXHRcdFx0aWYgKGVycikge1xuXHRcdFx0XHRyZWplY3QoZXJyKTtcblx0XHRcdH0gZWxzZSB7XG5cdFx0XHRcdHJlc29sdmUoSlNPTi5wYXJzZShyZXN1bHRTdHJpbmcpKTtcblx0XHRcdH1cblx0XHR9KTtcblx0fSk7XG59XG5cbi8qKlxuKiBXaWtpXG4qIEBjbGFzc1xuKiBAcGFyYW0gIHtPYmplY3R9IFtvcHRpb25zXSAtIG92ZXJyaWRlIG9wdGlvbnMgZm9yIEFQSSAob25seSBhcGlVcmwgZm9yIG5vdylcbiogQHJldHVybiB7V2lraX1cbiovXG5jbGFzcyBXaWtpIHtcblx0Y29uc3RydWN0b3Iob3B0aW9ucykge1xuXHRcdHRoaXMub3B0aW9ucyA9IE9iamVjdC5hc3NpZ24oe30sIGRlZmF1bHRPcHRpb25zLCBvcHRpb25zIHx8IHt9KTtcblx0fVxuXHRhcGkocGFyYW1zID0ge30pIHtcblx0XHRjb25zdCBxcyA9IF8uZXh0ZW5kKHBhcmFtcywge1xuXHRcdFx0Zm9ybWF0OiAnanNvbicsXG5cdFx0XHRhY3Rpb246ICdxdWVyeSdcblx0XHR9KTtcblx0XHRjb25zdCB1cmwgPSBgJHt0aGlzLm9wdGlvbnMuYXBpVXJsfT8ke3F1ZXJ5c3RyaW5nLnN0cmluZ2lmeShxcyl9YDtcblx0XHRyZXR1cm4gZmV0Y2godXJsLCBmZXRjaE9wdGlvbnMpLnRoZW4ocmVzID0+IHJlcy5qc29uKCkpO1xuXHR9XG5cdHBhZ2luYXRpb24ocGFyYW1zLCBwYXJzZVJlc3VsdHMpIHtcblx0XHRyZXR1cm4gdGhpcy5hcGkocGFyYW1zKVxuXHRcdFx0LnRoZW4oKHJlcykgPT4ge1xuXHRcdFx0XHRsZXQgcmVzb2x1dGlvbiA9IHt9O1xuXHRcdFx0XHRyZXNvbHV0aW9uLnJlc3VsdHMgPSBwYXJzZVJlc3VsdHMocmVzKTtcblx0XHRcdFx0aWYgKHJlc1snY29udGludWUnXSkge1xuXHRcdFx0XHRcdGNvbnN0IGNvbnRpbnVlVHlwZSA9IE9iamVjdFxuXHRcdFx0XHRcdFx0LmtleXMocmVzWydjb250aW51ZSddKVxuXHRcdFx0XHRcdFx0LmZpbHRlcihrZXkgPT4ga2V5ICE9PSAnY29udGludWUnKVswXTtcblx0XHRcdFx0XHRjb25zdCBjb250aW51ZUtleSA9IHJlc1snY29udGludWUnXVtjb250aW51ZVR5cGVdO1xuXHRcdFx0XHRcdHBhcmFtc1tjb250aW51ZVR5cGVdID0gY29udGludWVLZXk7XG5cdFx0XHRcdFx0cmVzb2x1dGlvbi5uZXh0ID0gKCkgPT4gdGhpcy5wYWdpbmF0aW9uKHBhcmFtcywgcGFyc2VSZXN1bHRzKTtcblx0XHRcdFx0fVxuXHRcdFx0XHRyZXR1cm4gcmVzb2x1dGlvbjtcblx0XHRcdH0pO1xuXHR9XG5cdGFnZ3JlZ2F0ZVBhZ2luYXRpb24ocGFnaW5hdGlvbiwgcHJldmlvdXNSZXN1bHRzID0gW10pIHtcblx0XHRyZXR1cm4gcGFnaW5hdGlvblxuXHRcdFx0LnRoZW4ocmVzID0+IHtcblx0XHRcdFx0Y29uc3QgcmVzdWx0cyA9IHByZXZpb3VzUmVzdWx0cy5jb25jYXQocmVzLnJlc3VsdHMpO1xuXHRcdFx0XHRpZiAocmVzLm5leHQpIHtcblx0XHRcdFx0XHRyZXR1cm4gdGhpcy5hZ2dyZWdhdGVQYWdpbmF0aW9uKHJlcy5uZXh0KCksIHJlc3VsdHMpO1xuXHRcdFx0XHR9IGVsc2Uge1xuXHRcdFx0XHRcdHJldHVybiByZXN1bHRzO1xuXHRcdFx0XHR9XG5cdFx0XHR9KTtcblx0fVxuXHQvKipcblx0ICogU2VhcmNoIGFydGljbGVzXG5cdCAqIEBleGFtcGxlXG5cdCAqIG5ldyBXaWtpKCkuc2VhcmNoKCdzdGFyIHdhcnMnKS50aGVuKChkYXRhKSA9PiBjb25zb2xlLmxvZyhkYXRhLnJlc3VsdHMubGVuZ3RoKSk7XG5cdCAqIEBleGFtcGxlXG5cdCAqIG5ldyBXaWtpKCkuc2VhcmNoKCdzdGFyIHdhcnMnKS50aGVuKChkYXRhKSA9PiB7XG5cdCAqIFx0ZGF0YS5uZXh0KCkudGhlbiguLi4pO1xuXHQgKiB9KTtcblx0ICogQG1ldGhvZCBXaWtpI3NlYXJjaFxuXHQgKiBAcGFyYW0gIHtzdHJpbmd9IHF1ZXJ5IC0ga2V5d29yZCBxdWVyeVxuXHQgKiBAcGFyYW0gIHtOdW1iZXJ9IFtsaW1pdF0gLSBsaW1pdHMgdGhlIG51bWJlciBvZiByZXN1bHRzXG5cdCAqIEByZXR1cm4ge1Byb21pc2V9IC0gcGFnaW5hdGlvbiBwcm9taXNlIHdpdGggcmVzdWx0cyBhbmQgbmV4dCBwYWdlIGZ1bmN0aW9uXG5cdCAqL1xuXHRzZWFyY2gocXVlcnksIGxpbWl0ID0gNTApIHtcblx0XHRyZXR1cm4gdGhpcy5wYWdpbmF0aW9uKHtcblx0XHRcdGxpc3Q6ICdzZWFyY2gnLFxuXHRcdFx0c3JzZWFyY2g6IHF1ZXJ5LFxuXHRcdFx0c3JsaW1pdDogbGltaXRcblx0XHR9LCAocmVzKSA9PiBfLnBsdWNrKHJlcy5xdWVyeS5zZWFyY2gsICd0aXRsZScpKTtcblx0fVxuXHQvKipcblx0ICogUmFuZG9tIGFydGljbGVzXG5cdCAqIEBtZXRob2QgV2lraSNyYW5kb21cblx0ICogQHBhcmFtICB7TnVtYmVyfSBbbGltaXRdIC0gbGltaXRzIHRoZSBudW1iZXIgb2YgcmFuZG9tIGFydGljbGVzXG5cdCAqIEByZXR1cm4ge1Byb21pc2V9XG5cdCAqL1xuXHRyYW5kb20obGltaXQgPSAxKSB7XG5cdFx0cmV0dXJuIHRoaXMuYXBpKHtcblx0XHRcdFx0bGlzdDogJ3JhbmRvbScsXG5cdFx0XHRcdHJubmFtZXNwYWNlOiAwLFxuXHRcdFx0XHRybmxpbWl0OiBsaW1pdFxuXHRcdFx0fSlcblx0XHRcdC50aGVuKHJlcyA9PiBfLnBsdWNrKHJlcy5xdWVyeS5yYW5kb20sICd0aXRsZScpKTtcblx0fVxuXHQvKipcblx0ICogQ3JlYXRlIFBhZ2UgSW50ZXJmYWNlXG5cdCAqIEBleGFtcGxlXG5cdCAqIG5ldyBXaWtpKCkucGFnZSgnQmF0bWFuJykudGhlbigocGFnZSkgPT4gY29uc29sZS5sb2cocGFnZS5wYWdlaWQpKTtcblx0ICogQG1ldGhvZCBXaWtpI3BhZ2Vcblx0ICogQHBhcmFtICB7c3RyaW5nfSB0aXRsZSAtIHRpdGxlIG9mIGFydGljbGVcblx0ICogQHJldHVybiB7UHJvbWlzZX1cblx0ICovXG5cdHBhZ2UodGl0bGUpIHtcblx0XHRyZXR1cm4gdGhpcy5hcGkoe1xuXHRcdFx0XHRwcm9wOiAnaW5mb3xwYWdlcHJvcHMnLFxuXHRcdFx0XHRpbnByb3A6ICd1cmwnLFxuXHRcdFx0XHRwcHByb3A6ICdkaXNhbWJpZ3VhdGlvbicsXG5cdFx0XHRcdHRpdGxlczogdGl0bGVcblx0XHRcdH0pXG5cdFx0XHQudGhlbihyZXMgPT4ge1xuXHRcdFx0XHRsZXQgaWQgPSBfLmZpbmRLZXkocmVzLnF1ZXJ5LnBhZ2VzLCAocGFnZSkgPT4gcGFnZS50aXRsZSA9PT0gdGl0bGUpO1xuXHRcdFx0XHRpZiAoIWlkKSB7XG5cdFx0XHRcdFx0dGhyb3cgbmV3IEVycm9yKCdObyBhcnRpY2xlIGZvdW5kJyk7XG5cdFx0XHRcdH0gZWxzZSB7XG5cdFx0XHRcdFx0cmV0dXJuIG5ldyBXaWtpUGFnZShyZXMucXVlcnkucGFnZXNbaWRdLCB0aGlzKTtcblx0XHRcdFx0fVxuXHRcdFx0fSk7XG5cdH1cblx0LyoqXG5cdCAqIEdlb2dyYXBoaWNhbCBTZWFyY2hcblx0ICogQG1ldGhvZCBXaWtpI2dlb1NlYXJjaFxuXHQgKiBAcGFyYW0gIHtOdW1iZXJ9IGxhdCAtIGxhdGl0dWRlXG5cdCAqIEBwYXJhbSAge051bWJlcn0gbG9uIC0gbG9uZ2l0dWRlXG5cdCAqIEBwYXJhbSAge051bWJlcn0gW3JhZGl1c10gLSBzZWFyY2ggcmFkaXVzIGluIGtpbG9tZXRlcnNcblx0ICogQHJldHVybiB7UHJvbWlzZX1cblx0ICovXG5cdGdlb1NlYXJjaChsYXQsIGxvbiwgcmFkaXVzID0gMTAwMCkgeyAvLyAxa21cblx0XHRyZXR1cm4gdGhpcy5hcGkoe1xuXHRcdFx0XHRsaXN0OiAnZ2Vvc2VhcmNoJyxcblx0XHRcdFx0Z3NyYWRpdXM6IHJhZGl1cyxcblx0XHRcdFx0Z3Njb29yZDogbGF0ICsgJ3wnICsgbG9uXG5cdFx0XHR9KVxuXHRcdFx0LnRoZW4ocmVzID0+IF8ucGx1Y2socmVzLnF1ZXJ5Lmdlb3NlYXJjaCwgJ3RpdGxlJykpO1xuXHR9XG59XG5cbi8qKlxuKiBQYWdlIEludGVyZmFjZVxuKiBAY2xhc3MgV2lraVBhZ2VcbiogQHBhcmFtICB7T2JqZWN0fSBbcHJvcHNdIC0gcGFnZSBwcm9wZXJ0aWVzIGZyb20gQVBJIHBhZ2UgcXVlcnlcbiogQHJldHVybiB7V2lraVBhZ2V9XG4qL1xuY2xhc3MgV2lraVBhZ2Uge1xuXHRjb25zdHJ1Y3Rvcihwcm9wcywgd2lraSkge1xuXHRcdHRoaXMud2lraSA9IHdpa2k7XG5cdFx0Xy5leHRlbmQodGhpcywgcHJvcHMpO1xuXHR9XG5cdC8qKlxuXHQgKiBIVE1MIGZyb20gcGFnZVxuXHQgKiBAbWV0aG9kIFdpa2lQYWdlI2h0bWxcblx0ICogQHJldHVybiB7UHJvbWlzZX1cblx0ICovXG5cdGh0bWwoKSB7XG5cdFx0cmV0dXJuIHRoaXMud2lraS5hcGkoe1xuXHRcdFx0XHRwcm9wOiAncmV2aXNpb25zJyxcblx0XHRcdFx0cnZwcm9wOiAnY29udGVudCcsXG5cdFx0XHRcdHJ2bGltaXQ6IDEsXG5cdFx0XHRcdHJ2cGFyc2U6ICcnLFxuXHRcdFx0XHR0aXRsZXM6IHRoaXMudGl0bGVcblx0XHRcdH0pXG5cdFx0XHQudGhlbihyZXMgPT4gcmVzLnF1ZXJ5LnBhZ2VzW3RoaXMucGFnZWlkXS5yZXZpc2lvbnNbMF1bJyonXSk7XG5cdH1cblx0LyoqXG5cdCAqIFRleHQgY29udGVudCBmcm9tIHBhZ2Vcblx0ICogQG1ldGhvZCBXaWtpUGFnZSNjb250ZW50XG5cdCAqIEByZXR1cm4ge1Byb21pc2V9XG5cdCAqL1xuXHRjb250ZW50KCkge1xuXHRcdHJldHVybiB0aGlzLndpa2kuYXBpKHtcblx0XHRcdFx0cHJvcDogJ2V4dHJhY3RzJyxcblx0XHRcdFx0ZXhwbGFpbnRleHQ6ICcnLFxuXHRcdFx0XHR0aXRsZXM6IHRoaXMudGl0bGVcblx0XHRcdH0pXG5cdFx0XHQudGhlbihyZXMgPT4gcmVzLnF1ZXJ5LnBhZ2VzW3RoaXMucGFnZWlkXS5leHRyYWN0KTtcblx0fVxuXHQvKipcblx0ICogVGV4dCBzdW1tYXJ5IGZyb20gcGFnZVxuXHQgKiBAbWV0aG9kIFdpa2lQYWdlI3N1bW1hcnlcblx0ICogQHJldHVybiB7UHJvbWlzZX1cblx0ICovXG5cdHN1bW1hcnkoKSB7XG5cdFx0cmV0dXJuIHRoaXMud2lraS5hcGkoe1xuXHRcdFx0XHRwcm9wOiAnZXh0cmFjdHMnLFxuXHRcdFx0XHRleHBsYWludGV4dDogJycsXG5cdFx0XHRcdGV4aW50cm86ICcnLFxuXHRcdFx0XHR0aXRsZXM6IHRoaXMudGl0bGVcblx0XHRcdH0pXG5cdFx0XHQudGhlbihyZXMgPT4gcmVzLnF1ZXJ5LnBhZ2VzW3RoaXMucGFnZWlkXS5leHRyYWN0KTtcblx0fVxuXHQvKipcblx0ICogSW1hZ2UgVVJMJ3MgZnJvbSBwYWdlXG5cdCAqIEBtZXRob2QgV2lraVBhZ2UjaW1hZ2VzXG5cdCAqIEByZXR1cm4ge1Byb21pc2V9XG5cdCAqL1xuXHRpbWFnZXMoKSB7XG5cdFx0cmV0dXJuIHRoaXMud2lraS5hcGkoe1xuXHRcdFx0XHRnZW5lcmF0b3I6ICdpbWFnZXMnLFxuXHRcdFx0XHRnaW1saW1pdDogJ21heCcsXG5cdFx0XHRcdHByb3A6ICdpbWFnZWluZm8nLFxuXHRcdFx0XHRpaXByb3A6ICd1cmwnLFxuXHRcdFx0XHR0aXRsZXM6IHRoaXMudGl0bGVcblx0XHRcdH0pXG5cdFx0XHQudGhlbihyZXMgPT4ge1xuXHRcdFx0XHRsZXQgdXJscyA9IG51bGw7XG5cdFx0XHRcdGlmIChyZXMucXVlcnkpIHtcblx0XHRcdFx0XHR1cmxzID0gXy5jaGFpbihyZXMucXVlcnkucGFnZXMpXG5cdFx0XHRcdFx0XHQucGx1Y2soJ2ltYWdlaW5mbycpXG5cdFx0XHRcdFx0XHQuZmxhdHRlbigpXG5cdFx0XHRcdFx0XHQucGx1Y2soJ3VybCcpXG5cdFx0XHRcdFx0XHQudmFsdWUoKTtcblx0XHRcdFx0fSBlbHNlIHtcblx0XHRcdFx0XHR1cmxzID0gW107XG5cdFx0XHRcdH1cblx0XHRcdFx0cmV0dXJuIHVybHM7XG5cdFx0XHR9KTtcblx0fVxuXHQvKipcblx0ICogUmVmZXJlbmNlcyBmcm9tIHBhZ2Vcblx0ICogQG1ldGhvZCBXaWtpUGFnZSNyZWZlcmVuY2VzXG5cdCAqIEByZXR1cm4ge1Byb21pc2V9XG5cdCAqL1xuXHRyZWZlcmVuY2VzKCkge1xuXHRcdHJldHVybiB0aGlzLndpa2kuYXBpKHtcblx0XHRcdFx0cHJvcDogJ2V4dGxpbmtzJyxcblx0XHRcdFx0ZWxsaW1pdDogJ21heCcsXG5cdFx0XHRcdHRpdGxlczogdGhpcy50aXRsZVxuXHRcdFx0fSlcblx0XHRcdC50aGVuKHJlcyA9PiBfLnBsdWNrKHJlcy5xdWVyeS5wYWdlc1t0aGlzLnBhZ2VpZF0uZXh0bGlua3MsICcqJykpO1xuXHR9XG5cdC8qKlxuXHQgKiBQYWdpbmF0ZWQgbGlua3MgZnJvbSBwYWdlXG5cdCAqIEBtZXRob2QgV2lraVBhZ2UjbGlua3Ncblx0ICogQHBhcmFtICB7Qm9vbGVhbn0gW2FnZ3JlZ2F0ZWRdIC0gcmV0dXJuIGFsbCBsaW5rcyAoZGVmYXVsdCBpcyB0cnVlKVxuXHQgKiBAcGFyYW0gIHtOdW1iZXJ9IFtsaW1pdF0gLSBudW1iZXIgb2YgbGlua3MgcGVyIHBhZ2Vcblx0ICogQHJldHVybiB7UHJvbWlzZX0gLSBpbmNsdWRlcyByZXN1bHRzIFthbmQgbmV4dCBmdW5jdGlvbiBmb3IgbW9yZSByZXN1bHRzIGlmIG5vdCBhZ2dyZWdhdGVkXVxuXHQgKi9cblx0bGlua3MoYWdncmVnYXRlZCA9IHRydWUsIGxpbWl0ID0gMTAwKSB7XG5cdFx0bGV0IHBhZ2luYXRpb24gPSB0aGlzLndpa2kucGFnaW5hdGlvbih7XG5cdFx0XHRwcm9wOiAnbGlua3MnLFxuXHRcdFx0cGxuYW1lc3BhY2U6IDAsXG5cdFx0XHRwbGxpbWl0OiBsaW1pdCxcblx0XHRcdHRpdGxlczogdGhpcy50aXRsZVxuXHRcdH0sIChyZXMpID0+IF8ucGx1Y2socmVzLnF1ZXJ5LnBhZ2VzW3RoaXMucGFnZWlkXS5saW5rcywgJ3RpdGxlJykpO1xuXHRcdGlmIChhZ2dyZWdhdGVkKSB7XG5cdFx0XHRyZXR1cm4gdGhpcy53aWtpLmFnZ3JlZ2F0ZVBhZ2luYXRpb24ocGFnaW5hdGlvbik7XG5cdFx0fSBlbHNlIHtcblx0XHRcdHJldHVybiBwYWdpbmF0aW9uO1xuXHRcdH1cblx0fVxuXHQvKipcblx0ICogUGFnaW5hdGVkIGNhdGVnb3JpZXMgZnJvbSBwYWdlXG5cdCAqIEBtZXRob2QgV2lraVBhZ2UjY2F0ZWdvcmllc1xuXHQgKiBAcGFyYW0gIHtCb29sZWFufSBbYWdncmVnYXRlZF0gLSByZXR1cm4gYWxsIGNhdGVnb3JpZXMgKGRlZmF1bHQgaXMgdHJ1ZSlcblx0ICogQHBhcmFtICB7TnVtYmVyfSBbbGltaXRdIC0gbnVtYmVyIG9mIGNhdGVnb3JpZXMgcGVyIHBhZ2Vcblx0ICogQHJldHVybiB7UHJvbWlzZX0gLSBpbmNsdWRlcyByZXN1bHRzIFthbmQgbmV4dCBmdW5jdGlvbiBmb3IgbW9yZSByZXN1bHRzIGlmIG5vdCBhZ2dyZWdhdGVkXVxuXHQgKi9cblx0Y2F0ZWdvcmllcyhhZ2dyZWdhdGVkID0gdHJ1ZSwgbGltaXQgPSAxMDApIHtcblx0XHRsZXQgcGFnaW5hdGlvbiA9IHRoaXMud2lraS5wYWdpbmF0aW9uKHtcblx0XHRcdHByb3A6ICdjYXRlZ29yaWVzJyxcblx0XHRcdHBsbGltaXQ6IGxpbWl0LFxuXHRcdFx0dGl0bGVzOiB0aGlzLnRpdGxlXG5cdFx0fSwgKHJlcykgPT4gXy5wbHVjayhyZXMucXVlcnkucGFnZXNbdGhpcy5wYWdlaWRdLmNhdGVnb3JpZXMsICd0aXRsZScpKTtcblx0XHRpZiAoYWdncmVnYXRlZCkge1xuXHRcdFx0cmV0dXJuIHRoaXMud2lraS5hZ2dyZWdhdGVQYWdpbmF0aW9uKHBhZ2luYXRpb24pO1xuXHRcdH0gZWxzZSB7XG5cdFx0XHRyZXR1cm4gcGFnaW5hdGlvbjtcblx0XHR9XG5cdH1cblx0LyoqXG5cdCAqIEdlb2dyYXBoaWNhbCBjb29yZGluYXRlcyBmcm9tIHBhZ2Vcblx0ICogQG1ldGhvZCBXaWtpUGFnZSNjb29yZGluYXRlc1xuXHQgKiBAcmV0dXJuIHtQcm9taXNlfVxuXHQgKi9cblx0Y29vcmRpbmF0ZXMoKSB7XG5cdFx0cmV0dXJuIHRoaXMud2lraS5hcGkoe1xuXHRcdFx0XHRwcm9wOiAnY29vcmRpbmF0ZXMnLFxuXHRcdFx0XHR0aXRsZXM6IHRoaXMudGl0bGVcblx0XHRcdH0pXG5cdFx0XHQudGhlbihyZXMgPT4gcmVzLnF1ZXJ5LnBhZ2VzW3RoaXMucGFnZWlkXS5jb29yZGluYXRlc1swXSk7XG5cdH1cblx0LyoqXG5cdCAqIEdldCBpbmZvcm1hdGlvbiBmcm9tIHBhZ2Vcblx0ICogQGV4YW1wbGVcblx0ICogbmV3IFdpa2koKS5wYWdlKCdCYXRtYW4nKS50aGVuKHBhZ2UgPT4gcGFnZS5pbmZvKCdhbHRlcl9lZ28nKSk7XG5cdCAqIEBtZXRob2QgV2lraVBhZ2UjaW5mb1xuXHQgKiBAcGFyYW0gIHtTdHJpbmd9IFtrZXldIC0gSW5mb3JtYXRpb24ga2V5XG5cdCAqIEByZXR1cm4ge1Byb21pc2V9IC0gaW5mbyBPYmplY3QgY29udGFpbnMga2V5L3ZhbHVlIHBhaXJzIG9mIGluZm9ib3ggZGF0YSwgb3Igc3BlY2lmaWMgdmFsdWUgaWYga2V5IGdpdmVuXG5cdCAqL1xuXHRpbmZvKGtleSkge1xuXHRcdHJldHVybiB0aGlzLndpa2kuYXBpKHtcblx0XHRcdFx0cHJvcDogJ3JldmlzaW9ucycsXG5cdFx0XHRcdHJ2cHJvcDogJ2NvbnRlbnQnLFxuXHRcdFx0XHRydnNlY3Rpb246IDAsXG5cdFx0XHRcdHRpdGxlczogdGhpcy50aXRsZVxuXHRcdFx0fSlcblx0XHRcdC50aGVuKHJlcyA9PiBtYXJrdXBQYXJzZXIoSlNPTi5zdHJpbmdpZnkocmVzKSkpXG5cdFx0XHQudGhlbihtZXRhZGF0YSA9PiB7XG5cdFx0XHRcdGlmICgha2V5KSB7XG5cdFx0XHRcdFx0cmV0dXJuIG1ldGFkYXRhO1xuXHRcdFx0XHR9XG5cdFx0XHRcdGlmIChtZXRhZGF0YS5oYXNPd25Qcm9wZXJ0eShrZXkpKSB7XG5cdFx0XHRcdFx0cmV0dXJuIG1ldGFkYXRhW2tleV07XG5cdFx0XHRcdH1cblx0XHRcdFx0aWYgKGRldGVybWluZXJzLmhhc093blByb3BlcnR5KGtleSkpIHtcblx0XHRcdFx0XHRjb25zdCB2YWx1ZSA9IGRldGVybWluZXJzW2tleV0obWV0YWRhdGEpO1xuXHRcdFx0XHRcdGlmICh2YWx1ZSkge1xuXHRcdFx0XHRcdFx0cmV0dXJuIHZhbHVlO1xuXHRcdFx0XHRcdH1cblx0XHRcdFx0fVxuXHRcdFx0XHRyZXR1cm4gdW5kZWZpbmVkO1xuXHRcdFx0fSk7XG5cdH1cblx0LyoqXG5cdCAqIFBhZ2luYXRlZCBiYWNrbGlua3MgZnJvbSBwYWdlXG5cdCAqIEBtZXRob2QgV2lraVBhZ2UjYmFja2xpbmtzXG5cdCAqIEBwYXJhbSAge0Jvb2xlYW59IFthZ2dyZWdhdGVkXSAtIHJldHVybiBhbGwgYmFja2xpbmtzIChkZWZhdWx0IGlzIHRydWUpXG5cdCAqIEBwYXJhbSAge051bWJlcn0gW2xpbWl0XSAtIG51bWJlciBvZiBiYWNrbGlua3MgcGVyIHBhZ2Vcblx0ICogQHJldHVybiB7UHJvbWlzZX0gLSBpbmNsdWRlcyByZXN1bHRzIFthbmQgbmV4dCBmdW5jdGlvbiBmb3IgbW9yZSByZXN1bHRzIGlmIG5vdCBhZ2dyZWdhdGVkXVxuXHQgKi9cblx0YmFja2xpbmtzKGFnZ3JlZ2F0ZWQgPSB0cnVlLCBsaW1pdCA9IDEwMCkge1xuXHRcdGxldCBwYWdpbmF0aW9uID0gdGhpcy53aWtpLnBhZ2luYXRpb24oe1xuXHRcdFx0bGlzdDogJ2JhY2tsaW5rcycsXG5cdFx0XHRibGxpbWl0OiBsaW1pdCxcblx0XHRcdGJsdGl0bGU6IHRoaXMudGl0bGVcblx0XHR9LCAocmVzKSA9PiBfLnBsdWNrKHJlcy5xdWVyeS5iYWNrbGlua3MsICd0aXRsZScpKTtcblx0XHRpZiAoYWdncmVnYXRlZCkge1xuXHRcdFx0cmV0dXJuIHRoaXMud2lraS5hZ2dyZWdhdGVQYWdpbmF0aW9uKHBhZ2luYXRpb24pO1xuXHRcdH0gZWxzZSB7XG5cdFx0XHRyZXR1cm4gcGFnaW5hdGlvbjtcblx0XHR9XG5cdH1cbn1cblxuLyoqXG4gKiBAbW9kdWxlIFdpa2lcbiAqL1xuZXhwb3J0IGRlZmF1bHQgV2lraTtcbiJdfQ==</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Wed Jun 08 2016 07:11:33 GMT-0500 (CDT) using the Minami theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>
