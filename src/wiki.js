@@ -300,10 +300,12 @@ class WikiPage {
 			.then(res => res.query.pages[this.pageid].coordinates[0]);
 	}
 	/**
-	 * Get info from page
+	 * Get information from page
+	 * @example
+	 * new Wiki().page('Batman').then(page => page.info('alter_ego'));
 	 * @method WikiPage#info
-	 * @param  {String} key Information key (Optional)
-	 * @return {Promise} - info Object contains key/value pairs of infobox data
+	 * @param  {String} [key] - Information key
+	 * @return {Promise} - info Object contains key/value pairs of infobox data, or specific value if key given
 	 */
 	info(key) {
 		return this.wiki.api({
