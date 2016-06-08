@@ -5,6 +5,7 @@ import fetch from 'isomorphic-fetch';
 import _ from 'underscore';
 import wikiInfoboxParser from 'wiki-infobox-parser-core';
 import querystring from 'querystring';
+import determiners from './determiners';
 
 /**
  * @namespace
@@ -301,16 +302,32 @@ class WikiPage {
 	/**
 	 * Get info from page
 	 * @method WikiPage#info
+	 * @param  {String} key Information key (Optional)
 	 * @return {Promise} - info Object contains key/value pairs of infobox data
 	 */
-	info() {
+	info(key) {
 		return this.wiki.api({
 				prop: 'revisions',
 				rvprop: 'content',
 				rvsection: 0,
 				titles: this.title
 			})
-			.then(res => markupParser(JSON.stringify(res)));
+			.then(res => markupParser(JSON.stringify(res)))
+			.then(metadata => {
+				if (!key) {
+					return metadata;
+				}
+				if (metadata.hasOwnProperty(key)) {
+					return metadata[key];
+				}
+				if (determiners.hasOwnProperty(key)) {
+					const value = determiners[key](metadata);
+					if (value) {
+						return value;
+					}
+				}
+				return undefined;
+			});
 	}
 	/**
 	 * Paginated backlinks from page
