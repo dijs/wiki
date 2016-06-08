@@ -5,6 +5,7 @@ import fetch from 'isomorphic-fetch';
 import _ from 'underscore';
 import wikiInfoboxParser from 'wiki-infobox-parser-core';
 import querystring from 'querystring';
+import determiners from './determiners';
 
 /**
  * @namespace
@@ -299,18 +300,36 @@ class WikiPage {
 			.then(res => res.query.pages[this.pageid].coordinates[0]);
 	}
 	/**
-	 * Get info from page
+	 * Get information from page
+	 * @example
+	 * new Wiki().page('Batman').then(page => page.info('alter_ego'));
 	 * @method WikiPage#info
-	 * @return {Promise} - info Object contains key/value pairs of infobox data
+	 * @param  {String} [key] - Information key
+	 * @return {Promise} - info Object contains key/value pairs of infobox data, or specific value if key given
 	 */
-	info() {
+	info(key) {
 		return this.wiki.api({
 				prop: 'revisions',
 				rvprop: 'content',
 				rvsection: 0,
 				titles: this.title
 			})
-			.then(res => markupParser(JSON.stringify(res)));
+			.then(res => markupParser(JSON.stringify(res)))
+			.then(metadata => {
+				if (!key) {
+					return metadata;
+				}
+				if (metadata.hasOwnProperty(key)) {
+					return metadata[key];
+				}
+				if (determiners.hasOwnProperty(key)) {
+					const value = determiners[key](metadata);
+					if (value) {
+						return value;
+					}
+				}
+				return undefined;
+			});
 	}
 	/**
 	 * Paginated backlinks from page

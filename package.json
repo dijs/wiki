@@ -2,7 +2,7 @@
   "name": "wikijs",
   "description": "Wikipedia interface for node",
   "author": "Richard van der Dys",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "keywords": [
     "wiki",
     "wikipedia",
@@ -21,6 +21,7 @@
   "dependencies": {
     "babel-polyfill": "^6.9.0",
     "isomorphic-fetch": "^2.2.1",
+    "moment": "^2.13.0",
     "underscore": "^1.8.3",
     "wiki-infobox-parser-core": "0.0.1"
   },

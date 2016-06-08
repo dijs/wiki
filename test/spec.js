@@ -222,6 +222,14 @@ describe('Page Methods', () => {
 		});
 	});
 
+	it('should get specific info by key', () => {
+		nock('http://en.wikipedia.org')
+			.get('/w/api.php?prop=revisions&rvprop=content&rvsection=0&titles=Luke%20Skywalker&format=json&action=query')
+			.once()
+			.reply(200, JSON.parse(fs.readFileSync('./test/data/1463865915453.json')))
+		return luke.info('gender').should.eventually.equal('Male');
+	});
+
 	it('should get coordinates from an article', (done) => {
 		nock('http://en.wikipedia.org')
 			.get('/w/api.php?prop=info%7Cpageprops&inprop=url&ppprop=disambiguation&titles=Texas&format=json&action=query')
@@ -244,16 +252,31 @@ describe('Page Methods', () => {
 		.catch(err => done(err));
 	});
 
-	it('should know who batman is', (done) => {
+	it('should know who batman is', () => {
 		nock('http://en.wikipedia.org')
+			.get('/w/api.php?prop=revisions&rvprop=content&rvsection=0&titles=Batman&format=json&action=query')
+			.once()
+			.reply(200, JSON.parse(fs.readFileSync('./test/data/batman_1465345136921.json')))
 			.get('/w/api.php?prop=info%7Cpageprops&inprop=url&ppprop=disambiguation&titles=Batman&format=json&action=query')
 			.once()
-			.reply(200, JSON.parse(fs.readFileSync('./test/data/1463865917587.json')))
-		new Wiki().page('Batman')
-		.then((batman) => {
-			done(null, batman.info().should.eventually.have.property('alter_ego', 'Bruce Wayne'));
-		})
-		.catch(err => done(err));
+			.reply(200, JSON.parse(fs.readFileSync('./test/data/batman_1465345136432.json')))
+		return new Wiki().page('Batman')
+		.then(batman => {
+			return batman.info().should.eventually.have.property('alter_ego', 'Bruce Wayne');
+		});
+	});
+
+	it('should determine information from metadata', () => {
+		nock('http://en.wikipedia.org')
+			.get('/w/api.php?prop=revisions&rvprop=content&rvsection=0&titles=Elizabeth%20II&format=json&action=query')
+			.once()
+			.reply(200, JSON.parse(fs.readFileSync('./test/data/queen_1465350664332.json')))
+			.get('/w/api.php?prop=info%7Cpageprops&inprop=url&ppprop=disambiguation&titles=Elizabeth%20II&format=json&action=query')
+			.once()
+			.reply(200, JSON.parse(fs.readFileSync('./test/data/queen_1465350664030.json')))
+		return new Wiki()
+			.page('Elizabeth II')
+			.then(queen => queen.info('age').should.eventually.equal(90));
 	});
 
 	it('should handle empty images properly', () => {

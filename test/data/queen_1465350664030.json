@@ -1,0 +1,22 @@
+{
+   "batchcomplete": "",
+   "query": {
+      "pages": {
+         "12153654": {
+            "pageid": 12153654,
+            "ns": 0,
+            "title": "Elizabeth II",
+            "contentmodel": "wikitext",
+            "pagelanguage": "en",
+            "pagelanguagehtmlcode": "en",
+            "pagelanguagedir": "ltr",
+            "touched": "2016-06-07T22:20:19Z",
+            "lastrevid": 724224625,
+            "length": 103293,
+            "fullurl": "https://en.wikipedia.org/wiki/Elizabeth_II",
+            "editurl": "https://en.wikipedia.org/w/index.php?title=Elizabeth_II&action=edit",
+            "canonicalurl": "https://en.wikipedia.org/wiki/Elizabeth_II"
+         }
+      }
+   }
+}
