@@ -2,7 +2,7 @@
   "name": "wikijs",
   "description": "Wikipedia interface for node",
   "author": "Richard van der Dys",
-  "version": "0.3.0",
+  "version": "1.0.0",
   "keywords": [
     "wiki",
     "wikipedia",
@@ -26,6 +26,7 @@
     "wiki-infobox-parser-core": "0.0.1"
   },
   "devDependencies": {
+    "babel": "^6.5.2",
     "babel-cli": "^6.9.0",
     "babel-preset-es2015": "^6.9.0",
     "coveralls": "^2.11.9",

@@ -5,8 +5,6 @@ import _ from 'underscore';
 import { pagination, api } from './util';
 import wikiPage from './page';
 
-
-
 // TODO: Needs to be in a closure
 /**
  * @namespace

@@ -1,3 +1,0 @@
-# TODO
-
-- Think about chaining page methods...
