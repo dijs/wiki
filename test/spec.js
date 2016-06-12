@@ -41,6 +41,18 @@ describe('Wiki Methods', () => {
 		return wiki().page('Batman').should.eventually.have.property('raw').with.property('pageid', 4335);
 	});
 
+	it('Should error if page not found', () => {
+		nock('http://en.wikipedia.org')
+			.get('/w/api.php?prop=info%7Cpageprops&inprop=url&ppprop=disambiguation&titles=Nope&format=json&action=query')
+			.once()
+			.reply(200, {
+				query: {
+					pages: []
+				}
+			});
+		return wiki().page('Nope').should.be.rejectedWith('No article found');
+	});
+
 	it('Should return page from coordinates', () => {
 		nock('http://en.wikipedia.org')
 			.get('/w/api.php?list=geosearch&gsradius=1000&gscoord=32.329%7C-96.136&format=json&action=query')

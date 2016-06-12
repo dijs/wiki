@@ -4,7 +4,14 @@
         "dictionaries": ["jsdoc"]
     },
     "source": {
-        "include": ["dist/wiki.js", "package.json", "README.md"],
+        "include": [
+          "dist/determiners.js",
+          "dist/page.js",
+          "dist/util.js",
+          "dist/wiki.js",
+          "package.json",
+          "README.md"
+        ],
         "includePattern": ".js$",
         "excludePattern": "(node_modules/|docs)"
     },

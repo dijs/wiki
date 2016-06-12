@@ -5,7 +5,6 @@ import _ from 'underscore';
 import { pagination, api } from './util';
 import wikiPage from './page';
 
-// TODO: Needs to be in a closure
 /**
  * @namespace
  * @constant
@@ -15,16 +14,11 @@ const defaultOptions = {
 	apiUrl: 'http://en.wikipedia.org/w/api.php'
 };
 
-// TODO: Helper function
-// function pluck() {
-//
-// }
-
 /**
  * wiki
  * @example
  * wiki({ apiUrl: 'http://fr.wikipedia.org/w/api.php' }).search(...);
- * @module Wiki
+ * @namespace Wiki
  * @param  {Object} options
  * @return {Object} - wiki (for chaining methods)
 */
@@ -90,7 +84,6 @@ export default function wiki(options = {}) {
 				if (!id) {
 					throw new Error('No article found');
 				}
-				// TODO: This will need to change...
 				return wikiPage(res.query.pages[id], apiOptions);
 			});
 	}

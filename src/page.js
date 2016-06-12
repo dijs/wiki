@@ -15,6 +15,10 @@ function markupParser(data) {
 	});
 }
 
+/**
+ * WikiPage
+ * @namespace WikiPage
+ */
 export default function wikiPage(rawPageInfo, apiOptions) {
 
 	const raw = rawPageInfo;

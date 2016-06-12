@@ -34,7 +34,6 @@ export function pagination(apiOptions, params, parseResults) {
 		});
 }
 
-// TODO: Use this...
 export function aggregatePagination(pagination, previousResults = []) {
 	return pagination
 		.then(res => {

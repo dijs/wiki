@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>wiki.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="Wiki.html">Wiki</a><ul class='methods'><li data-type='method'><a href="Wiki.html#geoSearch">geoSearch</a></li><li data-type='method'><a href="Wiki.html#page">page</a></li><li data-type='method'><a href="Wiki.html#random">random</a></li><li data-type='method'><a href="Wiki.html#search">search</a></li></ul></li><li><a href="WikiPage.html">WikiPage</a><ul class='methods'><li data-type='method'><a href="WikiPage.html#backlinks">backlinks</a></li><li data-type='method'><a href="WikiPage.html#categories">categories</a></li><li data-type='method'><a href="WikiPage.html#content">content</a></li><li data-type='method'><a href="WikiPage.html#coordinates">coordinates</a></li><li data-type='method'><a href="WikiPage.html#html">html</a></li><li data-type='method'><a href="WikiPage.html#images">images</a></li><li data-type='method'><a href="WikiPage.html#info">info</a></li><li data-type='method'><a href="WikiPage.html#links">links</a></li><li data-type='method'><a href="WikiPage.html#references">references</a></li><li data-type='method'><a href="WikiPage.html#summary">summary</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#defaultOptions">defaultOptions</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">wiki.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.default = wiki;
+
+require('babel-polyfill');
+
+var _underscore = require('underscore');
+
+var _underscore2 = _interopRequireDefault(_underscore);
+
+var _util = require('./util');
+
+var _page = require('./page');
+
+var _page2 = _interopRequireDefault(_page);
+
+function _interopRequireDefault(obj) { return obj &amp;&amp; obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * @namespace
+ * @constant
+ * @property {string} apiUrl - URL of Wikipedia API
+ */
+var defaultOptions = {
+	apiUrl: 'http://en.wikipedia.org/w/api.php'
+};
+
+/**
+ * wiki
+ * @example
+ * wiki({ apiUrl: 'http://fr.wikipedia.org/w/api.php' }).search(...);
+ * @namespace Wiki
+ * @param  {Object} options
+ * @return {Object} - wiki (for chaining methods)
+*/
+function wiki() {
+	var options = arguments.length &lt;= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+
+	var apiOptions = Object.assign({}, defaultOptions, options);
+
+	/**
+  * Search articles
+  * @example
+  * wiki.search('star wars').then(data => console.log(data.results.length));
+  * @example
+  * wiki.search('star wars').then(data => {
+  * 	data.next().then(...);
+  * });
+  * @method Wiki#search
+  * @param  {string} query - keyword query
+  * @param  {Number} [limit] - limits the number of results
+  * @return {Promise} - pagination promise with results and next page function
+  */
+	function search(query) {
+		var limit = arguments.length &lt;= 1 || arguments[1] === undefined ? 50 : arguments[1];
+
+		return (0, _util.pagination)(apiOptions, {
+			list: 'search',
+			srsearch: query,
+			srlimit: limit
+		}, function (res) {
+			return _underscore2.default.pluck(res.query.search, 'title');
+		});
+	}
+
+	/**
+  * Random articles
+  * @example
+  * wiki.random(3).then(results => console.log(results[0]));
+  * @method Wiki#random
+  * @param  {Number} [limit] - limits the number of random articles
+  * @return {Promise} - List of page titles
+  */
+	function random() {
+		var limit = arguments.length &lt;= 0 || arguments[0] === undefined ? 1 : arguments[0];
+
+		return (0, _util.api)(apiOptions, {
+			list: 'random',
+			rnnamespace: 0,
+			rnlimit: limit
+		}).then(function (res) {
+			return _underscore2.default.pluck(res.query.random, 'title');
+		});
+	}
+
+	/**
+  * Get Page
+  * @example
+  * wiki.page('Batman').then(page => console.log(page.pageid));
+  * @method Wiki#page
+  * @param  {string} title - title of article
+  * @return {Promise}
+  */
+	function page(title) {
+		return (0, _util.api)(apiOptions, {
+			prop: 'info|pageprops',
+			inprop: 'url',
+			ppprop: 'disambiguation',
+			titles: title
+		}).then(function (res) {
+			var id = _underscore2.default.findKey(res.query.pages, function (page) {
+				return page.title === title;
+			});
+			if (!id) {
+				throw new Error('No article found');
+			}
+			return (0, _page2.default)(res.query.pages[id], apiOptions);
+		});
+	}
+
+	/**
+  * Geographical Search
+  * @example
+  * wiki.geoSearch(32.329, -96.136).then(titles => console.log(titles.length));
+  * @method Wiki#geoSearch
+  * @param  {Number} lat - latitude
+  * @param  {Number} lon - longitude
+  * @param  {Number} [radius=1000] - search radius in kilometers (default: 1km)
+  * @return {Promise} - List of page titles
+  */
+	function geoSearch(lat, lon) {
+		var radius = arguments.length &lt;= 2 || arguments[2] === undefined ? 1000 : arguments[2];
+
+		return (0, _util.api)(apiOptions, {
+			list: 'geosearch',
+			gsradius: radius,
+			gscoord: lat + '|' + lon
+		}).then(function (res) {
+			return _underscore2.default.pluck(res.query.geosearch, 'title');
+		});
+	}
+
+	return {
+		search: search,
+		random: random,
+		page: page,
+		geoSearch: geoSearch,
+		options: options
+	};
+}
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uL3NyYy93aWtpLmpzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBOzs7OztrQkF3QndCLEk7O0FBdEJ4Qjs7QUFDQTs7OztBQUNBOztBQUNBOzs7Ozs7Ozs7OztBQU9BLElBQU0saUJBQWlCO0FBQ3RCLFNBQVE7QUFEYyxDQUF2Qjs7Ozs7Ozs7OztBQVllLFNBQVMsSUFBVCxHQUE0QjtBQUFBLEtBQWQsT0FBYyx5REFBSixFQUFJOzs7QUFFMUMsS0FBTSxhQUFhLE9BQU8sTUFBUCxDQUFjLEVBQWQsRUFBa0IsY0FBbEIsRUFBa0MsT0FBbEMsQ0FBbkI7Ozs7Ozs7Ozs7Ozs7OztBQWVBLFVBQVMsTUFBVCxDQUFnQixLQUFoQixFQUFtQztBQUFBLE1BQVosS0FBWSx5REFBSixFQUFJOztBQUNsQyxTQUFPLHNCQUFXLFVBQVgsRUFBdUI7QUFDN0IsU0FBTSxRQUR1QjtBQUU3QixhQUFVLEtBRm1CO0FBRzdCLFlBQVM7QUFIb0IsR0FBdkIsRUFJSjtBQUFBLFVBQU8scUJBQUUsS0FBRixDQUFRLElBQUksS0FBSixDQUFVLE1BQWxCLEVBQTBCLE9BQTFCLENBQVA7QUFBQSxHQUpJLENBQVA7QUFLQTs7Ozs7Ozs7OztBQVVELFVBQVMsTUFBVCxHQUEyQjtBQUFBLE1BQVgsS0FBVyx5REFBSCxDQUFHOztBQUMxQixTQUFPLGVBQUksVUFBSixFQUFnQjtBQUNyQixTQUFNLFFBRGU7QUFFckIsZ0JBQWEsQ0FGUTtBQUdyQixZQUFTO0FBSFksR0FBaEIsRUFLTCxJQUxLLENBS0E7QUFBQSxVQUFPLHFCQUFFLEtBQUYsQ0FBUSxJQUFJLEtBQUosQ0FBVSxNQUFsQixFQUEwQixPQUExQixDQUFQO0FBQUEsR0FMQSxDQUFQO0FBTUE7Ozs7Ozs7Ozs7QUFVRCxVQUFTLElBQVQsQ0FBYyxLQUFkLEVBQXFCO0FBQ3BCLFNBQU8sZUFBSSxVQUFKLEVBQWdCO0FBQ3JCLFNBQU0sZ0JBRGU7QUFFckIsV0FBUSxLQUZhO0FBR3JCLFdBQVEsZ0JBSGE7QUFJckIsV0FBUTtBQUphLEdBQWhCLEVBTUwsSUFOSyxDQU1BLGVBQU87QUFDWixPQUFNLEtBQUsscUJBQUUsT0FBRixDQUFVLElBQUksS0FBSixDQUFVLEtBQXBCLEVBQTJCO0FBQUEsV0FBUSxLQUFLLEtBQUwsS0FBZSxLQUF2QjtBQUFBLElBQTNCLENBQVg7QUFDQSxPQUFJLENBQUMsRUFBTCxFQUFTO0FBQ1IsVUFBTSxJQUFJLEtBQUosQ0FBVSxrQkFBVixDQUFOO0FBQ0E7QUFDRCxVQUFPLG9CQUFTLElBQUksS0FBSixDQUFVLEtBQVYsQ0FBZ0IsRUFBaEIsQ0FBVCxFQUE4QixVQUE5QixDQUFQO0FBQ0EsR0FaSyxDQUFQO0FBYUE7Ozs7Ozs7Ozs7OztBQVlELFVBQVMsU0FBVCxDQUFtQixHQUFuQixFQUF3QixHQUF4QixFQUE0QztBQUFBLE1BQWYsTUFBZSx5REFBTixJQUFNOztBQUMzQyxTQUFPLGVBQUksVUFBSixFQUFnQjtBQUNyQixTQUFNLFdBRGU7QUFFckIsYUFBVSxNQUZXO0FBR3JCLFlBQVksR0FBWixTQUFtQjtBQUhFLEdBQWhCLEVBS0wsSUFMSyxDQUtBO0FBQUEsVUFBTyxxQkFBRSxLQUFGLENBQVEsSUFBSSxLQUFKLENBQVUsU0FBbEIsRUFBNkIsT0FBN0IsQ0FBUDtBQUFBLEdBTEEsQ0FBUDtBQU1BOztBQUVELFFBQU87QUFDTixnQkFETTtBQUVOLGdCQUZNO0FBR04sWUFITTtBQUlOLHNCQUpNO0FBS047QUFMTSxFQUFQO0FBT0EiLCJmaWxlIjoid2lraS5qcyIsInNvdXJjZXNDb250ZW50IjpbIid1c2Ugc3RyaWN0JztcblxuaW1wb3J0ICdiYWJlbC1wb2x5ZmlsbCc7XG5pbXBvcnQgXyBmcm9tICd1bmRlcnNjb3JlJztcbmltcG9ydCB7IHBhZ2luYXRpb24sIGFwaSB9IGZyb20gJy4vdXRpbCc7XG5pbXBvcnQgd2lraVBhZ2UgZnJvbSAnLi9wYWdlJztcblxuLyoqXG4gKiBAbmFtZXNwYWNlXG4gKiBAY29uc3RhbnRcbiAqIEBwcm9wZXJ0eSB7c3RyaW5nfSBhcGlVcmwgLSBVUkwgb2YgV2lraXBlZGlhIEFQSVxuICovXG5jb25zdCBkZWZhdWx0T3B0aW9ucyA9IHtcblx0YXBpVXJsOiAnaHR0cDovL2VuLndpa2lwZWRpYS5vcmcvdy9hcGkucGhwJ1xufTtcblxuLyoqXG4gKiB3aWtpXG4gKiBAZXhhbXBsZVxuICogd2lraSh7IGFwaVVybDogJ2h0dHA6Ly9mci53aWtpcGVkaWEub3JnL3cvYXBpLnBocCcgfSkuc2VhcmNoKC4uLik7XG4gKiBAbmFtZXNwYWNlIFdpa2lcbiAqIEBwYXJhbSAge09iamVjdH0gb3B0aW9uc1xuICogQHJldHVybiB7T2JqZWN0fSAtIHdpa2kgKGZvciBjaGFpbmluZyBtZXRob2RzKVxuKi9cbmV4cG9ydCBkZWZhdWx0IGZ1bmN0aW9uIHdpa2kob3B0aW9ucyA9IHt9KSB7XG5cblx0Y29uc3QgYXBpT3B0aW9ucyA9IE9iamVjdC5hc3NpZ24oe30sIGRlZmF1bHRPcHRpb25zLCBvcHRpb25zKTtcblxuXHQvKipcblx0ICogU2VhcmNoIGFydGljbGVzXG5cdCAqIEBleGFtcGxlXG5cdCAqIHdpa2kuc2VhcmNoKCdzdGFyIHdhcnMnKS50aGVuKGRhdGEgPT4gY29uc29sZS5sb2coZGF0YS5yZXN1bHRzLmxlbmd0aCkpO1xuXHQgKiBAZXhhbXBsZVxuXHQgKiB3aWtpLnNlYXJjaCgnc3RhciB3YXJzJykudGhlbihkYXRhID0+IHtcblx0ICogXHRkYXRhLm5leHQoKS50aGVuKC4uLik7XG5cdCAqIH0pO1xuXHQgKiBAbWV0aG9kIFdpa2kjc2VhcmNoXG5cdCAqIEBwYXJhbSAge3N0cmluZ30gcXVlcnkgLSBrZXl3b3JkIHF1ZXJ5XG5cdCAqIEBwYXJhbSAge051bWJlcn0gW2xpbWl0XSAtIGxpbWl0cyB0aGUgbnVtYmVyIG9mIHJlc3VsdHNcblx0ICogQHJldHVybiB7UHJvbWlzZX0gLSBwYWdpbmF0aW9uIHByb21pc2Ugd2l0aCByZXN1bHRzIGFuZCBuZXh0IHBhZ2UgZnVuY3Rpb25cblx0ICovXG5cdGZ1bmN0aW9uIHNlYXJjaChxdWVyeSwgbGltaXQgPSA1MCkge1xuXHRcdHJldHVybiBwYWdpbmF0aW9uKGFwaU9wdGlvbnMsIHtcblx0XHRcdGxpc3Q6ICdzZWFyY2gnLFxuXHRcdFx0c3JzZWFyY2g6IHF1ZXJ5LFxuXHRcdFx0c3JsaW1pdDogbGltaXRcblx0XHR9LCByZXMgPT4gXy5wbHVjayhyZXMucXVlcnkuc2VhcmNoLCAndGl0bGUnKSk7XG5cdH1cblxuXHQvKipcblx0ICogUmFuZG9tIGFydGljbGVzXG5cdCAqIEBleGFtcGxlXG5cdCAqIHdpa2kucmFuZG9tKDMpLnRoZW4ocmVzdWx0cyA9PiBjb25zb2xlLmxvZyhyZXN1bHRzWzBdKSk7XG5cdCAqIEBtZXRob2QgV2lraSNyYW5kb21cblx0ICogQHBhcmFtICB7TnVtYmVyfSBbbGltaXRdIC0gbGltaXRzIHRoZSBudW1iZXIgb2YgcmFuZG9tIGFydGljbGVzXG5cdCAqIEByZXR1cm4ge1Byb21pc2V9IC0gTGlzdCBvZiBwYWdlIHRpdGxlc1xuXHQgKi9cblx0ZnVuY3Rpb24gcmFuZG9tKGxpbWl0ID0gMSkge1xuXHRcdHJldHVybiBhcGkoYXBpT3B0aW9ucywge1xuXHRcdFx0XHRsaXN0OiAncmFuZG9tJyxcblx0XHRcdFx0cm5uYW1lc3BhY2U6IDAsXG5cdFx0XHRcdHJubGltaXQ6IGxpbWl0XG5cdFx0XHR9KVxuXHRcdFx0LnRoZW4ocmVzID0+IF8ucGx1Y2socmVzLnF1ZXJ5LnJhbmRvbSwgJ3RpdGxlJykpO1xuXHR9XG5cblx0LyoqXG5cdCAqIEdldCBQYWdlXG5cdCAqIEBleGFtcGxlXG5cdCAqIHdpa2kucGFnZSgnQmF0bWFuJykudGhlbihwYWdlID0+IGNvbnNvbGUubG9nKHBhZ2UucGFnZWlkKSk7XG5cdCAqIEBtZXRob2QgV2lraSNwYWdlXG5cdCAqIEBwYXJhbSAge3N0cmluZ30gdGl0bGUgLSB0aXRsZSBvZiBhcnRpY2xlXG5cdCAqIEByZXR1cm4ge1Byb21pc2V9XG5cdCAqL1xuXHRmdW5jdGlvbiBwYWdlKHRpdGxlKSB7XG5cdFx0cmV0dXJuIGFwaShhcGlPcHRpb25zLCB7XG5cdFx0XHRcdHByb3A6ICdpbmZvfHBhZ2Vwcm9wcycsXG5cdFx0XHRcdGlucHJvcDogJ3VybCcsXG5cdFx0XHRcdHBwcHJvcDogJ2Rpc2FtYmlndWF0aW9uJyxcblx0XHRcdFx0dGl0bGVzOiB0aXRsZVxuXHRcdFx0fSlcblx0XHRcdC50aGVuKHJlcyA9PiB7XG5cdFx0XHRcdGNvbnN0IGlkID0gXy5maW5kS2V5KHJlcy5xdWVyeS5wYWdlcywgcGFnZSA9PiBwYWdlLnRpdGxlID09PSB0aXRsZSk7XG5cdFx0XHRcdGlmICghaWQpIHtcblx0XHRcdFx0XHR0aHJvdyBuZXcgRXJyb3IoJ05vIGFydGljbGUgZm91bmQnKTtcblx0XHRcdFx0fVxuXHRcdFx0XHRyZXR1cm4gd2lraVBhZ2UocmVzLnF1ZXJ5LnBhZ2VzW2lkXSwgYXBpT3B0aW9ucyk7XG5cdFx0XHR9KTtcblx0fVxuXG5cdC8qKlxuXHQgKiBHZW9ncmFwaGljYWwgU2VhcmNoXG5cdCAqIEBleGFtcGxlXG5cdCAqIHdpa2kuZ2VvU2VhcmNoKDMyLjMyOSwgLTk2LjEzNikudGhlbih0aXRsZXMgPT4gY29uc29sZS5sb2codGl0bGVzLmxlbmd0aCkpO1xuXHQgKiBAbWV0aG9kIFdpa2kjZ2VvU2VhcmNoXG5cdCAqIEBwYXJhbSAge051bWJlcn0gbGF0IC0gbGF0aXR1ZGVcblx0ICogQHBhcmFtICB7TnVtYmVyfSBsb24gLSBsb25naXR1ZGVcblx0ICogQHBhcmFtICB7TnVtYmVyfSBbcmFkaXVzPTEwMDBdIC0gc2VhcmNoIHJhZGl1cyBpbiBraWxvbWV0ZXJzIChkZWZhdWx0OiAxa20pXG5cdCAqIEByZXR1cm4ge1Byb21pc2V9IC0gTGlzdCBvZiBwYWdlIHRpdGxlc1xuXHQgKi9cblx0ZnVuY3Rpb24gZ2VvU2VhcmNoKGxhdCwgbG9uLCByYWRpdXMgPSAxMDAwKSB7XG5cdFx0cmV0dXJuIGFwaShhcGlPcHRpb25zLCB7XG5cdFx0XHRcdGxpc3Q6ICdnZW9zZWFyY2gnLFxuXHRcdFx0XHRnc3JhZGl1czogcmFkaXVzLFxuXHRcdFx0XHRnc2Nvb3JkOiBgJHtsYXR9fCR7bG9ufWBcblx0XHRcdH0pXG5cdFx0XHQudGhlbihyZXMgPT4gXy5wbHVjayhyZXMucXVlcnkuZ2Vvc2VhcmNoLCAndGl0bGUnKSk7XG5cdH1cblxuXHRyZXR1cm4ge1xuXHRcdHNlYXJjaCxcblx0XHRyYW5kb20sXG5cdFx0cGFnZSxcblx0XHRnZW9TZWFyY2gsXG5cdFx0b3B0aW9uc1xuXHR9O1xufVxuIl19</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Sun Jun 12 2016 18:24:41 GMT-0500 (CDT) using the Minami theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>
