@@ -9,6 +9,15 @@ describe('Wiki Methods', () => {
 
 	after(() => nock.enableNetConnect());
 
+	it('should not throw up when using pre 1.0.0 version', () => {
+		nock('http://en.wikipedia.org')
+			.get('/w/api.php?list=search&srsearch=kevin%20bacon%20number&srlimit=50&format=json&action=query')
+			.once()
+			.reply(200, JSON.parse(fs.readFileSync('./test/data/1463865881452.json')));
+		return new wiki().search('kevin bacon number').should.eventually.have
+			.property('results').with.property('length', 50);
+	});
+
 	it('Search should find an article', () => {
 		nock('http://en.wikipedia.org')
 			.get('/w/api.php?list=search&srsearch=kevin%20bacon%20number&srlimit=50&format=json&action=query')

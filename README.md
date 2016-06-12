@@ -41,9 +41,7 @@ npm test
 ## Usage
 
 ```javascript
-import Wiki from 'wikijs';
-
-const wiki = new Wiki();
+import wiki from 'wikijs';
 
 wiki.page('Batman')
 	.then(page => page.info('alter_ego'))

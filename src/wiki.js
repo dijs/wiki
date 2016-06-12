@@ -24,6 +24,10 @@ const defaultOptions = {
 */
 export default function wiki(options = {}) {
 
+	if (this instanceof wiki) {
+		console.log('Please do not use wikijs ^1.0.0 as a class. Please see the new README.'); // eslint-disable-line
+	}
+
 	const apiOptions = Object.assign({}, defaultOptions, options);
 
 	/**
