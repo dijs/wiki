@@ -39,7 +39,8 @@
   },
   "scripts": {
     "build": "babel src --out-dir dist --source-maps inline",
-    "test": "babel-node ./node_modules/istanbul/lib/cli cover node_modules/.bin/_mocha",
+    "test": "node_modules/.bin/_mocha --compilers js:babel-register",
+    "cover": "babel-node ./node_modules/istanbul/lib/cli cover node_modules/.bin/_mocha",
     "docs": "node_modules/.bin/jsdoc --configure .jsdoc.json --verbose",
     "coveralls": "cat ./coverage/lcov.info | coveralls"
   },
