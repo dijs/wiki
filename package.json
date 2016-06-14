@@ -2,7 +2,7 @@
   "name": "wikijs",
   "description": "Wikipedia interface for node",
   "author": "Richard van der Dys",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "keywords": [
     "wiki",
     "wikipedia",
