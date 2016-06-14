@@ -6,7 +6,13 @@
   "keywords": [
     "wiki",
     "wikipedia",
-    "interface"
+    "interface",
+    "search",
+    "client",
+    "article",
+    "node",
+    "api",
+    "mediawiki"
   ],
   "licenses": [
     {
