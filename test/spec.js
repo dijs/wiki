@@ -1,5 +1,5 @@
 import 'should';
-import Wiki from '../src/wiki';
+import wiki from '../src/wiki';
 import nock from 'nock';
 import fs from 'fs';
 
@@ -9,16 +9,13 @@ describe('Wiki Methods', () => {
 
 	after(() => nock.enableNetConnect());
 
-	it('Search structure API request correctly', () => {
+	it('should not throw up when using pre 1.0.0 version', () => {
 		nock('http://en.wikipedia.org')
-			.get('/w/api.php?name=John&format=json&action=query')
+			.get('/w/api.php?list=search&srsearch=kevin%20bacon%20number&srlimit=50&format=json&action=query')
 			.once()
-			.reply(200, {
-				success: true
-			});
-		return new Wiki().api({
-			name: 'John'
-		}).should.eventually.have.property('success', true);
+			.reply(200, JSON.parse(fs.readFileSync('./test/data/1463865881452.json')));
+		return new wiki().search('kevin bacon number').should.eventually.have
+			.property('results').with.property('length', 50);
 	});
 
 	it('Search should find an article', () => {
@@ -26,7 +23,7 @@ describe('Wiki Methods', () => {
 			.get('/w/api.php?list=search&srsearch=kevin%20bacon%20number&srlimit=50&format=json&action=query')
 			.once()
 			.reply(200, JSON.parse(fs.readFileSync('./test/data/1463865881452.json')));
-		return new Wiki().search('kevin bacon number').should.eventually.have.property('results').containEql('Six degrees of separation');
+		return wiki().search('kevin bacon number').should.eventually.have.property('results').containEql('Six degrees of separation');
 	});
 
 	it('Search should limit properly', () => {
@@ -34,7 +31,7 @@ describe('Wiki Methods', () => {
 			.get('/w/api.php?list=search&srsearch=batman&srlimit=7&format=json&action=query')
 			.once()
 			.reply(200, JSON.parse(fs.readFileSync('./test/data/1463865882183.json')));
-		return new Wiki().search('batman', 7).should.eventually.have.property('results').with.length(7);
+		return wiki().search('batman', 7).should.eventually.have.property('results').with.length(7);
 	});
 
 	it('Random should return the correct number of results', () => {
@@ -42,7 +39,7 @@ describe('Wiki Methods', () => {
 			.get('/w/api.php?list=random&rnnamespace=0&rnlimit=3&format=json&action=query')
 			.once()
 			.reply(200, JSON.parse(fs.readFileSync('./test/data/1463865883005.json')));
-		return new Wiki().random(3).should.eventually.have.length(3);
+		return wiki().random(3).should.eventually.have.length(3);
 	});
 
 	it('Should return correct page', () => {
@@ -50,7 +47,19 @@ describe('Wiki Methods', () => {
 			.get('/w/api.php?prop=info%7Cpageprops&inprop=url&ppprop=disambiguation&titles=Batman&format=json&action=query')
 			.once()
 			.reply(200, JSON.parse(fs.readFileSync('./test/data/1463865884408.json')));
-		return new Wiki().page('Batman').should.eventually.have.property('pageid', 4335);
+		return wiki().page('Batman').should.eventually.have.property('raw').with.property('pageid', 4335);
+	});
+
+	it('Should error if page not found', () => {
+		nock('http://en.wikipedia.org')
+			.get('/w/api.php?prop=info%7Cpageprops&inprop=url&ppprop=disambiguation&titles=Nope&format=json&action=query')
+			.once()
+			.reply(200, {
+				query: {
+					pages: []
+				}
+			});
+		return wiki().page('Nope').should.be.rejectedWith('No article found');
 	});
 
 	it('Should return page from coordinates', () => {
@@ -58,7 +67,7 @@ describe('Wiki Methods', () => {
 			.get('/w/api.php?list=geosearch&gsradius=1000&gscoord=32.329%7C-96.136&format=json&action=query')
 			.once()
 			.reply(200, JSON.parse(fs.readFileSync('./test/data/1463865885241.json')));
-		return new Wiki().geoSearch(32.329, -96.136).should.eventually.containEql('Gun Barrel City, Texas');
+		return wiki().geoSearch(32.329, -96.136).should.eventually.containEql('Gun Barrel City, Texas');
 	});
 
 	it('Should be able to choose wikipedia language', () => {
@@ -69,16 +78,14 @@ describe('Wiki Methods', () => {
 			.get('/w/api.php?prop=extracts&explaintext=&exintro=&titles=France&format=json&action=query')
 			.once()
 			.reply(200, JSON.parse(fs.readFileSync('./test/data/1463865886843.json')));
-		return new Wiki({ apiUrl: 'http://fr.wikipedia.org/w/api.php' })
+		return wiki({ apiUrl: 'http://fr.wikipedia.org/w/api.php' })
 			.page('France')
-			.then(page => page.summary())
-			.should.eventually.containEql('La France, officiellement République française');
+			.should.eventually.have.property('raw')
+			.with.property('canonicalurl', 'https://fr.wikipedia.org/wiki/France');
 	});
-
 });
 
 describe('Page Methods', () => {
-
 	let luke;
 
 	before((done) => {
@@ -89,15 +96,28 @@ describe('Page Methods', () => {
 			.once()
 			.reply(200, JSON.parse(fs.readFileSync('./test/data/1463865887477.json')))
 
-		new Wiki().page('Luke Skywalker')
+		wiki().page('Luke Skywalker')
 		.then(page => {
 			luke = page;
 			done();
 		})
-		.catch(err => done(err))
 	});
 
 	after(() => nock.enableNetConnect());
+
+	it('should get correct content from a non-default wiki', () => {
+		nock('http://fr.wikipedia.org')
+			.get('/w/api.php?prop=info%7Cpageprops&inprop=url&ppprop=disambiguation&titles=France&format=json&action=query')
+			.once()
+			.reply(200, JSON.parse(fs.readFileSync('./test/data/1463865886161.json')))
+			.get('/w/api.php?prop=extracts&explaintext=&exintro=&titles=France&format=json&action=query')
+			.once()
+			.reply(200, JSON.parse(fs.readFileSync('./test/data/1463865886843.json')));
+		return wiki({ apiUrl: 'http://fr.wikipedia.org/w/api.php' })
+			.page('France')
+			.then(page => page.summary())
+			.should.eventually.containEql('La France, officiellement République française');
+	});
 
 	it('should get html from an article', () => {
 		nock('http://en.wikipedia.org')
@@ -131,6 +151,14 @@ describe('Page Methods', () => {
 		return luke.images().should.eventually.containEql('https://upload.wikimedia.org/wikipedia/en/9/9b/Luke_Skywalker.png');
 	});
 
+	it('should get empty image list if no query data', () => {
+		nock('http://en.wikipedia.org')
+			.get('/w/api.php?generator=images&gimlimit=max&prop=imageinfo&iiprop=url&titles=Luke%20Skywalker&format=json&action=query')
+			.once()
+			.reply(200, {});
+		return luke.images().should.eventually.have.property('length', 0);
+	});
+
 	it('should get references from an article', () => {
 		nock('http://en.wikipedia.org')
 			.get('/w/api.php?prop=extlinks&ellimit=max&titles=Luke%20Skywalker&format=json&action=query')
@@ -144,16 +172,24 @@ describe('Page Methods', () => {
 			.get('/w/api.php?prop=links&plnamespace=0&pllimit=100&titles=Luke%20Skywalker&format=json&action=query')
 			.once()
 			.reply(200, JSON.parse(fs.readFileSync('./test/data/1463865893591.json')))
-			.get('/w/api.php?prop=links&plnamespace=0&pllimit=100&titles=Luke%20Skywalker&format=json&action=query&plcontinue=53602%7C0%7CJango_Fett')
+			.get('/w/api.php?prop=links&plnamespace=0&pllimit=100&titles=Luke%20Skywalker&plcontinue=53602%7C0%7CJango_Fett&format=json&action=query')
 			.once()
 			.reply(200, JSON.parse(fs.readFileSync('./test/data/1463865894283.json')))
-			.get('/w/api.php?prop=links&plnamespace=0&pllimit=100&titles=Luke%20Skywalker&format=json&action=query&plcontinue=53602%7C0%7CSkywalker_family')
+			.get('/w/api.php?prop=links&plnamespace=0&pllimit=100&titles=Luke%20Skywalker&plcontinue=53602%7C0%7CSkywalker_family&format=json&action=query')
 			.once()
 			.reply(200, JSON.parse(fs.readFileSync('./test/data/1463865895017.json')))
-			.get('/w/api.php?prop=links&plnamespace=0&pllimit=100&titles=Luke%20Skywalker&format=json&action=query&plcontinue=53602%7C0%7CYoda')
+			.get('/w/api.php?prop=links&plnamespace=0&pllimit=100&titles=Luke%20Skywalker&plcontinue=53602%7C0%7CYoda&format=json&action=query')
 			.once()
 			.reply(200, JSON.parse(fs.readFileSync('./test/data/1463865896368.json')))
 		return luke.links().should.eventually.containEql('Jedi');
+	});
+
+	it('should get partial links from an article', () => {
+		nock('http://en.wikipedia.org')
+			.get('/w/api.php?prop=links&plnamespace=0&pllimit=1&titles=Luke%20Skywalker&format=json&action=query')
+			.once()
+			.reply(200, JSON.parse(fs.readFileSync('./test/data/1463865893591.json')))
+		return luke.links(false, 1).should.eventually.have.property('results').containEql('A-wing');
 	});
 
 	it('should get categories from an article', () => {
@@ -161,13 +197,21 @@ describe('Page Methods', () => {
 			.get('/w/api.php?prop=categories&pllimit=100&titles=Luke%20Skywalker&format=json&action=query')
 			.once()
 			.reply(200, JSON.parse(fs.readFileSync('./test/data/1463865898699.json')))
-			.get('/w/api.php?prop=categories&pllimit=100&titles=Luke%20Skywalker&format=json&action=query&clcontinue=53602%7CFictional_hermits')
+			.get('/w/api.php?prop=categories&pllimit=100&titles=Luke%20Skywalker&clcontinue=53602%7CFictional_hermits&format=json&action=query')
 			.once()
 			.reply(200, JSON.parse(fs.readFileSync('./test/data/1463865900848.json')))
-			.get('/w/api.php?prop=categories&pllimit=100&titles=Luke%20Skywalker&format=json&action=query&clcontinue=53602%7CWikipedia_protected_pages_without_expiry')
+			.get('/w/api.php?prop=categories&pllimit=100&titles=Luke%20Skywalker&clcontinue=53602%7CWikipedia_protected_pages_without_expiry&format=json&action=query')
 			.once()
 			.reply(200, JSON.parse(fs.readFileSync('./test/data/1463865905051.json')))
 		return luke.categories().should.eventually.containEql('Category:Fictional farmers');
+	});
+
+	it('should get partial categories from an article', () => {
+		nock('http://en.wikipedia.org')
+			.get('/w/api.php?prop=categories&pllimit=1&titles=Luke%20Skywalker&format=json&action=query')
+			.once()
+			.reply(200, JSON.parse(fs.readFileSync('./test/data/1463865898699.json')));
+		return luke.categories(false, 1).should.eventually.have.property('results').containEql('Category:Action heroes');
 	});
 
 	it('should get backlinks from an article', () => {
@@ -175,40 +219,48 @@ describe('Page Methods', () => {
 			.get('/w/api.php?list=backlinks&bllimit=100&bltitle=Luke%20Skywalker&format=json&action=query')
 			.once()
 			.reply(200, JSON.parse(fs.readFileSync('./test/data/1463865905740.json')))
-			.get('/w/api.php?list=backlinks&bllimit=100&bltitle=Luke%20Skywalker&format=json&action=query&blcontinue=1%7C398180')
+			.get('/w/api.php?list=backlinks&bllimit=100&bltitle=Luke%20Skywalker&blcontinue=1%7C398180&format=json&action=query')
 			.once()
 			.reply(200, JSON.parse(fs.readFileSync('./test/data/1463865907167.json')))
-			.get('/w/api.php?list=backlinks&bllimit=100&bltitle=Luke%20Skywalker&format=json&action=query&blcontinue=0%7C1759525')
+			.get('/w/api.php?list=backlinks&bllimit=100&bltitle=Luke%20Skywalker&blcontinue=0%7C1759525&format=json&action=query')
 			.once()
 			.reply(200, JSON.parse(fs.readFileSync('./test/data/1463865907889.json')))
-			.get('/w/api.php?list=backlinks&bllimit=100&bltitle=Luke%20Skywalker&format=json&action=query&blcontinue=0%7C3137992')
+			.get('/w/api.php?list=backlinks&bllimit=100&bltitle=Luke%20Skywalker&blcontinue=0%7C3137992&format=json&action=query')
 			.once()
 			.reply(200, JSON.parse(fs.readFileSync('./test/data/1463865908539.json')))
-			.get('/w/api.php?list=backlinks&bllimit=100&bltitle=Luke%20Skywalker&format=json&action=query&blcontinue=2%7C5279310')
+			.get('/w/api.php?list=backlinks&bllimit=100&bltitle=Luke%20Skywalker&blcontinue=2%7C5279310&format=json&action=query')
 			.once()
 			.reply(200, JSON.parse(fs.readFileSync('./test/data/1463865909279.json')))
-			.get('/w/api.php?list=backlinks&bllimit=100&bltitle=Luke%20Skywalker&format=json&action=query&blcontinue=3%7C9378934')
+			.get('/w/api.php?list=backlinks&bllimit=100&bltitle=Luke%20Skywalker&blcontinue=3%7C9378934&format=json&action=query')
 			.once()
 			.reply(200, JSON.parse(fs.readFileSync('./test/data/1463865910008.json')))
-			.get('/w/api.php?list=backlinks&bllimit=100&bltitle=Luke%20Skywalker&format=json&action=query&blcontinue=4%7C14504799')
+			.get('/w/api.php?list=backlinks&bllimit=100&bltitle=Luke%20Skywalker&blcontinue=4%7C14504799&format=json&action=query')
 			.once()
 			.reply(200, JSON.parse(fs.readFileSync('./test/data/1463865910768.json')))
-			.get('/w/api.php?list=backlinks&bllimit=100&bltitle=Luke%20Skywalker&format=json&action=query&blcontinue=0%7C18617763')
+			.get('/w/api.php?list=backlinks&bllimit=100&bltitle=Luke%20Skywalker&blcontinue=0%7C18617763&format=json&action=query')
 			.once()
 			.reply(200, JSON.parse(fs.readFileSync('./test/data/1463865911458.json')))
-			.get('/w/api.php?list=backlinks&bllimit=100&bltitle=Luke%20Skywalker&format=json&action=query&blcontinue=0%7C23219359')
+			.get('/w/api.php?list=backlinks&bllimit=100&bltitle=Luke%20Skywalker&blcontinue=0%7C23219359&format=json&action=query')
 			.once()
 			.reply(200, JSON.parse(fs.readFileSync('./test/data/1463865912046.json')))
-			.get('/w/api.php?list=backlinks&bllimit=100&bltitle=Luke%20Skywalker&format=json&action=query&blcontinue=3%7C32891902')
+			.get('/w/api.php?list=backlinks&bllimit=100&bltitle=Luke%20Skywalker&blcontinue=3%7C32891902&format=json&action=query')
 			.once()
 			.reply(200, JSON.parse(fs.readFileSync('./test/data/1463865912820.json')))
-			.get('/w/api.php?list=backlinks&bllimit=100&bltitle=Luke%20Skywalker&format=json&action=query&blcontinue=4%7C40396152')
+			.get('/w/api.php?list=backlinks&bllimit=100&bltitle=Luke%20Skywalker&blcontinue=4%7C40396152&format=json&action=query')
 			.once()
 			.reply(200, JSON.parse(fs.readFileSync('./test/data/1463865913602.json')))
-			.get('/w/api.php?list=backlinks&bllimit=100&bltitle=Luke%20Skywalker&format=json&action=query&blcontinue=0%7C48176993')
+			.get('/w/api.php?list=backlinks&bllimit=100&bltitle=Luke%20Skywalker&blcontinue=0%7C48176993&format=json&action=query')
 			.once()
 			.reply(200, JSON.parse(fs.readFileSync('./test/data/1463865914719.json')))
 		return luke.backlinks().should.eventually.containEql('Jedi');
+	});
+
+	it('should get partial backlinks from an article', () => {
+		nock('http://en.wikipedia.org')
+			.get('/w/api.php?list=backlinks&bllimit=1&bltitle=Luke%20Skywalker&format=json&action=query')
+			.once()
+			.reply(200, JSON.parse(fs.readFileSync('./test/data/1463865905740.json')))
+		return luke.backlinks(false, 1).should.eventually.have.property('results').containEql('Jedi');
 	});
 
 	it('should get info', () => {
@@ -230,7 +282,7 @@ describe('Page Methods', () => {
 		return luke.info('gender').should.eventually.equal('Male');
 	});
 
-	it('should get coordinates from an article', (done) => {
+	it('should get coordinates from an article', () => {
 		nock('http://en.wikipedia.org')
 			.get('/w/api.php?prop=info%7Cpageprops&inprop=url&ppprop=disambiguation&titles=Texas&format=json&action=query')
 			.once()
@@ -238,18 +290,10 @@ describe('Page Methods', () => {
 			.get('/w/api.php?prop=coordinates&titles=Texas&format=json&action=query')
 			.once()
 			.reply(200, JSON.parse(fs.readFileSync('./test/data/1463865916863.json')))
-		new Wiki().page('Texas')
-		.then((texas) => {
-			texas.coordinates().then((coords) => {
-				coords.should.have.properties({
-					lat: 31,
-					lon: -100
-				});
-				done();
-			})
-			.catch(err => done(err));
-		})
-		.catch(err => done(err));
+		wiki().page('Texas').then(texas => texas.coordinates()).should.eventually.have.properties({
+			lat: 31,
+			lon: -100
+		});
 	});
 
 	it('should know who batman is', () => {
@@ -260,7 +304,7 @@ describe('Page Methods', () => {
 			.get('/w/api.php?prop=info%7Cpageprops&inprop=url&ppprop=disambiguation&titles=Batman&format=json&action=query')
 			.once()
 			.reply(200, JSON.parse(fs.readFileSync('./test/data/batman_1465345136432.json')))
-		return new Wiki().page('Batman')
+		return wiki().page('Batman')
 		.then(batman => {
 			return batman.info().should.eventually.have.property('alter_ego', 'Bruce Wayne');
 		});
@@ -274,7 +318,7 @@ describe('Page Methods', () => {
 			.get('/w/api.php?prop=info%7Cpageprops&inprop=url&ppprop=disambiguation&titles=Elizabeth%20II&format=json&action=query')
 			.once()
 			.reply(200, JSON.parse(fs.readFileSync('./test/data/queen_1465350664030.json')))
-		return new Wiki()
+		return wiki()
 			.page('Elizabeth II')
 			.then(queen => queen.info('age').should.eventually.equal(90));
 	});
@@ -287,7 +331,7 @@ describe('Page Methods', () => {
 			.get('/w/api.php?generator=images&gimlimit=max&prop=imageinfo&iiprop=url&titles=The%20Future%20Kings%20of%20England&format=json&action=query')
 			.once()
 			.reply(200, JSON.parse(fs.readFileSync('./test/data/1463865919502.json')))
-		const searchImages = term => new Wiki().page(term).then(page => page.images());
+		const searchImages = term => wiki().page(term).then(page => page.images());
 		return searchImages('The Future Kings of England').should.eventually.have.property('length', 0);
 	});
 
