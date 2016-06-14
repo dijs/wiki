@@ -43,7 +43,7 @@ npm test
 ```javascript
 import wiki from 'wikijs';
 
-wiki.page('Batman')
+wiki().page('Batman')
 	.then(page => page.info('alter_ego'))
 	.then(console.log); // Bruce Wayne
 ```
