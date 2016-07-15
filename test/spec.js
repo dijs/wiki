@@ -151,6 +151,28 @@ describe('Page Methods', () => {
 		return luke.images().should.eventually.containEql('https://upload.wikimedia.org/wikipedia/en/9/9b/Luke_Skywalker.png');
 	});
 
+	it('should get raw images from an article', () => {
+		nock('http://en.wikipedia.org')
+			.get('/w/api.php?generator=images&gimlimit=max&prop=imageinfo&iiprop=url&titles=Luke%20Skywalker&format=json&action=query')
+			.once()
+			.reply(200, JSON.parse(fs.readFileSync('./test/data/1463865891844.json')))
+		return luke.rawImages().then(images => {
+			const lightsaber = images.find(image => image.title === 'File:Lightsaber blue.svg');
+			lightsaber.should.exist;
+		});
+	});
+
+	it('should get main image from an article', () => {
+		nock('http://en.wikipedia.org')
+			.get('/w/api.php?generator=images&gimlimit=max&prop=imageinfo&iiprop=url&titles=Luke%20Skywalker&format=json&action=query')
+			.once()
+			.reply(200, JSON.parse(fs.readFileSync('./test/data/1463865891844.json')))
+			.get('/w/api.php?prop=revisions&rvprop=content&rvsection=0&titles=Luke%20Skywalker&format=json&action=query')
+			.once()
+			.reply(200, JSON.parse(fs.readFileSync('./test/data/1463865915453.json')))
+		return luke.mainImage().should.eventually.equal('https://upload.wikimedia.org/wikipedia/en/9/9b/Luke_Skywalker.png');
+	});
+
 	it('should get empty image list if no query data', () => {
 		nock('http://en.wikipedia.org')
 			.get('/w/api.php?generator=images&gimlimit=max&prop=imageinfo&iiprop=url&titles=Luke%20Skywalker&format=json&action=query')

@@ -75,13 +75,13 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 	}
 
 	/**
-	 * Image URL's from page
+	 * Raw data from images from page
 	 * @example
-	 * wiki.page('batman').then(page => page.image()).then(console.log);
-	 * @method WikiPage#images
+	 * wiki.page('batman').then(page => page.rawImages()).then(console.log);
+	 * @method WikiPage#rawImages
 	 * @return {Promise}
 	 */
-	function images() {
+	function rawImages() {
 		return api(apiOptions, {
 				generator: 'images',
 				gimlimit: 'max',
@@ -91,13 +91,42 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 			})
 			.then(res => {
 				if (res.query) {
-					return _.chain(res.query.pages)
-						.pluck('imageinfo')
-						.flatten()
-						.pluck('url')
-						.value();
+					return _.values(res.query.pages);
 				}
 				return [];
+			});
+	}
+
+	/**
+	 * Main image URL from infobox on page
+	 * @example
+	 * wiki.page('batman').then(page => page.mainImage()).then(console.log);
+	 * @method WikiPage#mainImage
+	 * @return {Promise}
+	 */
+	function mainImage() {
+		return Promise.all([rawImages(), info()])
+			.then(([images, info]) => {
+				const image = images.find(image => image.title === `File:${info.image}`);
+				return image.imageinfo.length > 0 ? image.imageinfo[0].url : undefined;
+			});
+	}
+
+	/**
+	 * Image URL's from page
+	 * @example
+	 * wiki.page('batman').then(page => page.image()).then(console.log);
+	 * @method WikiPage#images
+	 * @return {Promise}
+	 */
+	function images() {
+		return rawImages()
+			.then(images => {
+				return _.chain(images)
+					.pluck('imageinfo')
+					.flatten()
+					.pluck('url')
+					.value();
 			});
 	}
 
@@ -238,7 +267,9 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 		categories,
 		coordinates,
 		info,
-		backlinks
+		backlinks,
+		rawImages,
+		mainImage
 	};
 
   return page;
