@@ -12,7 +12,7 @@ export function api(apiOptions, params = {}) {
 	const qs = Object.assign({}, params, {
 		format: 'json',
 		action: 'query',
-    redirects: ''
+		redirects: ''
 	});
 	const url = `${apiOptions.apiUrl}?${querystring.stringify(qs)}`;
 	return fetch(url, fetchOptions).then(res => res.json());
