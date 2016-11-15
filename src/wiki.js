@@ -30,6 +30,18 @@ export default function wiki(options = {}) {
 
 	const apiOptions = Object.assign({}, defaultOptions, options);
 
+  function handleRedirect(res) {
+    if (res.query.redirects && res.query.redirects.length === 1) {
+      return api(apiOptions, {
+				prop: 'info|pageprops',
+				inprop: 'url',
+				ppprop: 'disambiguation',
+				titles: res.query.redirects[0].to
+			});
+    }
+    return res;
+  }
+
 	/**
 	 * Search articles
 	 * @example
@@ -83,8 +95,9 @@ export default function wiki(options = {}) {
 				ppprop: 'disambiguation',
 				titles: title
 			})
+      .then(handleRedirect)
 			.then(res => {
-				const id = _.findKey(res.query.pages, page => page.title === title);
+				const id = Object.keys(res.query.pages)[0];
 				if (!id) {
 					throw new Error('No article found');
 				}
