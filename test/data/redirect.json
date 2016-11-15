@@ -1,0 +1,51 @@
+{
+  "batchcomplete": "",
+  "query": {
+    "normalized": [
+      {
+        "from": "Boletus_edulis",
+        "to": "Boletus edulis"
+      }
+    ],
+    "redirects": [
+      {
+        "from": "Boletus edulis",
+        "to": "\u0411\u0435\u043b\u044b\u0439 \u0433\u0440\u0438\u0431"
+      }
+    ],
+    "pages": {
+      "293802": {
+        "pageid": 293802,
+        "ns": 0,
+        "title": "\u0411\u0435\u043b\u044b\u0439 \u0433\u0440\u0438\u0431",
+        "redirects": [
+          {
+            "pageid": 293808,
+            "ns": 0,
+            "title": "\u0411\u043e\u0440\u043e\u0432\u0438\u043a (\u0433\u0440\u0438\u0431)"
+          },
+          {
+            "pageid": 314062,
+            "ns": 0,
+            "title": "Boletus edulis"
+          },
+          {
+            "pageid": 576871,
+            "ns": 0,
+            "title": "\u0411\u043e\u0440\u043e\u0432\u0438\u043a \u043d\u0430\u0441\u0442\u043e\u044f\u0449\u0438\u0439"
+          },
+          {
+            "pageid": 2905295,
+            "ns": 0,
+            "title": "\u0411\u0435\u043b\u044b\u0435 \u0433\u0440\u0438\u0431\u044b"
+          },
+          {
+            "pageid": 6076225,
+            "ns": 0,
+            "title": "\u041f\u043e\u0440\u0447\u0438\u043d\u0438"
+          }
+        ]
+      }
+    }
+  }
+}
