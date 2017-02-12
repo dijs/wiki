@@ -1,6 +1,5 @@
 'use strict';
 
-import 'babel-polyfill';
 import _ from 'underscore';
 import { pagination, api } from './util';
 import wikiPage from './page';

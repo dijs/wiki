@@ -25,7 +25,6 @@
   },
   "main": "./dist/wiki.js",
   "dependencies": {
-    "babel-polyfill": "^6.9.0",
     "isomorphic-fetch": "^2.2.1",
     "moment": "^2.13.0",
     "underscore": "^1.8.3",
