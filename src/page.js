@@ -15,6 +15,20 @@ function markupParser(data) {
 	});
 }
 
+const keyValuePairPattern = /\w+=[\d\w]+/g;
+
+function parseDeprecatedCoord(coord) {
+  return coord
+    .match(keyValuePairPattern)
+    .reduce((memo, pair) => {
+      const [key, value] = pair.split('=');
+      const floatValue = parseFloat(value);
+      return Object.assign({}, memo, {
+        [key]: isNaN(floatValue) ? value : floatValue
+      })
+    }, {});
+}
+
 /**
  * WikiPage
  * @namespace WikiPage
@@ -201,7 +215,26 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 				prop: 'coordinates',
 				titles: raw.title
 			})
-			.then(res => res.query.pages[raw.pageid].coordinates[0]);
+			.then(res => {
+				const page = res.query.pages[raw.pageid];
+				if (page.coordinates) {
+					return page.coordinates[0];
+				}
+				// No coordinates for this page, check infobox for deprecated version
+        return info().then(data => {
+          if (data.latd && data.longd) {
+            return Object.assign(
+              {
+                type: 'deprecated'
+              },
+              parseDeprecatedCoord(data.latd),
+              parseDeprecatedCoord(data.longd)
+            );
+          }
+          // No coordinates
+          return null;
+        });
+			});
 	}
 
 	/**
