@@ -5,19 +5,16 @@
  */
 export function parseCoordinates(infoboxData) {
 	if(infoboxData.coordinates) {
-		// inline coordinate format
 		return parseInfoboxCoords(infoboxData.coordinates);
 	}
-	else if(infoboxData.latd && infoboxData.longd) {
-		// deprecated coordinate format
+	if(infoboxData.latd && infoboxData.longd) {
 		return parseDeprecatedCoords(infoboxData.latd,infoboxData.longd);
-	}else {
-		return {
-			lat: null,
-			lon: null,
-			error: 'No coordinates on page.'
-		};
 	}
+	return {
+		lat: null,
+		lon: null,
+		error: 'No coordinates on page.'
+	};
 }
 
 // regex to match deprecated coordinates
@@ -32,17 +29,9 @@ const deprecatedCoordinatePattern = /(\d{1,3})\s*\|\s*\w{3,4}m=(\d{1,2})(?:\s*\|
  * @return {Object} - Wiki formatted object containing lat and lon
  */
 function parseDeprecatedCoords(latString,lonString) {
-	var matches, latitude, longitude;
-	matches = latString.match(deprecatedCoordinatePattern);
-	latitude = dmsToDecimal(floatOrDefault(matches[1]),
-		floatOrDefault(matches[2]),
-		floatOrDefault(matches[3]),
-		matches[4]);
-	matches = lonString.match(deprecatedCoordinatePattern);
-	longitude = dmsToDecimal(floatOrDefault(matches[1]),
-		floatOrDefault(matches[2]),
-		floatOrDefault(matches[3]),
-		matches[4]);
+	let latitude, longitude;
+	latitude = convertCoordinatesFromStrings(latString.match(deprecatedCoordinatePattern));
+	longitude = convertCoordinatesFromStrings(lonString.match(deprecatedCoordinatePattern));
 	return wikiCoordinates(latitude,longitude);
 }
 
@@ -57,28 +46,39 @@ const infoboxCoordinatePattern = /\|(\d{1,2})\|(\d{1,2})\|(\d{1,2})?\|?([NSEW])\
  * @return {Object} - Wiki formatted object containing lat and lon
  */
 function parseInfoboxCoords(coord) {
-	var matches, latitude, longitude;
+	let matches, latitude, longitude;
 	matches = coord.match(infoboxCoordinatePattern);
-	latitude = dmsToDecimal(floatOrDefault(matches[1]),
-		floatOrDefault(matches[2]),
-		floatOrDefault(matches[3]),
-		matches[4]);
-	longitude = dmsToDecimal(floatOrDefault(matches[5]),
-		floatOrDefault(matches[6]),
-		floatOrDefault(matches[7]),
-		matches[8]);
+	latitude = convertCoordinatesFromStrings(matches.slice(0,4));
+	longitude = convertCoordinatesFromStrings(matches.slice(4));
 	return wikiCoordinates(latitude,longitude);
 }
 
+/**
+ * Converts coordinates after they've been separated into components by regex matching.
+ * Missing or undefined elements in array will be treated as 0. Missing direction will
+ * result in positive coordinate.
+ * @example
+ * convertCoordinatesFromStrings(['38','54','23','N'])
+ * @param {Array} matches - array in format ['degrees','minutes','seconds','direction']
+ * @returns 
+ */
+function convertCoordinatesFromStrings(matches) {
+	return dmsToDecimal(floatOrDefault(matches[1]),
+		floatOrDefault(matches[2]),
+		floatOrDefault(matches[3]),
+		matches[4]);
+}
+
+// simplifies positive / negative calculation in decimal conversion
+const directions = {'N': 1, 'S': -1, 'E': 1, 'W': -1};
 /**
  * Converts coordinates from degrees, minutes, seconds, direction to decimal.
  * @example
  * dmsToDecimal(100,39,58,'W') == -100.6661111
  * @return {Number} - coordinate in decimal form, with proper positive / negative sign applied.
  */
-const directions = {'N': 1, 'S': -1, 'E': 1, 'W': -1};
-function dmsToDecimal(degrees,minutes,seconds,direction){
-	return (degrees + (1/60)*minutes + (1/3600)*seconds) * (direction in directions ? directions[direction] : 1);
+function dmsToDecimal(degrees,minutes,seconds,direction) {
+	return (degrees + (1/60)*minutes + (1/3600)*seconds) * (directions[direction] || 1);
 }
 
 /**
@@ -103,6 +103,6 @@ function wikiCoordinates(latitude,longitude) {
  * @return {Number} - returns numStr converted to Number or 0 if NaN
  */
 function floatOrDefault(numStr) {
-	var num = Number(numStr);
+	const num = Number(numStr);
 	return (!isNaN(num) ? num : 0);
 }

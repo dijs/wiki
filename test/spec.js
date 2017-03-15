@@ -2,9 +2,6 @@ import 'should';
 import wiki from '../src/wiki';
 import nock from 'nock';
 import fs from 'fs';
-// import rewire from 'rewire';
-
-const described = () => {};
 
 describe('Wiki Methods', () => {
 
