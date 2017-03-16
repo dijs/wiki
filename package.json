@@ -50,6 +50,7 @@
     "cover": "babel-node ./node_modules/istanbul/lib/cli cover node_modules/.bin/_mocha",
     "docs": "node_modules/.bin/jsdoc --configure .jsdoc.json --verbose",
     "lint": "eslint src",
+    "publish-docs": "git push origin `git subtree split --prefix docs/wikijs/2.1.1 master`:gh-pages --force",
     "coveralls": "cat ./coverage/lcov.info | coveralls"
   },
   "homepage": "https://github.com/dijs/wiki",
