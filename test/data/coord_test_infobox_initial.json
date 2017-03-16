@@ -1,0 +1,22 @@
+{
+    "batchcomplete": "",
+    "query": {
+        "pages": {
+            "1106712": {
+                "pageid": 1106712,
+                "ns": 0,
+                "title": "Catanzaro",
+                "contentmodel": "wikitext",
+                "pagelanguage": "en",
+                "pagelanguagehtmlcode": "en",
+                "pagelanguagedir": "ltr",
+                "touched": "2017-03-07T14:04:17Z",
+                "lastrevid": 768521411,
+                "length": 13800,
+                "fullurl": "https://en.wikipedia.org/wiki/Catanzaro",
+                "editurl": "https://en.wikipedia.org/w/index.php?title=Catanzaro&action=edit",
+                "canonicalurl": "https://en.wikipedia.org/wiki/Catanzaro"
+            }
+        }
+    }
+}

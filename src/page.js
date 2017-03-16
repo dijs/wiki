@@ -2,6 +2,7 @@ import _ from 'underscore';
 import { aggregatePagination, pagination, api } from './util';
 import determiners from './determiners';
 import wikiInfoboxParser from 'wiki-infobox-parser-core';
+import {parseCoordinates} from './coordinates';
 
 function markupParser(data) {
 	return new Promise((resolve, reject) => {
@@ -13,20 +14,6 @@ function markupParser(data) {
 			}
 		});
 	});
-}
-
-const keyValuePairPattern = /\w+=[\d\w]+/g;
-
-function parseDeprecatedCoord(coord) {
-  return coord
-    .match(keyValuePairPattern)
-    .reduce((memo, pair) => {
-      const [key, value] = pair.split('=');
-      const floatValue = parseFloat(value);
-      return Object.assign({}, memo, {
-        [key]: isNaN(floatValue) ? value : floatValue
-      })
-    }, {});
 }
 
 /**
@@ -221,19 +208,7 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 					return page.coordinates[0];
 				}
 				// No coordinates for this page, check infobox for deprecated version
-        return info().then(data => {
-          if (data.latd && data.longd) {
-            return Object.assign(
-              {
-                type: 'deprecated'
-              },
-              parseDeprecatedCoord(data.latd),
-              parseDeprecatedCoord(data.longd)
-            );
-          }
-          // No coordinates
-          return null;
-        });
+				return info().then(data => parseCoordinates(data));
 			});
 	}
 
@@ -305,5 +280,5 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 		mainImage
 	};
 
-  return page;
+	return page;
 }

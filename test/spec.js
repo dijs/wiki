@@ -323,9 +323,43 @@ describe('Page Methods', () => {
 			.get('/w/api.php?prop=coordinates&titles=Texas&format=json&action=query&redirects=')
 			.once()
 			.reply(200, JSON.parse(fs.readFileSync('./test/data/1463865916863.json')))
-		wiki().page('Texas').then(texas => texas.coordinates()).should.eventually.have.properties({
+		return wiki().page('Texas').then(texas => texas.coordinates()).should.eventually.have.properties({
 			lat: 31,
 			lon: -100
+		});
+	});
+
+	it('should parse coordinates located in infobox', () => {
+		nock('http://en.wikipedia.org')
+			.get('/w/api.php?prop=info%7Cpageprops&inprop=url&ppprop=disambiguation&titles=Catanzaro&format=json&action=query&redirects=')
+			.once()
+			.reply(200, JSON.parse(fs.readFileSync('./test/data/coord_test_infobox_initial.json')))
+			.get('/w/api.php?prop=coordinates&titles=Catanzaro&format=json&action=query&redirects=')
+			.once()
+			.reply(200, JSON.parse(fs.readFileSync('./test/data/coord_test_infobox_nullresp.json')))
+			.get('/w/api.php?prop=revisions&rvprop=content&rvsection=0&titles=Catanzaro&format=json&action=query&redirects=')
+			.once()
+			.reply(200, JSON.parse(fs.readFileSync('./test/data/coord_test_infobox.json')))
+		return wiki().page('Catanzaro').then(page => page.coordinates()).should.eventually.have.properties({
+			lat: 38.9,
+			lon: 16.6
+		});
+	});
+
+	it('should parse deprecated format coordinates', () => {
+		nock('http://en.wikipedia.org')
+			.get('/w/api.php?prop=info%7Cpageprops&inprop=url&ppprop=disambiguation&titles=Solok&format=json&action=query&redirects=')
+			.once()
+			.reply(200, JSON.parse(fs.readFileSync('./test/data/coord_test_deprecated_initial.json')))
+			.get('/w/api.php?prop=coordinates&titles=Solok&format=json&action=query&redirects=')
+			.once()
+			.reply(200, JSON.parse(fs.readFileSync('./test/data/coord_test_deprecated_nullresp.json')))
+			.get('/w/api.php?prop=revisions&rvprop=content&rvsection=0&titles=Solok&format=json&action=query&redirects=')
+			.once()
+			.reply(200, JSON.parse(fs.readFileSync('./test/data/coord_test_deprecated.json')))
+		return wiki().page('Solok').then(page => page.coordinates()).should.eventually.have.properties({
+			lat: -0.7997,
+			lon: 100.6661
 		});
 	});
 
@@ -367,5 +401,4 @@ describe('Page Methods', () => {
 		const searchImages = term => wiki().page(term).then(page => page.images());
 		return searchImages('The Future Kings of England').should.eventually.have.property('length', 0);
 	});
-
 });
