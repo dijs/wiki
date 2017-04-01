@@ -12,6 +12,7 @@ export function api(apiOptions, params = {}) {
 	const qs = Object.assign({}, params, {
 		format: 'json',
 		action: 'query',
+		origin: "*",
 		redirects: ''
 	});
 	const url = `${apiOptions.apiUrl}?${querystring.stringify(qs)}`;
