@@ -1,6 +1,5 @@
 'use strict';
 
-import _ from 'underscore';
 import { pagination, api } from './util';
 import wikiPage from './page';
 
@@ -59,7 +58,7 @@ export default function wiki(options = {}) {
 			list: 'search',
 			srsearch: query,
 			srlimit: limit
-		}, res => _.pluck(res.query.search, 'title'));
+		}, res => res.query.search.map(article => article.title));
 	}
 
 	/**
@@ -76,7 +75,7 @@ export default function wiki(options = {}) {
 				rnnamespace: 0,
 				rnlimit: limit
 			})
-			.then(res => _.pluck(res.query.random, 'title'));
+			.then(res => res.query.random.map(article => article.title));
 	}
 
 	/**
@@ -120,7 +119,7 @@ export default function wiki(options = {}) {
 				gsradius: radius,
 				gscoord: `${lat}|${lon}`
 			})
-			.then(res => _.pluck(res.query.geosearch, 'title'));
+			.then(res => res.query.geosearch.map(article => article.title));
 	}
 
 	return {

@@ -1,4 +1,3 @@
-import _ from 'underscore';
 import { aggregatePagination, pagination, api } from './util';
 import determiners from './determiners';
 import wikiInfoboxParser from 'wiki-infobox-parser-core';
@@ -92,7 +91,7 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 			})
 			.then(res => {
 				if (res.query) {
-					return _.values(res.query.pages);
+					return Object.keys(res.query.pages).map(id => res.query.pages[id]);
 				}
 				return [];
 			});
@@ -123,11 +122,10 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 	function images() {
 		return rawImages()
 			.then(images => {
-				return _.chain(images)
-					.pluck('imageinfo')
-					.flatten()
-					.pluck('url')
-					.value();
+				return images
+					.map(image => image.imageinfo)
+					.reduce((imageInfos, list) => [...imageInfos, ...list], [])
+					.map(info => info.url);
 			});
 	}
 
@@ -144,7 +142,7 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 				ellimit: 'max',
 				titles: raw.title
 			})
-			.then(res => _.pluck(res.query.pages[raw.pageid].extlinks, '*'));
+			.then(res => res.query.pages[raw.pageid].extlinks.map(link => link['*']));
 	}
 
 	/**
@@ -162,7 +160,7 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 			plnamespace: 0,
 			pllimit: limit,
 			titles: raw.title
-		}, res => _.pluck(res.query.pages[raw.pageid].links, 'title'));
+		}, res => res.query.pages[raw.pageid].links.map(link => link.title));
 		if (aggregated) {
 			return aggregatePagination(_pagination);
 		}
@@ -183,7 +181,7 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 			prop: 'categories',
 			pllimit: limit,
 			titles: raw.title
-		}, res => _.pluck(res.query.pages[raw.pageid].categories, 'title'));
+		}, res => res.query.pages[raw.pageid].categories.map(category => category.title));
 		if (aggregated) {
 			return aggregatePagination(_pagination);
 		}
@@ -257,7 +255,7 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 			list: 'backlinks',
 			bllimit: limit,
 			bltitle: raw.title
-		}, res => _.pluck(res.query.backlinks, 'title'));
+		}, res => res.query.backlinks.map(link => link.title));
 		if (aggregated) {
 			return aggregatePagination(_pagination);
 		}
