@@ -1,6 +1,5 @@
-import moment from 'moment';
-
-const datePattern = /(\d+\|\d+\|\d+)/;
+const datePattern = /(\d+)\|(\d+)\|(\d+)/;
+const millisInYear = 1000 * 60 * 60 * 24 * 365;
 
 const determiners = {
   age: metadata => {
@@ -11,8 +10,9 @@ const determiners = {
     if (!matches) {
       return;
     }
-    const birthDate = moment(matches[1], 'YYYY|MM|DD');
-    return moment().diff(birthDate, 'years');
+    const [, year, month, date] = matches;
+    const birthDate = new Date(year, month, date);
+    return Math.floor((Date.now() - birthDate) / millisInYear);
   }
 };
 
