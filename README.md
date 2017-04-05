@@ -42,6 +42,7 @@ npm test
 
 ```javascript
 import wiki from 'wikijs';
+// const wiki = require('wikijs').default;
 
 wiki().page('Batman')
 	.then(page => page.info('alter_ego'))
