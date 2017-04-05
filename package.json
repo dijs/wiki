@@ -23,7 +23,7 @@
   "engines": {
     "node": ">=0.10.4"
   },
-  "main": "./dist-wiki.js",
+  "main": "./dist/wiki.js",
   "dependencies": {
     "isomorphic-fetch": "^2.2.1",
     "wiki-infobox-parser-core": "0.0.1"
@@ -44,7 +44,7 @@
     "should": "^9.0.0"
   },
   "scripts": {
-    "build": "babel src --out-file dist-wiki.js --source-maps true",
+    "build": "babel src --out-dir dist --source-maps true",
     "test": "node_modules/.bin/_mocha --compilers js:babel-register",
     "cover": "babel-node ./node_modules/istanbul/lib/cli cover node_modules/.bin/_mocha",
     "docs": "node_modules/.bin/jsdoc --configure .jsdoc.json --verbose",

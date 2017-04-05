@@ -3,5 +3,3 @@ node_modules/
 dist/
 coverage/
 npm-debug.log
-dist-wiki.js
-dist-wiki.js.map
