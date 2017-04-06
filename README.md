@@ -1,7 +1,7 @@
 [![NPM Version](https://img.shields.io/npm/v/wikijs.svg)](https://www.npmjs.com/package/wikijs)
 [![Build Status](https://travis-ci.org/dijs/wiki.svg)](https://travis-ci.org/dijs/wiki)
 [![Coverage Status](https://coveralls.io/repos/dijs/wiki/badge.svg)](https://coveralls.io/r/dijs/wiki)
-[![gitcheese.com](https://api.gitcheese.com/v1/projects/bda088c4-6016-49e5-80c8-2fea51b65e2f/badges)](https://www.gitcheese.com/app/#/projects/bda088c4-6016-49e5-80c8-2fea51b65e2f/pledges/create)
+[![gitcheese.com](https://s3.amazonaws.com/gitcheese-ui-master/images/badge.svg)](https://www.gitcheese.com/donate/users/1774430/repos/12490028)
 
 # WikiJs
 
