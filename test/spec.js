@@ -301,9 +301,11 @@ describe('Page Methods', () => {
 			.get('/w/api.php?prop=revisions&rvprop=content&rvsection=0&titles=Luke%20Skywalker&format=json&action=query&origin=*&redirects=')
 			.once()
 			.reply(200, JSON.parse(fs.readFileSync('./test/data/1463865915453.json')))
-		return luke.info().should.eventually.have.properties({
-			gender: 'Male',
-			species: 'Human'
+		return luke.info().then(info => {
+			info.should.have.property('gender', 'Male');
+			info.species.should.containEql('Human');
+			info.relatives.should.containEql('Owen Lars');
+			info.relatives.should.containEql('Beru Lars');
 		});
 	});
 
@@ -373,7 +375,7 @@ describe('Page Methods', () => {
 			.reply(200, JSON.parse(fs.readFileSync('./test/data/batman_1465345136432.json')))
 		return wiki().page('Batman')
 		.then(batman => {
-			return batman.info().should.eventually.have.property('alter_ego', 'Bruce Wayne');
+			return batman.info().should.eventually.have.property('alterEgo', 'Bruce Wayne');
 		});
 	});
 
@@ -387,7 +389,10 @@ describe('Page Methods', () => {
 			.reply(200, JSON.parse(fs.readFileSync('./test/data/queen_1465350664030.json')))
 		return wiki()
 			.page('Elizabeth II')
-			.then(queen => queen.info('age').should.eventually.equal(90));
+			.then(queen => queen.info('father'))
+			.then(father => {
+				father.should.equal('George VI');
+			});
 	});
 
 	it('should handle empty images properly', () => {

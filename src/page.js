@@ -1,19 +1,6 @@
 import { aggregatePagination, pagination, api } from './util';
-import determiners from './determiners';
-import wikiInfoboxParser from 'wiki-infobox-parser-core';
+import infoboxParser from 'infobox-parser';
 import {parseCoordinates} from './coordinates';
-
-function markupParser(data) {
-	return new Promise((resolve, reject) => {
-		wikiInfoboxParser(data, (err, resultString) => {
-			if (err) {
-				reject(err);
-			} else {
-				resolve(JSON.parse(resultString));
-			}
-		});
-	});
-}
 
 /**
  * WikiPage
@@ -225,7 +212,10 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 				rvsection: 0,
 				titles: raw.title
 			})
-			.then(res => markupParser(JSON.stringify(res)))
+			.then(res => {
+				const wikitext = res.query.pages[raw.pageid].revisions[0]['*'];
+				return infoboxParser(wikitext);
+			})
 			.then(metadata => {
 				if (!key) {
 					return metadata;
@@ -233,13 +223,6 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 				if (metadata.hasOwnProperty(key)) {
 					return metadata[key];
 				}
-				if (determiners.hasOwnProperty(key)) {
-					const value = determiners[key](metadata);
-					if (value) {
-						return value;
-					}
-				}
-				return undefined;
 			});
 	}
 

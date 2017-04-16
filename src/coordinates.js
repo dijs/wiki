@@ -8,7 +8,7 @@ export function parseCoordinates(infoboxData) {
 		return parseInfoboxCoords(infoboxData.coordinates);
 	}
 	if(infoboxData.latd && infoboxData.longd) {
-		return parseDeprecatedCoords(infoboxData.latd,infoboxData.longd);
+		return parseDeprecatedCoords(infoboxData);
 	}
 	return {
 		lat: null,
@@ -16,9 +16,6 @@ export function parseCoordinates(infoboxData) {
 		error: 'No coordinates on page.'
 	};
 }
-
-// regex to match deprecated coordinates
-const deprecatedCoordinatePattern = /(\d{1,3})\s*\|\s*\w{3,4}m=(\d{1,2})(?:\s*\|\s*\w{3,4}s=)?(\d{1,2})?\s*\|\s*\w+=([NSEW])/;
 
 /**
  * Parses coordinates which are in Wikipedia Deprecated Format.
@@ -28,15 +25,24 @@ const deprecatedCoordinatePattern = /(\d{1,3})\s*\|\s*\w{3,4}m=(\d{1,2})(?:\s*\|
  * @param  {String} lonString - Deprecated coordinate string for longitude (from longd property)
  * @return {Object} - Wiki formatted object containing lat and lon
  */
-function parseDeprecatedCoords(latString,lonString) {
-	let latitude, longitude;
-	latitude = convertCoordinatesFromStrings(latString.match(deprecatedCoordinatePattern));
-	longitude = convertCoordinatesFromStrings(lonString.match(deprecatedCoordinatePattern));
+function parseDeprecatedCoords(data) {
+	const latitude = dmsToDecimal(
+		floatOrDefault(data.latd),
+		floatOrDefault(data.latm),
+		floatOrDefault(data.lats),
+		data.latNS
+	);
+	const longitude = dmsToDecimal(
+		floatOrDefault(data.longd),
+		floatOrDefault(data.longm),
+		floatOrDefault(data.longs),
+		data.latEW
+	);
 	return wikiCoordinates(latitude,longitude);
 }
 
 // regex to match coordinate string in infobox
-const infoboxCoordinatePattern = /\|(\d{1,2})\|(\d{1,2})\|(\d{1,2})?\|?([NSEW])\|(\d{1,3})\|(\d{1,2})\|(\d{1,2})?\|?([NSEW])/;
+const infoboxCoordinatePattern = /(\d{1,2})\|(\d{1,2})\|(\d{1,2})?\|?([NSEW])\|(\d{1,3})\|(\d{1,2})\|(\d{1,2})?\|?([NSEW])/;
 
 /**
  * Parses coordinates which are embedded in infobox instead of in the page.
@@ -60,7 +66,7 @@ function parseInfoboxCoords(coord) {
  * @example
  * convertCoordinatesFromStrings(['38','54','23','N'])
  * @param {Array} matches - array in format ['degrees','minutes','seconds','direction']
- * @returns 
+ * @returns
  */
 function convertCoordinatesFromStrings(matches) {
 	return dmsToDecimal(floatOrDefault(matches[1]),
