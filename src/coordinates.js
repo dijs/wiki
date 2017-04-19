@@ -30,13 +30,13 @@ function parseDeprecatedCoords(data) {
 		floatOrDefault(data.latd),
 		floatOrDefault(data.latm),
 		floatOrDefault(data.lats),
-		data.latNS
+		data.latNS || data.latNs
 	);
 	const longitude = dmsToDecimal(
 		floatOrDefault(data.longd),
 		floatOrDefault(data.longm),
 		floatOrDefault(data.longs),
-		data.latEW
+		data.longEW || data.longEw
 	);
 	return wikiCoordinates(latitude,longitude);
 }
