@@ -26,7 +26,7 @@
   "main": "./dist/wiki.js",
   "dependencies": {
     "isomorphic-fetch": "^2.2.1",
-    "infobox-parser": "^1.0.0"
+    "infobox-parser": "^1.0.1"
   },
   "devDependencies": {
     "babel": "^6.23.0",
