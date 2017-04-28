@@ -207,6 +207,10 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 	 * @return {Promise} - info Object contains key/value pairs of infobox data, or specific value if key given
 	 */
 	function info(key, options) {
+    if (key && typeof key === 'object') {
+      options = key;
+      key = '';
+    }
 		return api(apiOptions, {
 				prop: 'revisions',
 				rvprop: 'content',
@@ -215,7 +219,8 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 			})
 			.then(res => {
 				const wikitext = res.query.pages[raw.pageid].revisions[0]['*'];
-				return infoboxParser(wikitext, options || apiOptions);
+        const opts = Object.assign({}, apiOptions, options);
+				return infoboxParser(wikitext, opts);
 			})
 			.then(metadata => {
 				if (!key) {
