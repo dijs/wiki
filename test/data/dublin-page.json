@@ -1,0 +1,22 @@
+{
+  "batchcomplete": "",
+  "query": {
+    "pages": {
+      "8504": {
+        "pageid": 8504,
+         "ns": 0,
+         "title": "Dublin",
+         "contentmodel": "wikitext",
+         "pagelanguage": "en",
+         "pagelanguagehtmlcode": "en",
+         "pagelanguagedir": "ltr",
+         "touched": "2017-04-28T08:18:59Z",
+         "lastrevid": 777617763,
+         "length": 102548,
+         "fullurl": "https://en.wikipedia.org/wiki/Dublin",
+         "editurl": "https://en.wikipedia.org/w/index.php?title=Dublin&action=edit",
+         "canonicalurl": "https://en.wikipedia.org/wiki/Dublin"
+      }
+    }
+  }
+}
