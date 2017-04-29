@@ -31,8 +31,7 @@ describe('Dublin page integration', () => {
     return dublin.info({simplifyDataValues: false}).then((info) => {
       info.name.should.equal('Dublin');
       info.gdp.should.equal('US$ 90.1 billion');
-      //TODO fix infobox parser to activate this test
-      //info.populationTotal.should.equal(553165)
+      info.populationTotal.should.equal(553165)
     });
   });
 
