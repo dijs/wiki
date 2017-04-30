@@ -203,14 +203,9 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 	 * new Wiki().page('Batman').then(page => page.info('alter_ego'));
 	 * @method WikiPage#info
 	 * @param  {String} [key] - Information key. Falsy keys are ignored
-   * @param  {Object} [options] - Infobox parser options
 	 * @return {Promise} - info Object contains key/value pairs of infobox data, or specific value if key given
 	 */
-	function info(key, options) {
-    if (key && typeof key === 'object') {
-      options = key;
-      key = '';
-    }
+	function info(key) {
 		return api(apiOptions, {
 				prop: 'revisions',
 				rvprop: 'content',
@@ -219,8 +214,7 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 			})
 			.then(res => {
 				const wikitext = res.query.pages[raw.pageid].revisions[0]['*'];
-        const opts = Object.assign({}, apiOptions, options);
-				return infoboxParser(wikitext, opts);
+				return infoboxParser(wikitext, apiOptions.parser);
 			})
 			.then(metadata => {
 				if (!key) {

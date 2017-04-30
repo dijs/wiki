@@ -13,7 +13,13 @@ describe('Dublin page integration', () => {
       .once()
       .reply(200, JSON.parse(fs.readFileSync('./test/data/dublin-page.json')));
 
-    wiki().page('Dublin')
+    const opts = {
+      parser: {
+        simplifyDataValues: false
+      }
+    }
+
+    wiki(opts).page('Dublin')
     .then((page) => {
       dublin = page
       done()
@@ -28,7 +34,7 @@ describe('Dublin page integration', () => {
       .once()
       .reply(200, JSON.parse(fs.readFileSync('./test/data/dublin-info.json')));
 
-    return dublin.info({simplifyDataValues: false}).then((info) => {
+    return dublin.info().then((info) => {
       info.name.should.equal('Dublin');
       info.gdp.should.equal('US$ 90.1 billion');
       info.populationTotal.should.equal(553165)
