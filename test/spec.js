@@ -34,7 +34,11 @@ describe('Wiki Methods', () => {
 			.get('/w/api.php?list=search&srsearch=kevin%20bacon%20number&srlimit=50&format=json&action=query&origin=*&redirects=')
 			.once()
 			.reply(200, JSON.parse(fs.readFileSync('./test/data/1463865881452.json')));
-		return wiki().search('kevin bacon number').should.eventually.have.property('results').containEql('Six degrees of separation');
+		const promise = wiki().search('kevin bacon number');
+		return Promise.all([
+			promise.should.eventually.have.property('results').containEql('Six degrees of separation'),
+			promise.should.eventually.have.property('query', 'kevin bacon number')
+		]);
 	});
 
 	it('Search should limit properly', () => {

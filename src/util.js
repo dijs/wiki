@@ -24,6 +24,7 @@ export function pagination(apiOptions, params, parseResults) {
 		.then(res => {
 			let resolution = {};
 			resolution.results = parseResults(res);
+			resolution.query = params.srsearch;
 			if (res['continue']) {
 				const continueType = Object
 					.keys(res['continue'])
