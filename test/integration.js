@@ -25,7 +25,12 @@ describe('Dublin page integration', () => {
       done()
     })
     .catch(done)
-  })
+  });
+  
+  after(() => {
+    nock.cleanAll();
+    nock.enableNetConnect();
+  });
 
   it('should get Dublins info', () => {
     nock('http://en.wikipedia.org')

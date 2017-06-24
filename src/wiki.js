@@ -96,7 +96,7 @@ export default function wiki(options = {}) {
       .then(handleRedirect)
 			.then(res => {
 				const id = Object.keys(res.query.pages)[0];
-				if (!id) {
+				if (!id || id === '-1') {
 					throw new Error('No article found');
 				}
 				return wikiPage(res.query.pages[id], apiOptions);

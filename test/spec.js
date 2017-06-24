@@ -7,7 +7,10 @@ describe('Wiki Methods', () => {
 
 	before(() => nock.disableNetConnect());
 
-	after(() => nock.enableNetConnect());
+	after(() => {
+		nock.cleanAll();
+		nock.enableNetConnect();
+	});
 
 	it('should not throw up when using pre 1.0.0 version', () => {
 		nock('http://en.wikipedia.org')
