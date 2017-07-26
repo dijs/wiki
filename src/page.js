@@ -2,6 +2,11 @@ import { aggregatePagination, pagination, api } from './util';
 import infoboxParser from 'infobox-parser';
 import {parseCoordinates} from './coordinates';
 
+const byNamedImage = searchName => image => {
+	const [type, name] = image.title.split(':');
+	return name === searchName;
+};
+
 /**
  * WikiPage
  * @namespace WikiPage
@@ -94,7 +99,7 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 	function mainImage() {
 		return Promise.all([rawImages(), info()])
 			.then(([images, info]) => {
-				const image = images.find(image => image.title === `File:${info.image}`);
+				const image = images.find(byNamedImage(info.image));
 				return image.imageinfo.length > 0 ? image.imageinfo[0].url : undefined;
 			});
 	}
