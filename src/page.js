@@ -12,7 +12,6 @@ const byNamedImage = searchName => image => {
  * @namespace WikiPage
  */
 export default function wikiPage(rawPageInfo, apiOptions) {
-
 	const raw = rawPageInfo;
 
 	/**
@@ -99,14 +98,23 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 	function mainImage() {
 		return Promise.all([rawImages(), info()])
 			.then(([images, info]) => {
-				if (!info.image) {
+				// Handle different translations of "image" here
+				const mainImageName = info.image ||
+					info.bildname ||
+					info.imagen ||
+					info.Immagine;
+				// Handle case where no info box exists
+				if (!mainImageName) {
 					return rawInfo().then(text => {
 						// Sort images by what is seen first in page's info text
 						images.sort((a, b) => text.indexOf(b.title) - text.indexOf(a.title));
-						return images[0];
+						const image = images[0];
+						return image.imageinfo.length > 0
+							? image.imageinfo[0].url
+							: undefined;
 					});
 				}
-				const image = images.find(byNamedImage(info.image));
+				const image = images.find(byNamedImage(mainImageName));
 				return image.imageinfo.length > 0
 					? image.imageinfo[0].url
 					: undefined;

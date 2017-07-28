@@ -17,7 +17,18 @@ describe('Live tests', () => {
       .page('Batman')
       .then(page => {
         page.mainImage().then(mainImage => {
-          mainImage.title.should.equal('Datei:Gotham City Saviour (2430422247).jpg');
+          mainImage.should.equal('https://upload.wikimedia.org/wikipedia/commons/0/07/Gotham_City_Saviour_%282430422247%29.jpg');
+          done();
+        });
+      });
+  });
+  it('should use different names for "image" for foreign wikis', function(done) {
+    this.timeout(5000);
+    wiki({ apiUrl: 'https://es.wikipedia.org/w/api.php' })
+      .page('Cristiano Ronaldo')
+      .then(page => {
+        page.mainImage().then(mainImage => {
+          mainImage.should.equal('https://upload.wikimedia.org/wikipedia/commons/3/3e/Ronaldo_vs._FC_Schalke_04_%2816854146922%29.jpg');
           done();
         });
       });
