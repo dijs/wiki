@@ -3,7 +3,7 @@ import infoboxParser from 'infobox-parser';
 import {parseCoordinates} from './coordinates';
 
 const byNamedImage = searchName => image => {
-	const [type, name] = image.title.split(':');
+	const [, name] = image.title.split(':');
 	return name === searchName;
 };
 
@@ -99,8 +99,17 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 	function mainImage() {
 		return Promise.all([rawImages(), info()])
 			.then(([images, info]) => {
+				if (!info.image) {
+					return rawInfo().then(text => {
+						// Sort images by what is seen first in page's info text
+						images.sort((a, b) => text.indexOf(b.title) - text.indexOf(a.title));
+						return images[0];
+					});
+				}
 				const image = images.find(byNamedImage(info.image));
-				return image.imageinfo.length > 0 ? image.imageinfo[0].url : undefined;
+				return image.imageinfo.length > 0
+					? image.imageinfo[0].url
+					: undefined;
 			});
 	}
 
@@ -201,6 +210,16 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 				return info().then(data => parseCoordinates(data));
 			});
 	}
+	
+	function rawInfo() {
+		return api(apiOptions, {
+				prop: 'revisions',
+				rvprop: 'content',
+				rvsection: 0,
+				titles: raw.title
+			})
+			.then(res => res.query.pages[raw.pageid].revisions[0]['*']);
+	}
 
 	/**
 	 * Get information from page
@@ -211,14 +230,8 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 	 * @return {Promise} - info Object contains key/value pairs of infobox data, or specific value if key given
 	 */
 	function info(key) {
-		return api(apiOptions, {
-				prop: 'revisions',
-				rvprop: 'content',
-				rvsection: 0,
-				titles: raw.title
-			})
-			.then(res => {
-				const wikitext = res.query.pages[raw.pageid].revisions[0]['*'];
+		return rawInfo()
+			.then(wikitext => {
 				return infoboxParser(wikitext, apiOptions.parser);
 			})
 			.then(metadata => {
@@ -263,7 +276,8 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 		info,
 		backlinks,
 		rawImages,
-		mainImage
+		mainImage,
+		rawInfo
 	};
 
 	return page;
