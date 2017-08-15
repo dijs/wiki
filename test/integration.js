@@ -41,7 +41,7 @@ describe('Dublin page integration', () => {
 
     return dublin.info().then((info) => {
       info.name.should.equal('Dublin');
-      info.gdp.should.equal('US$ 90.1 billion');
+      info.gdp.should.equal('American dollar 90.1 billion');
       info.populationTotal.should.equal(553165)
     });
   });

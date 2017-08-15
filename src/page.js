@@ -2,11 +2,6 @@ import { aggregatePagination, pagination, api } from './util';
 import infoboxParser from 'infobox-parser';
 import {parseCoordinates} from './coordinates';
 
-const byNamedImage = searchName => image => {
-	const [, name] = image.title.split(':');
-	return name === searchName;
-};
-
 /**
  * WikiPage
  * @namespace WikiPage
@@ -103,6 +98,7 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 					info.bildname ||
 					info.imagen ||
 					info.Immagine;
+					
 				// Handle case where no info box exists
 				if (!mainImageName) {
 					return rawInfo().then(text => {
@@ -114,7 +110,7 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 							: undefined;
 					});
 				}
-				const image = images.find(byNamedImage(mainImageName));
+				const image = images.find(({ title }) => title.indexOf(mainImageName) !== -1);
 				return image.imageinfo.length > 0
 					? image.imageinfo[0].url
 					: undefined;

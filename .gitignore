@@ -4,3 +4,4 @@ dist/
 coverage/
 npm-debug.log
 yarn.lock
+package-lock.json
