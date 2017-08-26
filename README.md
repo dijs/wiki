@@ -59,3 +59,14 @@ externals: {
   "isomorphic-fetch": "fetch"
 }
 ```
+
+## Parsing Wiki Infobox Data
+
+The code Wikipedia uses for infobox data is strange and complex. So I have split the parsing code into another library. You can find it [here](https://github.com/dijs/infobox-parser).
+[![NPM Version](https://img.shields.io/npm/v/wikijs.svg)](https://www.npmjs.com/package/infobox-parser)
+
+We not only parse out the information, but also try to transform the data into a convenient structure for data processing.
+
+## Contribute!
+
+I always welcome help. Please just stick to the lint rules and write tests with each feature/fix.
