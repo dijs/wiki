@@ -33,13 +33,24 @@ describe('Live tests', () => {
         });
       });
   });
-  it('should parse main image properly', function(done) {
+  it('should handle Issue #53', function(done) {
     this.timeout(5000);
     wiki()
       .page('FC Copenhagen')
       .then(page => {
         page.mainImage().then(mainImage => {
           mainImage.should.equal('https://upload.wikimedia.org/wikipedia/en/9/93/FC_K%C3%B8benhavn.svg');
+          done();
+        });
+      });
+  });
+  it('should handle Issue #54', function(done) {
+    this.timeout(5000);
+    wiki()
+      .page('FC Santa Coloma')
+      .then(page => {
+        page.mainImage().then(mainImage => {
+          mainImage.should.equal('https://upload.wikimedia.org/wikipedia/en/a/ab/Santa-Coloma1.png');
           done();
         });
       });
