@@ -55,4 +55,13 @@ describe('Live tests', () => {
         });
       });
   });
+  it('should handle Issue #55', function() {
+    this.timeout(5000);
+    return wiki({
+      apiUrl: 'https://awoiaf.westeros.org/api.php',
+      origin: null
+    })
+      .search('Winterfell')
+      .should.eventually.have.property('results').containEql('Crypt of Winterfell');
+  });
 });

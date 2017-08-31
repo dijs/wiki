@@ -12,9 +12,11 @@ export function api(apiOptions, params = {}) {
 	const qs = Object.assign({}, params, {
 		format: 'json',
 		action: 'query',
-		origin: '*',
 		redirects: ''
 	});
+	if (apiOptions.origin) {
+		qs.origin = apiOptions.origin;
+	}
 	const url = `${apiOptions.apiUrl}?${querystring.stringify(qs)}`;
 	return fetch(url, fetchOptions).then(res => res.json());
 }
