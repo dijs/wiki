@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>coordinates.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <li class="nav-link nav-home-link"><a href="index.html">Home</a></li><li class="nav-heading">Namespaces</li><li class="nav-heading"><span class="nav-item-type type-namespace">N</span><span class="nav-item-name"><a href="Wiki.html">Wiki</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Wiki.html#geoSearch">geoSearch</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Wiki.html#page">page</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Wiki.html#random">random</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Wiki.html#search">search</a></span></li><li class="nav-heading"><span class="nav-item-type type-namespace">N</span><span class="nav-item-name"><a href="WikiPage.html">WikiPage</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="WikiPage.html#backlinks">backlinks</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="WikiPage.html#categories">categories</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="WikiPage.html#content">content</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="WikiPage.html#coordinates">coordinates</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="WikiPage.html#html">html</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="WikiPage.html#images">images</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="WikiPage.html#info">info</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="WikiPage.html#links">links</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="WikiPage.html#mainImage">mainImage</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="WikiPage.html#rawImages">rawImages</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="WikiPage.html#references">references</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="WikiPage.html#summary">summary</a></span></li><li class="nav-heading"><a href="global.html">Globals</a></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#convertCoordinatesFromStrings">convertCoordinatesFromStrings</a></span></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#defaultOptions">defaultOptions</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#dmsToDecimal">dmsToDecimal</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#floatOrDefault">floatOrDefault</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#parseDeprecatedCoords">parseDeprecatedCoords</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#parseInfoboxCoords">parseInfoboxCoords</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#wikiCoordinates">wikiCoordinates</a></span></li>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">coordinates.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @ignore
+ * Parses Coordinates for pages where the default Wiki Infobox Parser fails.
+ * @param  {Object} infoboxData - raw data object from Wiki Infobox Parser
+ * @returns {Object} - formatted object containing coordinates, or null object if none.
+ */
+export function parseCoordinates(infoboxData) {
+	if(infoboxData.coordinates) {
+		return parseInfoboxCoords(infoboxData.coordinates);
+	}
+	if(infoboxData.latd &amp;&amp; infoboxData.longd) {
+		return parseDeprecatedCoords(infoboxData);
+	}
+	return {
+		lat: null,
+		lon: null,
+		error: 'No coordinates on page.'
+	};
+}
+
+/**
+ * Parses coordinates which are in Wikipedia Deprecated Format.
+ * @example
+ * parseDeprecatedCoords('00 |latm=47 |lats=59 |latNS=S','100 |longm=39 |longs=58 |longEW=E');
+ * @param  {String} latString - Deprecated coordinate string for latitutde (from latd property)
+ * @param  {String} lonString - Deprecated coordinate string for longitude (from longd property)
+ * @returns {Object} - Wiki formatted object containing lat and lon
+ */
+function parseDeprecatedCoords(data) {
+	const latitude = dmsToDecimal(
+		floatOrDefault(data.latd),
+		floatOrDefault(data.latm),
+		floatOrDefault(data.lats),
+		data.latNs
+	);
+	const longitude = dmsToDecimal(
+		floatOrDefault(data.longd),
+		floatOrDefault(data.longm),
+		floatOrDefault(data.longs),
+		data.longEw
+	);
+	return wikiCoordinates(latitude,longitude);
+}
+
+// regex to match coordinate string in infobox
+const infoboxCoordinatePattern = /(\d{1,2})\|(\d{1,2})\|(\d{1,2})?\|?([NSEW])\|(\d{1,3})\|(\d{1,2})\|(\d{1,2})?\|?([NSEW])/;
+
+/**
+ * Parses coordinates which are embedded in infobox instead of in the page.
+ * @example
+ * parseInfoboxCoord('{{coord|38|54|N|16|36|E|type:region:IT_type:city(94969)|display=inline}}')
+ * @param  {String} coord - coordinate string from infobox.
+ * @return {Object} - Wiki formatted object containing lat and lon
+ */
+function parseInfoboxCoords(coord) {
+	let matches, latitude, longitude;
+	matches = coord.match(infoboxCoordinatePattern);
+	latitude = convertCoordinatesFromStrings(matches.slice(0,4));
+	longitude = convertCoordinatesFromStrings(matches.slice(4));
+	return wikiCoordinates(latitude,longitude);
+}
+
+/**
+ * Converts coordinates after they've been separated into components by regex matching.
+ * Missing or undefined elements in array will be treated as 0. Missing direction will
+ * result in positive coordinate.
+ * @example
+ * convertCoordinatesFromStrings(['38','54','23','N'])
+ * @param {Array} matches - array in format ['degrees','minutes','seconds','direction']
+ * @returns {Number} - coordinate in decimal form, with proper positive / negative sign applied.
+ */
+function convertCoordinatesFromStrings(matches) {
+	return dmsToDecimal(floatOrDefault(matches[1]),
+		floatOrDefault(matches[2]),
+		floatOrDefault(matches[3]),
+		matches[4]);
+}
+
+// simplifies positive / negative calculation in decimal conversion
+const directions = {'N': 1, 'S': -1, 'E': 1, 'W': -1};
+/**
+ * Converts coordinates from degrees, minutes, seconds, direction to decimal.
+ * @example
+ * dmsToDecimal(100,39,58,'W') == -100.6661111
+ * @returns {Number} - coordinate in decimal form, with proper positive / negative sign applied.
+ */
+function dmsToDecimal(degrees,minutes,seconds,direction) {
+	return (degrees + (1/60)*minutes + (1/3600)*seconds) * (directions[direction] || 1);
+}
+
+/**
+ * Returns latitude and longitude in format Wikipedia Parser would do so.
+ * Rounds to 4 decimal places.
+ * @param  {Number} latitude - latitude in decimal form
+ * @param  {Number} longitude - longitude in decimal form
+ * @returns {Object} - {lat: latitude, lon: longitude}
+ */
+function wikiCoordinates(latitude,longitude) {
+	return {
+		lat: Number(latitude.toFixed(4)),
+		lon: Number(longitude.toFixed(4))
+	};
+}
+
+/**
+ * Convert numeric string to Number or return 0 if not possible
+ * @example
+ * floatOrDefault("5") == 5; floatOrDefault(undefined) == 0;
+ * @param  {String} numStr - input number string (or undefined)
+ * @returns {Number} - returns numStr converted to Number or 0 if NaN
+ */
+function floatOrDefault(numStr) {
+	const num = Number(numStr);
+	return (!isNaN(num) ? num : 0);
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.3</a> on Thu Aug 31 2017 11:51:00 GMT+0300 (EEST) using the Minami theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>
