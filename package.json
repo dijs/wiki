@@ -36,6 +36,7 @@
     "babel-register": "^6.24.0",
     "coveralls": "^2.11.9",
     "eslint": "^2.10.2",
+    "gh-pages": "^1.0.0",
     "istanbul": "^1.0.0-alpha.2",
     "jsdoc": "^3.3.0-beta3",
     "minami": "^1.1.0",
@@ -49,7 +50,7 @@
     "cover": "babel-node ./node_modules/istanbul/lib/cli cover node_modules/.bin/_mocha",
     "docs": "node_modules/.bin/jsdoc --configure .jsdoc.json --verbose",
     "lint": "eslint src",
-    "publish-docs": "git push origin `git subtree split --prefix docs/wikijs/2.1.1 master`:gh-pages --force",
+    "publish-docs": "PACKAGE_VERSION=$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]') && gh-pages -d docs/wikijs/$PACKAGE_VERSION ",
     "coveralls": "cat ./coverage/lcov.info | coveralls"
   },
   "homepage": "https://github.com/dijs/wiki",
