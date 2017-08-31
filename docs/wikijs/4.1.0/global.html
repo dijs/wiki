@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Home - Documentation</title>
+    <title>Global - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,66 +29,244 @@
 
 <div id="main">
     
+    <h1 class="page-title">Global</h1>
+    
 
     
 
 
 
+
+<section>
+
+<header>
+    
+        <h2>
+        
+        </h2>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+
+        
+
+
+<dl class="details">
+
     
 
-
-
-
-
-
-
-
+    
 
     
 
+    
 
-    <section class="readme">
-        <article><p><a href="https://www.npmjs.com/package/wikijs"><img src="https://img.shields.io/npm/v/wikijs.svg" alt="NPM Version"></a>
-<a href="https://travis-ci.org/dijs/wiki"><img src="https://travis-ci.org/dijs/wiki.svg" alt="Build Status"></a>
-<a href="https://coveralls.io/r/dijs/wiki"><img src="https://coveralls.io/repos/dijs/wiki/badge.svg" alt="Coverage Status"></a>
-<a href="https://www.gitcheese.com/donate/users/1774430/repos/12490028"><img src="https://s3.amazonaws.com/gitcheese-ui-master/images/badge.svg" alt="gitcheese.com"></a></p>
-<h1>WikiJs</h1><p>WikiJs is a node.js library which serves as an interface to Wikipedia (or any MediaWiki).</p>
-<h2>What can it do?</h2><ul>
-<li>Search wiki articles</li>
-<li>Fetch article content</li>
-<li>Find all links/images/categories in a article page</li>
-<li>Get parsed information about articles</li>
-<li>Find articles by geographical location</li>
-<li>and much more!</li>
-</ul>
-<h2>Documentation</h2><https://dijs.github.io/wiki>
+    
 
-<h2>Install</h2><pre class="prettyprint source lang-bash"><code>npm install wikijs</code></pre><h2>Build yourself</h2><p>You can run these commands in order to build and test WikiJs:</p>
-<pre class="prettyprint source lang-bash"><code>git clone git@github.com:dijs/wiki.git
-cd wiki
-npm install
-npm run build
-npm test</code></pre><h2>Usage</h2><pre class="prettyprint source lang-javascript"><code>import wiki from 'wikijs';
-// const wiki = require('wikijs').default;
+    
 
-wiki().page('Batman')
-    .then(page => page.info('alterEgo'))
-    .then(console.log); // Bruce Wayne</code></pre><h2>Usage with webpack</h2><p>In order for webpack to build wikijs properly, you must add an option to
-your webpack configuration file. <a href="https://webpack.github.io/docs/configuration.html#externals">Documentation</a></p>
-<pre class="prettyprint source lang-json"><code>externals: {
-  &quot;isomorphic-fetch&quot;: &quot;fetch&quot;
-}</code></pre><h2>Usage with other MediaWiki's</h2><p>You can use the API options configuration:</p>
-<pre class="prettyprint source lang-js"><code>wiki({
-    apiUrl: 'https://awoiaf.westeros.org/api.php',
-    origin: null
-}).search('Winterfell');</code></pre><p>Read more about Cross Domain Requests <a href="https://www.mediawiki.org/wiki/API:Main_module">here</a></p>
-<h2>Parsing Wiki Infobox Data</h2><p>The code Wikipedia uses for infobox data is strange and complex. So I have split the parsing code into another library. You can find it <a href="https://github.com/dijs/infobox-parser">here</a>.
-<a href="https://www.npmjs.com/package/infobox-parser"><img src="https://img.shields.io/npm/v/wikijs.svg" alt="NPM Version"></a></p>
-<p>We not only parse out the information, but also try to transform the data into a convenient structure for data processing.</p>
-<h2>Contribute!</h2><p>I always welcome help. Please just stick to the lint rules and write tests with each feature/fix.</p></article>
-    </section>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
 
 
+        
+    
+    </div>
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+<div class="section-members">
+<h4 class="name" id="defaultOptions"><span class="type-signature">(constant) </span>defaultOptions<span class="type-signature"></span></h4>
+
+
+
+
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>apiUrl</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>string</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>URL of Wikipedia API</p></td>
+        </tr>
+
+        
+
+    
+
+        <tr>
+            
+                <td class="name"><code>origin</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>string</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>When accessing the API using a cross-domain AJAX
+request (CORS), set this to the originating domain. This must be included in
+any pre-flight request, and therefore must be part of the request URI (not
+the POST body). This must match one of the origins in the Origin header
+exactly, so it has to be set to something like https://en.wikipedia.org or
+https://meta.wikimedia.org. If this parameter does not match the Origin
+header, a 403 response will be returned. If this parameter matches the Origin
+header and the origin is whitelisted, an Access-Control-Allow-Origin header
+will be set.</p></td>
+        </tr>
+
+        
+
+    
+    </tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="wiki.js.html">wiki.js</a>, <a href="wiki.js.html#line20">line 20</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+</div>
+
+        
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 

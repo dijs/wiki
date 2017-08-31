@@ -1,7 +1,8 @@
 /**
- * Parses Coordinates for pages where the default Wiki Infobox Parser fails.
+ * @ignore
+ * @description Parses Coordinates for pages where the default Wiki Infobox Parser fails.
  * @param  {Object} infoboxData - raw data object from Wiki Infobox Parser
- * @return {Object} - formatted object containing coordinates, or null object if none.
+ * @returns {Object} - formatted object containing coordinates, or null object if none.
  */
 export function parseCoordinates(infoboxData) {
 	if(infoboxData.coordinates) {
@@ -18,12 +19,13 @@ export function parseCoordinates(infoboxData) {
 }
 
 /**
- * Parses coordinates which are in Wikipedia Deprecated Format.
+	* @ignore
+ * @description Parses coordinates which are in Wikipedia Deprecated Format.
  * @example
  * parseDeprecatedCoords('00 |latm=47 |lats=59 |latNS=S','100 |longm=39 |longs=58 |longEW=E');
  * @param  {String} latString - Deprecated coordinate string for latitutde (from latd property)
  * @param  {String} lonString - Deprecated coordinate string for longitude (from longd property)
- * @return {Object} - Wiki formatted object containing lat and lon
+ * @returns {Object} - Wiki formatted object containing lat and lon
  */
 function parseDeprecatedCoords(data) {
 	const latitude = dmsToDecimal(
@@ -45,7 +47,8 @@ function parseDeprecatedCoords(data) {
 const infoboxCoordinatePattern = /(\d{1,2})\|(\d{1,2})\|(\d{1,2})?\|?([NSEW])\|(\d{1,3})\|(\d{1,2})\|(\d{1,2})?\|?([NSEW])/;
 
 /**
- * Parses coordinates which are embedded in infobox instead of in the page.
+ * @ignore
+ * @description Parses coordinates which are embedded in infobox instead of in the page.
  * @example
  * parseInfoboxCoord('{{coord|38|54|N|16|36|E|type:region:IT_type:city(94969)|display=inline}}')
  * @param  {String} coord - coordinate string from infobox.
@@ -60,13 +63,14 @@ function parseInfoboxCoords(coord) {
 }
 
 /**
- * Converts coordinates after they've been separated into components by regex matching.
+	* @ignore
+ * @description Converts coordinates after they've been separated into components by regex matching.
  * Missing or undefined elements in array will be treated as 0. Missing direction will
  * result in positive coordinate.
  * @example
  * convertCoordinatesFromStrings(['38','54','23','N'])
  * @param {Array} matches - array in format ['degrees','minutes','seconds','direction']
- * @returns
+ * @returns {Number} - coordinate in decimal form, with proper positive / negative sign applied.
  */
 function convertCoordinatesFromStrings(matches) {
 	return dmsToDecimal(floatOrDefault(matches[1]),
@@ -77,22 +81,25 @@ function convertCoordinatesFromStrings(matches) {
 
 // simplifies positive / negative calculation in decimal conversion
 const directions = {'N': 1, 'S': -1, 'E': 1, 'W': -1};
+
 /**
- * Converts coordinates from degrees, minutes, seconds, direction to decimal.
+ * @ignore
+ * @description Converts coordinates from degrees, minutes, seconds, direction to decimal.
  * @example
  * dmsToDecimal(100,39,58,'W') == -100.6661111
- * @return {Number} - coordinate in decimal form, with proper positive / negative sign applied.
+ * @returns {Number} - coordinate in decimal form, with proper positive / negative sign applied.
  */
 function dmsToDecimal(degrees,minutes,seconds,direction) {
 	return (degrees + (1/60)*minutes + (1/3600)*seconds) * (directions[direction] || 1);
 }
 
 /**
- * Returns latitude and longitude in format Wikipedia Parser would do so.
+ * @ignore
+ * @description Returns latitude and longitude in format Wikipedia Parser would do so.
  * Rounds to 4 decimal places.
  * @param  {Number} latitude - latitude in decimal form
  * @param  {Number} longitude - longitude in decimal form
- * @return {Object} - {lat: latitude, lon: longitude}
+ * @returns {Object} - {lat: latitude, lon: longitude}
  */
 function wikiCoordinates(latitude,longitude) {
 	return {
@@ -102,11 +109,12 @@ function wikiCoordinates(latitude,longitude) {
 }
 
 /**
- * Convert numeric string to Number or return 0 if not possible
+ * @ignore
+ * @description Convert numeric string to Number or return 0 if not possible
  * @example
  * floatOrDefault("5") == 5; floatOrDefault(undefined) == 0;
  * @param  {String} numStr - input number string (or undefined)
- * @return {Number} - returns numStr converted to Number or 0 if NaN
+ * @returns {Number} - returns numStr converted to Number or 0 if NaN
  */
 function floatOrDefault(numStr) {
 	const num = Number(numStr);

@@ -5,10 +5,10 @@
     },
     "source": {
         "include": [
-          "dist/determiners.js",
-          "dist/page.js",
-          "dist/util.js",
-          "dist/wiki.js",
+          "src/coordinates.js",
+          "src/page.js",
+          "src/util.js",
+          "src/wiki.js",
           "package.json",
           "README.md"
         ],
