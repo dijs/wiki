@@ -50,7 +50,7 @@ export default function wiki(options = {}) {
     return res;
   }
 
-	/**
+  	/**
 	 * Search articles
 	 * @example
 	 * wiki.search('star wars').then(data => console.log(data.results.length));
@@ -114,6 +114,29 @@ export default function wiki(options = {}) {
 	}
 
 	/**
+	 * Get Page by PageId
+	 * @example
+	 * wiki.findById('Batman').then(page => console.log(page.title));
+	 * @method Wiki#findById
+	 * @param {integer} pageid, id of the page
+	 * @return {Promise}
+	 */
+	function findById(pageid) {
+		return api(apiOptions, {
+			pageids: pageid
+			})
+		.then(handleRedirect)
+			.then(res => {
+				const id = Object.keys(res.query.pages)[0];
+				if (!id || id === '-1') {
+					throw new Error('No article found');
+				}
+				return wikiPage(res.query.pages[id], apiOptions);
+			})
+
+	}
+
+	/**
 	 * Geographical Search
 	 * @example
 	 * wiki.geoSearch(32.329, -96.136).then(titles => console.log(titles.length));
@@ -137,6 +160,7 @@ export default function wiki(options = {}) {
 		random,
 		page,
 		geoSearch,
-		options
+		options,
+		findById
 	};
 }
