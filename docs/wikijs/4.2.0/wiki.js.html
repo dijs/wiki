@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>wiki.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <li class="nav-link nav-home-link"><a href="index.html">Home</a></li><li class="nav-heading">Namespaces</li><li class="nav-heading"><span class="nav-item-type type-namespace">N</span><span class="nav-item-name"><a href="Wiki.html">Wiki</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Wiki.html#findById">findById</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Wiki.html#geoSearch">geoSearch</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Wiki.html#page">page</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Wiki.html#random">random</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Wiki.html#search">search</a></span></li><li class="nav-heading"><span class="nav-item-type type-namespace">N</span><span class="nav-item-name"><a href="WikiPage.html">WikiPage</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="WikiPage.html#backlinks">backlinks</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="WikiPage.html#categories">categories</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="WikiPage.html#content">content</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="WikiPage.html#coordinates">coordinates</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="WikiPage.html#html">html</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="WikiPage.html#images">images</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="WikiPage.html#info">info</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="WikiPage.html#links">links</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="WikiPage.html#mainImage">mainImage</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="WikiPage.html#rawImages">rawImages</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="WikiPage.html#references">references</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="WikiPage.html#summary">summary</a></span></li><li class="nav-heading"><a href="global.html">Globals</a></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#defaultOptions">defaultOptions</a></span></li>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">wiki.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>'use strict';
+
+import { pagination, api } from './util';
+import wikiPage from './page';
+
+/**
+ * @namespace
+ * @constant
+ * @property {string} apiUrl - URL of Wikipedia API
+ * @property {string} origin - When accessing the API using a cross-domain AJAX
+ * request (CORS), set this to the originating domain. This must be included in
+ * any pre-flight request, and therefore must be part of the request URI (not
+ * the POST body). This must match one of the origins in the Origin header
+ * exactly, so it has to be set to something like https://en.wikipedia.org or
+ * https://meta.wikimedia.org. If this parameter does not match the Origin
+ * header, a 403 response will be returned. If this parameter matches the Origin
+ * header and the origin is whitelisted, an Access-Control-Allow-Origin header
+ * will be set.
+ */
+const defaultOptions = {
+	apiUrl: 'http://en.wikipedia.org/w/api.php',
+	origin: '*'
+};
+
+/**
+ * wiki
+ * @example
+ * wiki({ apiUrl: 'http://fr.wikipedia.org/w/api.php' }).search(...);
+ * @namespace Wiki
+ * @param  {Object} options
+ * @return {Object} - wiki (for chaining methods)
+*/
+export default function wiki(options = {}) {
+
+	if (this instanceof wiki) {
+		console.log('Please do not use wikijs ^1.0.0 as a class. Please see the new README.'); // eslint-disable-line
+	}
+
+	const apiOptions = Object.assign({}, defaultOptions, options);
+
+  function handleRedirect(res) {
+    if (res.query.redirects &amp;&amp; res.query.redirects.length === 1) {
+      return api(apiOptions, {
+				prop: 'info|pageprops',
+				inprop: 'url',
+				ppprop: 'disambiguation',
+				titles: res.query.redirects[0].to
+			});
+    }
+    return res;
+  }
+
+  	/**
+	 * Search articles
+	 * @example
+	 * wiki.search('star wars').then(data => console.log(data.results.length));
+	 * @example
+	 * wiki.search('star wars').then(data => {
+	 * 	data.next().then(...);
+	 * });
+	 * @method Wiki#search
+	 * @param  {string} query - keyword query
+	 * @param  {Number} [limit] - limits the number of results
+	 * @return {Promise} - pagination promise with results and next page function
+	 */
+	function search(query, limit = 50) {
+		return pagination(apiOptions, {
+			list: 'search',
+			srsearch: query,
+			srlimit: limit
+		}, res => res.query.search.map(article => article.title));
+	}
+
+	/**
+	 * Random articles
+	 * @example
+	 * wiki.random(3).then(results => console.log(results[0]));
+	 * @method Wiki#random
+	 * @param  {Number} [limit] - limits the number of random articles
+	 * @return {Promise} - List of page titles
+	 */
+	function random(limit = 1) {
+		return api(apiOptions, {
+				list: 'random',
+				rnnamespace: 0,
+				rnlimit: limit
+			})
+			.then(res => res.query.random.map(article => article.title));
+	}
+
+	/**
+	 * Get Page
+	 * @example
+	 * wiki.page('Batman').then(page => console.log(page.pageid));
+	 * @method Wiki#page
+	 * @param  {string} title - title of article
+	 * @return {Promise}
+	 */
+	function page(title) {
+		return api(apiOptions, {
+				prop: 'info|pageprops',
+				inprop: 'url',
+				ppprop: 'disambiguation',
+				titles: title
+			})
+      .then(handleRedirect)
+			.then(res => {
+				const id = Object.keys(res.query.pages)[0];
+				if (!id || id === '-1') {
+					throw new Error('No article found');
+				}
+				return wikiPage(res.query.pages[id], apiOptions);
+			});
+	}
+
+	/**
+	 * Get Page by PageId
+	 * @example
+	 * wiki.findById('Batman').then(page => console.log(page.title));
+	 * @method Wiki#findById
+	 * @param {integer} pageid, id of the page
+	 * @return {Promise}
+	 */
+	function findById(pageid) {
+		return api(apiOptions, {
+			pageids: pageid
+			})
+		.then(handleRedirect)
+			.then(res => {
+				const id = Object.keys(res.query.pages)[0];
+				if (!id || id === '-1') {
+					throw new Error('No article found');
+				}
+				return wikiPage(res.query.pages[id], apiOptions);
+			})
+
+	}
+
+	/**
+	 * Geographical Search
+	 * @example
+	 * wiki.geoSearch(32.329, -96.136).then(titles => console.log(titles.length));
+	 * @method Wiki#geoSearch
+	 * @param  {Number} lat - latitude
+	 * @param  {Number} lon - longitude
+	 * @param  {Number} [radius=1000] - search radius in kilometers (default: 1km)
+	 * @return {Promise} - List of page titles
+	 */
+	function geoSearch(lat, lon, radius = 1000) {
+		return api(apiOptions, {
+				list: 'geosearch',
+				gsradius: radius,
+				gscoord: `${lat}|${lon}`
+			})
+			.then(res => res.query.geosearch.map(article => article.title));
+	}
+
+	return {
+		search,
+		random,
+		page,
+		geoSearch,
+		options,
+		findById
+	};
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.3</a> on Wed Sep 13 2017 18:39:39 GMT+0300 (EEST) using the Minami theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>
