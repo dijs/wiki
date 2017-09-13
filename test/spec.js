@@ -101,6 +101,15 @@ describe('Wiki Methods', () => {
 			.should.eventually.have.property('raw')
 			.with.property('canonicalurl', 'https://fr.wikipedia.org/wiki/France');
 	});
+
+	it('Should find page by given id', () => {
+		nock('http://en.wikipedia.org')
+			.get('/w/api.php?pageids=4335&format=json&action=query&redirects=&origin=*')
+			.once()
+			.reply(200, JSON.parse(fs.readFileSync('./test/data/1463865884408.json')));
+
+		return wiki().findById(4335).should.eventually.have.property('raw').with.property('title', 'Batman');
+	});
 });
 
 describe('Page Methods', () => {
