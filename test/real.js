@@ -64,4 +64,11 @@ describe('Live tests', () => {
       .search('Winterfell')
       .should.eventually.have.property('results').containEql('Crypt of Winterfell');
   });
+  it('should handle Issue #57', function() {
+    this.timeout(5000);
+    return wiki({
+      apiUrl: 'https://oldschoolrunescape.wikia.com/api.php',
+      origin: null
+    }).search('Bob').catch(e => e.message.should.equal('text search is disabled'));
+  });
 });

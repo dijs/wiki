@@ -18,7 +18,14 @@ export function api(apiOptions, params = {}) {
 		qs.origin = apiOptions.origin;
 	}
 	const url = `${apiOptions.apiUrl}?${querystring.stringify(qs)}`;
-	return fetch(url, fetchOptions).then(res => res.json());
+	return fetch(url, fetchOptions)
+		.then(res => res.json())
+		.then(res => {
+			if (res.error) {
+				throw new Error(res.error.info);
+			}
+			return res;
+		});
 }
 
 export function pagination(apiOptions, params, parseResults) {

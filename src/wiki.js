@@ -50,7 +50,7 @@ export default function wiki(options = {}) {
     return res;
   }
 
-  	/**
+	/**
 	 * Search articles
 	 * @example
 	 * wiki.search('star wars').then(data => console.log(data.results.length));
