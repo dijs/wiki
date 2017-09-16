@@ -66,7 +66,9 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 				exintro: '',
 				titles: raw.title
 			})
-			.then(res => res.query.pages[raw.pageid].extract);
+			.then(res => {
+				return res.query.pages[raw.pageid].extract;
+			});
 	}
 
 	/**
@@ -149,15 +151,22 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 	 * @example
 	 * wiki.page('batman').then(page => page.references()).then(console.log);
 	 * @method WikiPage#references
+	 * @param  {Number} [limit] - number of references to return, max is 500
 	 * @return {Promise}
 	 */
-	function references() {
+	function references(limit = 10) {
 		return api(apiOptions, {
 				prop: 'extlinks',
-				ellimit: 'max',
+				ellimit: limit,
 				titles: raw.title
 			})
-			.then(res => res.query.pages[raw.pageid].extlinks.map(link => link['*']));
+			.then(res => {
+				const page = res.query.pages[raw.pageid];
+				if (!page.extlinks) {
+					return [];
+				}
+				return page.extlinks.map(link => link['*']);
+			});
 	}
 
 	/**
