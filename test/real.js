@@ -71,4 +71,23 @@ describe('Live tests', () => {
       origin: null
     }).search('Bob').catch(e => e.message.should.equal('text search is disabled'));
   });
+  it('should handle Issue #57.1', function() {
+    this.timeout(5000);
+    return wiki({
+      apiUrl: 'https://oldschoolrunescape.wikia.com/api.php',
+      origin: null
+    })
+      .page('Quests')
+      .should.eventually.have.propertyByPath('raw', 'pageid').equal(6930);
+  });
+  it('should handle Issue #57.2', function() {
+    this.timeout(5000);
+    return wiki({
+      apiUrl: 'https://oldschoolrunescape.wikia.com/api.php',
+      origin: null
+    })
+      .page('Quests')
+      .then(page => page.references())
+      .should.eventually.deepEqual([]);
+  });
 });
