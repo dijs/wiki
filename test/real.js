@@ -71,4 +71,22 @@ describe('Live tests', () => {
       origin: null
     }).search('Bob').catch(e => e.message.should.equal('text search is disabled'));
   });
+  it('should handle Issue #59', function(done) {
+    this.timeout(5000);
+    wiki()
+      .page('Batman')
+      .then(page => {
+        page.langlinks().then(links => {
+          links.should.containEql({
+            lang: 'el',
+            title: 'Μπάτμαν'
+          });
+          links.should.containEql({
+            lang: 'az',
+            title: 'Betmen'
+          });
+          done();
+        });
+      });
+  });
 });

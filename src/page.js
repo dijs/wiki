@@ -276,6 +276,25 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 		}
 		return _pagination;
 	}
+	
+	/**
+	 * Get list of links to different translations
+	 * @method WikiPage#langlinks
+	 * @return {Promise} - includes link objects { lang, title }
+	 */
+	function langlinks() {
+		return api(apiOptions, {
+				prop: 'langlinks',
+				lllimit: 'max',
+				titles: raw.title
+			})
+			.then(res => res.query.pages[raw.pageid].langlinks.map(link => {
+				return {
+					lang: link.lang,
+					title: link['*']
+				}
+			}));
+	}
 
 	const page = {
 		raw,
@@ -291,6 +310,7 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 		backlinks,
 		rawImages,
 		mainImage,
+		langlinks,
 		rawInfo
 	};
 
