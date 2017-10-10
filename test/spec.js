@@ -104,7 +104,7 @@ describe('Wiki Methods', () => {
 
 	it('Should find page by given id', () => {
 		nock('http://en.wikipedia.org')
-			.get('/w/api.php?pageids=4335&format=json&action=query&redirects=&origin=*')
+			.get('/w/api.php?prop=info%7Cpageprops&inprop=url&ppprop=disambiguation&pageids=4335&format=json&action=query&redirects=&origin=*')
 			.once()
 			.reply(200, JSON.parse(fs.readFileSync('./test/data/1463865884408.json')));
 
