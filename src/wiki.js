@@ -123,7 +123,10 @@ export default function wiki(options = {}) {
 	 */
 	function findById(pageid) {
 		return api(apiOptions, {
-			pageids: pageid
+				prop: 'info|pageprops',
+				inprop: 'url',
+				ppprop: 'disambiguation',
+				pageids: pageid
 			})
 		.then(handleRedirect)
 			.then(res => {
