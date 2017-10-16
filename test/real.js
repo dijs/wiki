@@ -89,4 +89,18 @@ describe('Live tests', () => {
         });
       });
   });
+  it('should handle Issue #62', function(done) {
+    this.timeout(5000);
+    const wi = wiki({
+      apiUrl: 'http://fr.wikipedia.org/w/api.php'
+    });
+    wi.search('royan') .then(data => {
+      wi.page(data.results[0]).then(page => {
+        page.mainImage().then(img => {
+          img.should.equal('https://upload.wikimedia.org/wikipedia/commons/1/18/Port_Royan.jpg');
+          done();
+        });
+      });
+    });
+  });
 });

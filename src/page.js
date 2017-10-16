@@ -120,8 +120,13 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 							: undefined;
 					});
 				}
-				const image = images.find(({ title }) => getFileName(title) === mainImageName);
-				return image.imageinfo.length > 0
+				const image = images.find(({ title }) => {
+					const filename = getFileName(title);
+					// Some wikis use underscores for spaces, some don't
+					return filename === mainImageName ||
+						filename.replace(/\s/g, '_') === mainImageName;
+				});
+				return image && image.imageinfo.length > 0
 					? image.imageinfo[0].url
 					: undefined;
 			});
