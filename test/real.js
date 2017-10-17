@@ -103,4 +103,15 @@ describe('Live tests', () => {
       });
     });
   });
+  it('should handle Issue #63', function(done) {
+    this.timeout(5000);
+    wiki()
+      .findById(250197)
+      .then(page => {
+        page.mainImage().then(mainImage => {
+          mainImage.should.equal('https://upload.wikimedia.org/wikipedia/en/a/a3/Equipe_de_France_de_football_Logo.png');
+          done();
+        });
+      });
+  });
 });
