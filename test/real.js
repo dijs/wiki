@@ -114,4 +114,15 @@ describe('Live tests', () => {
         });
       });
   });
+  it('should handle Issue #64', function(done) {
+    this.timeout(5000);
+    wiki()
+      .findById(3165)
+      .then(page => {
+        page.mainImage().then(mainImage => {
+          mainImage.should.equal('https://upload.wikimedia.org/wikipedia/en/b/ba/ACF_Fiorentina_2.svg');
+          done();
+        });
+      });
+  });
 });
