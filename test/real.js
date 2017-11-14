@@ -28,7 +28,7 @@ describe('Live tests', () => {
       .page('Cristiano Ronaldo')
       .then(page => {
         page.mainImage().then(mainImage => {
-          mainImage.should.equal('https://upload.wikimedia.org/wikipedia/commons/3/3e/Ronaldo_vs._FC_Schalke_04_%2816854146922%29.jpg');
+          mainImage.should.equal('https://upload.wikimedia.org/wikipedia/commons/d/db/New_Zealand-Portugal_%2820%29.jpg');
           done();
         });
       });
