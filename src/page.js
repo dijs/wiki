@@ -108,7 +108,8 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 					info.bildname ||
 					info.imagen ||
 					info.Immagine ||
-					info.badge
+					info.badge ||
+					info.logo
 				);
 				// Handle case where no info box exists
 				if (!mainImageName) {
