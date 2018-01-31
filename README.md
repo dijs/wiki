@@ -64,6 +64,16 @@ wiki({
 }).search('Winterfell');
 ```
 
+## Usage with other languages
+You just need to change the API to the proper URL. This is normally just changing the subdomain of wikipedia.
+
+```js
+wiki({ apiUrl: 'https://es.wikipedia.org/w/api.php' })
+  .page('Cristiano Ronaldo')
+  .then(page => page.info())
+  .then(console.log);
+```
+
 Read more about Cross Domain Requests [here](https://www.mediawiki.org/wiki/API:Main_module)
 
 ## Parsing Wiki Infobox Data
