@@ -18,8 +18,15 @@ import wikiPage from './page';
  * will be set.
  */
 const defaultOptions = {
-	apiUrl: 'http://en.wikipedia.org/w/api.php',
-	origin: '*'
+	apiUrl: 'http://fr.wikipedia.org/w/api.php',
+        origin: null,
+        prop: 'revisions',
+        rvprop:'content',
+        action:'query',
+        format:'json',
+        ppprop: null,
+        inprop: null,
+        redirects: null
 };
 
 /**
