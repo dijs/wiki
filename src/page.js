@@ -114,6 +114,7 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 				// Handle case where no info box exists
 				if (!mainImageName) {
 					return rawInfo().then(text => {
+						if (!images.length) return undefined;
 						// Sort images by what is seen first in page's info text
 						images.sort((a, b) => text.indexOf(b.title) - text.indexOf(a.title));
 						const image = images[0];

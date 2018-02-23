@@ -1,4 +1,4 @@
-import 'should';
+import should from 'should';
 import wiki from '../src/wiki';
 
 describe('Live tests', () => {
@@ -121,6 +121,17 @@ describe('Live tests', () => {
       .then(page => {
         page.mainImage().then(mainImage => {
           mainImage.should.equal('https://upload.wikimedia.org/wikipedia/en/b/ba/ACF_Fiorentina_2.svg');
+          done();
+        });
+      });
+  });
+  it('should handle Issue #72', function(done) {
+    this.timeout(5000);
+    wiki()
+      .page('Java_Classloader')
+      .then(page => {
+        page.mainImage().then(mainImage => {
+          should.equal(mainImage, undefined);
           done();
         });
       });
