@@ -1,9 +1,11 @@
 import should from 'should';
 import wiki from '../src/wiki';
 
+const timeoutTime = 10000;
+
 describe('Live tests', () => {
   it('should handle non existent pages properly', function(done) {
-    this.timeout(5000);
+    this.timeout(timeoutTime);
     wiki()
       .page('asdasdlkalskdjalsdjalskdalsdjasdasd')
       .catch(e => {
@@ -12,7 +14,7 @@ describe('Live tests', () => {
       });
   });
   it('should return first foreign image as main', function(done) {
-    this.timeout(5000);
+    this.timeout(timeoutTime);
     wiki({ apiUrl: 'https://de.wikipedia.org/w/api.php' })
       .page('Batman')
       .then(page => {
@@ -23,7 +25,7 @@ describe('Live tests', () => {
       });
   });
   it('should use different names for "image" for foreign wikis', function(done) {
-    this.timeout(5000);
+    this.timeout(timeoutTime);
     wiki({ apiUrl: 'https://es.wikipedia.org/w/api.php' })
       .page('Cristiano Ronaldo')
       .then(page => {
@@ -34,7 +36,7 @@ describe('Live tests', () => {
       });
   });
   it('should handle Issue #53', function(done) {
-    this.timeout(5000);
+    this.timeout(timeoutTime);
     wiki()
       .page('FC Copenhagen')
       .then(page => {
@@ -45,7 +47,7 @@ describe('Live tests', () => {
       });
   });
   it('should handle Issue #54', function(done) {
-    this.timeout(5000);
+    this.timeout(timeoutTime);
     wiki()
       .page('FC Santa Coloma')
       .then(page => {
@@ -56,7 +58,7 @@ describe('Live tests', () => {
       });
   });
   it('should handle Issue #55', function() {
-    this.timeout(5000);
+    this.timeout(timeoutTime);
     return wiki({
       apiUrl: 'https://awoiaf.westeros.org/api.php',
       origin: null
@@ -65,14 +67,14 @@ describe('Live tests', () => {
       .should.eventually.have.property('results').containEql('Crypt of Winterfell');
   });
   it('should handle Issue #57', function() {
-    this.timeout(5000);
+    this.timeout(timeoutTime);
     return wiki({
       apiUrl: 'https://oldschoolrunescape.wikia.com/api.php',
       origin: null
     }).search('Bob').catch(e => e.message.should.equal('text search is disabled'));
   });
   it('should handle Issue #59', function(done) {
-    this.timeout(5000);
+    this.timeout(timeoutTime);
     wiki()
       .page('Batman')
       .then(page => {
@@ -90,7 +92,7 @@ describe('Live tests', () => {
       });
   });
   it('should handle Issue #62', function(done) {
-    this.timeout(5000);
+    this.timeout(timeoutTime);
     const wi = wiki({
       apiUrl: 'http://fr.wikipedia.org/w/api.php'
     });
@@ -104,7 +106,7 @@ describe('Live tests', () => {
     });
   });
   it('should handle Issue #63', function(done) {
-    this.timeout(5000);
+    this.timeout(timeoutTime);
     wiki()
       .findById(250197)
       .then(page => {
@@ -115,7 +117,7 @@ describe('Live tests', () => {
       });
   });
   it('should handle Issue #64', function(done) {
-    this.timeout(5000);
+    this.timeout(timeoutTime);
     wiki()
       .findById(3165)
       .then(page => {
@@ -126,7 +128,7 @@ describe('Live tests', () => {
       });
   });
   it('should handle Issue #72', function(done) {
-    this.timeout(5000);
+    this.timeout(timeoutTime);
     wiki()
       .page('Java_Classloader')
       .then(page => {
@@ -134,6 +136,16 @@ describe('Live tests', () => {
           should.equal(mainImage, undefined);
           done();
         });
+      });
+  });
+  it('should handle Issue #74 -> make all infoboxes available', function(done) {
+    this.timeout(timeoutTime);
+    wiki()
+      .page('Cross_Game')
+      .then(page => page.fullInfo())
+      .then(info => {
+        info.tvSeries.director.should.equal('Osamu Sekita');
+        done();
       });
   });
 });
