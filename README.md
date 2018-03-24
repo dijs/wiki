@@ -1,9 +1,10 @@
+<img height="150" src="wikijs.png">
+
 [![NPM Version](https://img.shields.io/npm/v/wikijs.svg)](https://www.npmjs.com/package/wikijs)
 [![Build Status](https://travis-ci.org/dijs/wiki.svg)](https://travis-ci.org/dijs/wiki)
 [![Coverage Status](https://coveralls.io/repos/dijs/wiki/badge.svg)](https://coveralls.io/r/dijs/wiki)
 [![gitcheese.com](https://s3.amazonaws.com/gitcheese-ui-master/images/badge.svg)](https://www.gitcheese.com/donate/users/1774430/repos/12490028)
 
-# WikiJs
 WikiJs is a node.js library which serves as an interface to Wikipedia (or any MediaWiki).
 
 ## What can it do?
@@ -84,3 +85,6 @@ We not only parse out the information, but also try to transform the data into a
 
 ## Contribute!
 I always welcome help. Please just stick to the lint rules and write tests with each feature/fix.
+
+## Artwork
+Thanks to [Heather van der Dys](http://heathervanderdys.com/) for the awesome logo!
