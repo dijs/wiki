@@ -244,7 +244,8 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 	}
 
 	/**
-	 * Get information from page
+	 * Get general information from page, with optional specifc property
+	 * @deprecated This method will be dropped and replaced with the `fullInfo` implementation in v5
 	 * @example
 	 * new Wiki().page('Batman').then(page => page.info('alter_ego'));
 	 * @method WikiPage#info
@@ -254,7 +255,8 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 	function info(key) {
 		return rawInfo()
 			.then(wikitext => {
-				return infoboxParser(wikitext, apiOptions.parser);
+				// Use general data for now...
+				return infoboxParser(wikitext, apiOptions.parser).general;
 			})
 			.then(metadata => {
 				if (!key) {
@@ -264,6 +266,17 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 					return metadata[key];
 				}
 			});
+	}
+
+	/**
+	 * Get the full infobox data, parsed in a easy to use manner
+	 * @example
+	 * new Wiki().page('Batman').then(page => page.fullInfo()).then(info => info.general.aliases);
+	 * @method WikiPage#fullInfo
+	 * @return {Promise} - Parsed object of all infobox data
+	 */
+	function fullInfo() {
+		return rawInfo().then(wikitext => infoboxParser(wikitext, apiOptions.parser));
 	}
 
 	/**
@@ -319,7 +332,8 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 		rawImages,
 		mainImage,
 		langlinks,
-		rawInfo
+		rawInfo,
+		fullInfo
 	};
 
 	return page;
