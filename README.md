@@ -1,4 +1,4 @@
-<img height="150" src="wikijs.png">
+<img height="150" src="img/wikijs.png">
 
 [![NPM Version](https://img.shields.io/npm/v/wikijs.svg)](https://www.npmjs.com/package/wikijs)
 [![Build Status](https://travis-ci.org/dijs/wiki.svg)](https://travis-ci.org/dijs/wiki)

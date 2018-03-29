@@ -20,7 +20,14 @@
     ],
     "templates": {
         "cleverLinks": false,
-        "monospaceLinks": true
+        "monospaceLinks": true,
+        "default": {
+          "staticFiles": {
+            "include": [
+                "./static"
+            ]
+          }
+        }
     },
     "opts": {
         "destination": "./docs",
