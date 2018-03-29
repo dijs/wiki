@@ -116,7 +116,7 @@ export default function wiki(options = {}) {
 	/**
 	 * Get Page by PageId
 	 * @example
-	 * wiki.findById('Batman').then(page => console.log(page.title));
+	 * wiki.findById(4335).then(page => console.log(page.title));
 	 * @method Wiki#findById
 	 * @param {integer} pageid, id of the page
 	 * @return {Promise}
