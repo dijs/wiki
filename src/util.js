@@ -2,10 +2,9 @@ import fetch from 'isomorphic-fetch';
 import querystring from 'querystring';
 
 const fetchOptions = {
-	method: 'GET',
-	headers: {
-		'User-Agent': 'WikiJs/0.1 (https://github.com/dijs/wiki; richard.vanderdys@gmail.com)'
-	}
+	method: 'GET'	,
+	mode: 'cors',
+	credentials: 'omit'
 };
 
 export function api(apiOptions, params = {}) {
