@@ -1,6 +1,6 @@
 {
   "name": "wikijs",
-  "description": "Wikipedia interface for node",
+  "description": "Wikipedia interface for Node and Web",
   "author": "Richard van der Dys",
   "version": "4.6.2",
   "keywords": [
@@ -14,12 +14,7 @@
     "api",
     "mediawiki"
   ],
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "https://raw.github.com/dijs/wiki/master/LICENSE"
-    }
-  ],
+  "license": "MIT",
   "engines": {
     "node": ">=0.10.4"
   },
