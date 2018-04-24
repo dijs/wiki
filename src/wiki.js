@@ -136,7 +136,21 @@ export default function wiki(options = {}) {
 				}
 				return wikiPage(res.query.pages[id], apiOptions);
 			})
+	}
 
+	/**
+	 * Find page by query and optional predicate
+	 * @example
+	 * wiki.find('luke skywalker').then(page => console.log(page.title));
+	 * @method Wiki#find
+	 * @param {string} search query
+	 * @param {function} [predicate] - testing function for choosing which page result to fetch. Default is first result.
+	 * @return {Promise}
+	 */
+	function find(query, predicate = results => results[0]) {
+		return search(query)
+      .then(res => predicate(res.results))
+      .then(name => page(name));
 	}
 
 	/**
@@ -164,6 +178,7 @@ export default function wiki(options = {}) {
 		page,
 		geoSearch,
 		options,
-		findById
+		findById,
+		find
 	};
 }
