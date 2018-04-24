@@ -1,7 +1,7 @@
 import should from 'should';
 import wiki from '../src/wiki';
 
-const timeoutTime = 10000;
+const timeoutTime = 15000;
 
 describe('Live tests', () => {
   it('should handle non existent pages properly', function(done) {
@@ -145,6 +145,26 @@ describe('Live tests', () => {
       .then(page => page.fullInfo())
       .then(info => {
         info.tvSeries.director.should.equal('Osamu Sekita');
+        done();
+      });
+  });
+  it('should handle Issue #80 -> implement find method (default behavior)', function(done) {
+    this.timeout(timeoutTime);
+    wiki()
+      .find('kylie jenner')
+      .then(page => page.fullInfo())
+      .then(info => {
+        info.general.birthName.should.equal('Kylie Kristen Jenner');
+        done();
+      });
+  });
+  it('should handle Issue #80 -> implement find method with predicate', function(done) {
+    this.timeout(timeoutTime);
+    wiki()
+      .find('kylie jenner', results => results.find(result => result.includes('Kim')))
+      .then(page => page.fullInfo())
+      .then(info => {
+        info.general.birthName.should.equal('Kimberly Noel Kardashian');
         done();
       });
   });
