@@ -172,6 +172,31 @@ export default function wiki(options = {}) {
 			.then(res => res.query.geosearch.map(article => article.title));
 	}
 
+	/**
+	 * Fetch all page titles in wiki
+	 * @param  {String} [fromTitle]   Start at specific title
+	 * @param  {String} [titlePrefix] Filter pages with title prefix
+	 * @param  {Number} [pageLimit=500] Limit number of titles per page
+	 * @param  {Array}  [results]     Internally used for aggregating results
+	 * @return {Array}             Array of title results
+	 */
+	function allPages(fromTitle = undefined, titlePrefix = undefined, pageLimit = 500, results = []) {
+		return api(apiOptions, {
+				list: 'allpages',
+				apfrom: fromTitle,
+				apprefix: titlePrefix,
+				aplimit: pageLimit
+			})
+			.then(res => {
+				const nextResults = [...results, ...res.query.allpages.map(({ title }) => title)];
+				const continueWith = res['query-continue'];
+				if (continueWith) {
+					return allPages(continueWith.allpages.apfrom, titlePrefix, pageLimit, nextResults);
+				}
+				return nextResults;
+			});
+	}
+
 	return {
 		search,
 		random,
@@ -179,6 +204,7 @@ export default function wiki(options = {}) {
 		geoSearch,
 		options,
 		findById,
-		find
+		find,
+		allPages
 	};
 }

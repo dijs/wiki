@@ -1,7 +1,7 @@
 import should from 'should';
 import wiki from '../src/wiki';
 
-const timeoutTime = 15000;
+const timeoutTime = 30000;
 
 describe('Live tests', () => {
   it('should handle non existent pages properly', function(done) {
@@ -80,8 +80,8 @@ describe('Live tests', () => {
       .then(page => {
         page.langlinks().then(links => {
           links.should.containEql({
-            lang: 'el',
-            title: 'Μπάτμαν'
+            lang: 'ru',
+            title: 'Бэтмен'
           });
           links.should.containEql({
             lang: 'az',
@@ -165,6 +165,17 @@ describe('Live tests', () => {
       .then(page => page.fullInfo())
       .then(info => {
         info.general.birthName.should.equal('Kimberly Noel Kardashian');
+        done();
+      });
+  });
+  it('should fetch all pages of wiki', function(done) {
+    this.timeout(timeoutTime);
+    wiki({
+      apiUrl: 'http://batman.wikia.com/api.php'
+    })
+      .allPages()
+      .then(pages => {
+        pages.length.should.be.above(7000);
         done();
       });
   });
