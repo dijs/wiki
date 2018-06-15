@@ -1,6 +1,6 @@
 'use strict';
 
-import { pagination, api } from './util';
+import { pagination, api, aggregate } from './util';
 import wikiPage from './page';
 
 /**
@@ -174,27 +174,29 @@ export default function wiki(options = {}) {
 
 	/**
 	 * Fetch all page titles in wiki
-	 * @param  {String} [fromTitle]   Start at specific title
-	 * @param  {String} [titlePrefix] Filter pages with title prefix
-	 * @param  {Number} [pageLimit=500] Limit number of titles per page
-	 * @param  {Array}  [results]     Internally used for aggregating results
-	 * @return {Array}             Array of title results
+	 * @return {Array} Array of pages
 	 */
-	function allPages(fromTitle = undefined, titlePrefix = undefined, pageLimit = 500, results = []) {
-		return api(apiOptions, {
-				list: 'allpages',
-				apfrom: fromTitle,
-				apprefix: titlePrefix,
-				aplimit: pageLimit
-			})
-			.then(res => {
-				const nextResults = [...results, ...res.query.allpages.map(({ title }) => title)];
-				const continueWith = res['query-continue'];
-				if (continueWith) {
-					return allPages(continueWith.allpages.apfrom, titlePrefix, pageLimit, nextResults);
-				}
-				return nextResults;
-			});
+	function allPages() {
+		return aggregate(apiOptions, {}, 'allpages', 'title', 'ap');
+	}
+
+	/**
+	 * Fetch all categories in wiki
+	 * @return {Array} Array of categories
+	 */
+	function allCategories() {
+		return aggregate(apiOptions, {}, 'allcategories', '*', 'ac');
+	}
+
+	/**
+	 * Fetch all pages in category
+	 * @param  {String} category Category to fetch from
+	 * @return {Array} Array of pages
+	 */
+	function pagesInCategory(category) {
+		return aggregate(apiOptions, {
+			cmtitle: category
+		}, 'categorymembers', 'title', 'cm');
 	}
 
 	return {
@@ -205,6 +207,8 @@ export default function wiki(options = {}) {
 		options,
 		findById,
 		find,
-		allPages
+		allPages,
+		allCategories,
+		pagesInCategory
 	};
 }

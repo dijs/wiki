@@ -168,15 +168,28 @@ describe('Live tests', () => {
         done();
       });
   });
-  it('should fetch all pages of wiki', function(done) {
+  it('should fetch all pages of wiki', function() {
     this.timeout(timeoutTime);
-    wiki({
+    return wiki({
       apiUrl: 'http://batman.wikia.com/api.php'
     })
       .allPages()
-      .then(pages => {
-        pages.length.should.be.above(7000);
-        done();
-      });
+      .then(pages => pages.length.should.be.above(7000));
+  });
+  it('should fetch all categories of wiki', function() {
+    this.timeout(timeoutTime);
+    return wiki({
+      apiUrl: 'http://batman.wikia.com/api.php'
+    })
+      .allCategories()
+      .then(cats => cats.should.containEql('Characters'))
+  });
+  it('should fetch all pages in category', function() {
+    this.timeout(timeoutTime);
+    return wiki({
+      apiUrl: 'http://batman.wikia.com/api.php'
+    })
+      .pagesInCategory('Category:Characters')
+      .then(pages => pages.should.containEql('Robin (Damian Wayne)'))
   });
 });

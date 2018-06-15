@@ -56,3 +56,22 @@ export function aggregatePagination(pagination, previousResults = []) {
 			}
 		});
 }
+
+const pageLimit = 500;
+
+export function aggregate(apiOptions, params, list, key, prefix, results = []) {
+	params.list = list;
+	params[prefix + 'limit'] = pageLimit;
+	return api(apiOptions, params)
+		.then(res => {
+			const nextResults = [...results, ...res.query[list].map(e => e[key])];
+			const continueWith = res['query-continue'] || res.continue;
+			if (continueWith) {
+				const nextFromKey = (continueWith[list] && continueWith[list][prefix + 'from']) || continueWith[prefix + 'continue'];
+				params[prefix + 'continue'] = nextFromKey;
+				params[prefix + 'from'] = nextFromKey;
+				return aggregate(apiOptions, params, list, key, prefix, nextResults);
+			}
+			return nextResults;
+		});
+}
