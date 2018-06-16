@@ -174,6 +174,7 @@ export default function wiki(options = {}) {
 
 	/**
 	 * Fetch all page titles in wiki
+	 * @method Wiki#allPages
 	 * @return {Array} Array of pages
 	 */
 	function allPages() {
@@ -182,6 +183,7 @@ export default function wiki(options = {}) {
 
 	/**
 	 * Fetch all categories in wiki
+	 * @method Wiki#allCategories
 	 * @return {Array} Array of categories
 	 */
 	function allCategories() {
@@ -190,6 +192,7 @@ export default function wiki(options = {}) {
 
 	/**
 	 * Fetch all pages in category
+	 * @method Wiki#pagesInCategory
 	 * @param  {String} category Category to fetch from
 	 * @return {Array} Array of pages
 	 */
