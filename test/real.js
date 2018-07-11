@@ -24,14 +24,13 @@ describe('Live tests', () => {
         });
       });
   });
-  it('should use different names for "image" for foreign wikis', function(done) {
+  it('should use different names for "image" for foreign wikis', function() {
     this.timeout(timeoutTime);
-    wiki({ apiUrl: 'https://es.wikipedia.org/w/api.php' })
+    return wiki({ apiUrl: 'https://es.wikipedia.org/w/api.php' })
       .page('Cristiano Ronaldo')
       .then(page => {
-        page.mainImage().then(mainImage => {
-          mainImage.should.equal('https://upload.wikimedia.org/wikipedia/commons/d/db/New_Zealand-Portugal_%2820%29.jpg');
-          done();
+        return page.mainImage().then(mainImage => {
+          mainImage.should.equal('https://upload.wikimedia.org/wikipedia/commons/8/8c/Cristiano_Ronaldo_2018.jpg');
         });
       });
   });
@@ -105,14 +104,13 @@ describe('Live tests', () => {
       });
     });
   });
-  it('should handle Issue #63', function(done) {
+  it('should handle Issue #63', function() {
     this.timeout(timeoutTime);
-    wiki()
+    return wiki()
       .findById(250197)
       .then(page => {
-        page.mainImage().then(mainImage => {
-          mainImage.should.equal('https://upload.wikimedia.org/wikipedia/en/a/a3/Equipe_de_France_de_football_Logo.png');
-          done();
+        return page.mainImage().then(mainImage => {
+          mainImage.should.equal('https://upload.wikimedia.org/wikipedia/en/1/12/France_national_football_team_seal.svg');
         });
       });
   });
@@ -191,5 +189,13 @@ describe('Live tests', () => {
     })
       .pagesInCategory('Category:Characters')
       .then(pages => pages.should.containEql('Robin (Damian Wayne)'))
+  });
+  it('should handle issue #83', function() {
+    this.timeout(timeoutTime);
+    return wiki().page('athena').then(p => {
+      return p.mainImage().then(name => {
+        return name.should.equal('https://upload.wikimedia.org/wikipedia/commons/2/22/Mattei_Athena_Louvre_Ma530_n2.jpg');
+      });
+    });
   });
 });
