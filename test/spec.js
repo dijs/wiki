@@ -433,4 +433,20 @@ describe('Page Methods', () => {
 		const searchImages = term => wiki().page(term).then(page => page.images());
 		return searchImages('The Future Kings of England').should.eventually.have.property('length', 0);
 	});
+
+	it('should pass headers to API', () => {
+		nock('http://en.wikipedia.org', {
+			reqheaders: {
+				Cookie: 'name=value; name2=value2; name3=value3'
+			}
+		})
+			.get('/w/api.php?prop=info%7Cpageprops&inprop=url&ppprop=disambiguation&pageids=4335&format=json&action=query&redirects=&origin=*')
+			.once()
+			.reply(200, JSON.parse(fs.readFileSync('./test/data/1463865884408.json')));
+		return wiki({
+			headers: {
+				Cookie: 'name=value; name2=value2; name3=value3'
+			}
+		}).findById(4335).should.eventually.have.property('raw').with.property('title', 'Batman');
+	});
 });

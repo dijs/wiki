@@ -7,6 +7,7 @@ import wikiPage from './page';
  * @namespace
  * @constant
  * @property {string} apiUrl - URL of Wikipedia API
+ * @property {string} headers - Headers to pass through to the API request
  * @property {string} origin - When accessing the API using a cross-domain AJAX
  * request (CORS), set this to the originating domain. This must be included in
  * any pre-flight request, and therefore must be part of the request URI (not

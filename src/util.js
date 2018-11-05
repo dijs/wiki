@@ -17,7 +17,7 @@ export function api(apiOptions, params = {}) {
 		qs.origin = apiOptions.origin;
 	}
 	const url = `${apiOptions.apiUrl}?${querystring.stringify(qs)}`;
-	return fetch(url, fetchOptions)
+	return fetch(url, Object.assign({ headers: apiOptions.headers }, fetchOptions))
 		.then(res => res.json())
 		.then(res => {
 			if (res.error) {
