@@ -77,6 +77,17 @@ wiki({ apiUrl: 'https://es.wikipedia.org/w/api.php' })
 
 Read more about Cross Domain Requests [here](https://www.mediawiki.org/wiki/API:Main_module)
 
+## Usage with custom headers
+If you need to pass authentication headers or anything else.
+
+```js
+wiki({
+	headers: {
+		Cookie: 'name=value; name2=value2; name3=value3'
+	}
+}).search('Winterfell');
+```
+
 ## Parsing Wiki Infobox Data
 The code Wikipedia uses for infobox data is strange and complex. So I have split the parsing code into another library. You can find it [here](https://github.com/dijs/infobox-parser).
 [![NPM Version](https://img.shields.io/npm/v/wikijs.svg)](https://www.npmjs.com/package/infobox-parser)
