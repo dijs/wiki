@@ -8,10 +8,16 @@ const fetchOptions = {
 };
 
 export function api(apiOptions, params = {}) {
-	const qs = Object.assign({}, params, {
+	const qs = Object.assign({
 		format: 'json',
 		action: 'query',
 		redirects: ''
+	}, params);
+	// Remove undefined properties
+	Object.keys(qs).forEach(key => {
+		if (qs[key] === undefined) {
+			delete qs[key];
+		}
 	});
 	if (apiOptions.origin) {
 		qs.origin = apiOptions.origin;

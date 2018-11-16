@@ -69,7 +69,30 @@ export default function wiki(options = {}) {
 			list: 'search',
 			srsearch: query,
 			srlimit: limit
-		}, res => res.query.search.map(article => article.title));
+		}, res => res.query.search.map(article => article.title))
+		.catch(err => {
+			if (err.message === '"text" search is disabled.') {
+				// Try backup search method
+				return opensearch(query, limit);
+			}
+			throw err;
+		});
+	}
+
+	/**
+	 * Opensearch (mainly used as a backup to normal text search)
+	 * @param  {string} query - keyword query
+	 * @param  {Number} limit - limits the number of results
+	 * @return {Array}       List of page title results
+	 */
+	function opensearch(query, limit = 50) {
+		return api(apiOptions, {
+			search: query,
+			limit,
+			namespace: 0,
+			action: 'opensearch',
+			redirects: undefined
+		}).then(res => res[1]);
 	}
 
 	/**
@@ -213,6 +236,7 @@ export default function wiki(options = {}) {
 		find,
 		allPages,
 		allCategories,
-		pagesInCategory
+		pagesInCategory,
+		opensearch
 	};
 }
