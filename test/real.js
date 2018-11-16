@@ -198,4 +198,20 @@ describe('Live tests', () => {
       });
     });
   });
+  it('should handle opensearch', function() {
+    this.timeout(timeoutTime);
+    return wiki({
+      apiUrl: 'https://lol.gamepedia.com/api.php'
+    })
+      .opensearch('Ashe')
+      .then(titles => titles.should.containEql('Ashe/Old Lore'))
+  });
+  it('should use opensearch as backup when text search is disabled', function() {
+    this.timeout(timeoutTime);
+    return wiki({
+      apiUrl: 'https://lol.gamepedia.com/api.php'
+    })
+      .search('Ashe')
+      .then(titles => titles.should.containEql('Ashe/Old Lore'))
+  });
 });
