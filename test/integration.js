@@ -8,8 +8,17 @@ describe('Dublin page integration', () => {
   let dublin;
   before(done => {
     nock('http://en.wikipedia.org')
-      .get('/w/api.php?prop=info%7Cpageprops&inprop=url&ppprop=disambiguation'
-         + '&titles=Dublin&format=json&action=query&redirects=&origin=*')
+      .get('/w/api.php')
+      .query({
+        prop: 'info|pageprops',
+        inprop: 'url',
+        ppprop: 'disambiguation',
+        titles: 'Dublin',
+        format: 'json',
+        action: 'query',
+        redirects: '',
+        origin: '*'
+      })
       .once()
       .reply(200, JSON.parse(fs.readFileSync('./test/data/dublin-page.json')));
 
@@ -34,8 +43,17 @@ describe('Dublin page integration', () => {
 
   it('should get Dublins info', () => {
     nock('http://en.wikipedia.org')
-      .get('/w/api.php?prop=revisions&rvprop=content&rvsection=0'
-         + '&titles=Dublin&format=json&action=query&redirects=&origin=*')
+      .get('/w/api.php')
+      .query({
+        prop: 'revisions',
+        rvprop: 'content',
+        rvsection: '0',
+        titles: 'Dublin',
+        format: 'json',
+        action: 'query',
+        redirects: '',
+        origin: '*'
+      })
       .once()
       .reply(200, JSON.parse(fs.readFileSync('./test/data/dublin-info.json')));
 
