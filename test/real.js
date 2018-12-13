@@ -212,6 +212,6 @@ describe('Live tests', () => {
       apiUrl: 'https://lol.gamepedia.com/api.php'
     })
       .search('Ashe')
-      .then(titles => titles.should.containEql('Ashe/Old Lore'))
+      .then(titles => titles.should.have.property('results').containEql('Ashe/Old Lore'))
   });
 });
