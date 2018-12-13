@@ -197,7 +197,7 @@ declare module 'wikijs' {
      * 
      * @param {Options} [options] 
      */
-    function WikiJS (options?: Options): {
+    export default function WikiJS (options?: Options): {
         /**
          * Get Page by PageId
          * 
@@ -249,6 +249,4 @@ declare module 'wikijs' {
          */
         search(query: string, limit?: number): Promise<Result>
     }
-
-    export = WikiJS;
 }
