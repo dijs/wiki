@@ -11,7 +11,7 @@ const get = (obj, first, ...rest) => {
 };
 
 const firstValue = obj => {
-	if (typeof obj === 'object') return Object.values(obj)[0]
+	if (typeof obj === 'object') return obj[Object.keys(obj)[0]]
 	return obj[0];
 };
 
