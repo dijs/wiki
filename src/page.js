@@ -2,6 +2,19 @@ import { aggregatePagination, pagination, api } from './util';
 import infoboxParser from 'infobox-parser';
 import {parseCoordinates} from './coordinates';
 
+const get = (obj, first, ...rest) => {
+	if (obj === undefined || first === undefined) return obj;
+	if (typeof first === 'function') {
+		return get(first(obj), ...rest);
+	}
+	return get(obj[first], ...rest);
+};
+
+const firstValue = obj => {
+	if (typeof obj === 'object') return obj[Object.keys(obj)[0]]
+	return obj[0];
+};
+
 const getFileName = text => {
 	if (!text) return undefined;
 	if (text.indexOf(':') !== -1) {
@@ -233,14 +246,14 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 			});
 	}
 	
-	function rawInfo() {
+	function rawInfo(title) {
 		return api(apiOptions, {
 				prop: 'revisions',
 				rvprop: 'content',
 				rvsection: 0,
-				titles: raw.title
+				titles: title || raw.title
 			})
-			.then(res => res.query.pages[raw.pageid].revisions[0]['*']);
+			.then(res => get(res, 'query', 'pages', firstValue, 'revisions', 0, '*'));
 	}
 
 	/**
@@ -256,7 +269,13 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 		return rawInfo()
 			.then(wikitext => {
 				// Use general data for now...
-				return infoboxParser(wikitext, apiOptions.parser).general;
+				const info = infoboxParser(wikitext, apiOptions.parser).general;
+				if (Object.keys(info).length === 0) {
+					// If empty, check to see if this page has a templated infobox
+					return rawInfo(`Template:Infobox ${raw.title.toLowerCase()}`)
+						.then(_wikitext => infoboxParser(_wikitext || '', apiOptions.parser).general)
+				}
+				return info;
 			})
 			.then(metadata => {
 				if (!key) {
