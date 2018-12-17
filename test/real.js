@@ -214,4 +214,10 @@ describe('Live tests', () => {
       .search('Ashe')
       .then(titles => titles.should.have.property('results').containEql('Ashe/Old Lore'))
   });
+  it('should fetch deep infoboxes [Issue #95]', function() {
+    this.timeout(timeoutTime);
+    return wiki() 
+      .page('Copper')
+      .then(page => page.info().should.eventually.have.property('symbol', 'Cu'))
+  });
 });
