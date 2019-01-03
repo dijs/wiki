@@ -257,6 +257,20 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 	}
 
 	/**
+	 * Fetch and parse tables within page
+	 * @return {Array} Collection of tables
+	 */
+	function tables() {
+		return api(apiOptions, {
+				prop: 'revisions',
+				rvprop: 'content',
+				titles: raw.title
+			})
+			.then(res => get(res, 'query', 'pages', firstValue, 'revisions', 0, '*'))
+			.then(wikitext => infoboxParser(wikitext, apiOptions.parser).tables);
+	}
+
+	/**
 	 * Get general information from page, with optional specifc property
 	 * @deprecated This method will be dropped and replaced with the `fullInfo` implementation in v5
 	 * @example
@@ -352,7 +366,8 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 		mainImage,
 		langlinks,
 		rawInfo,
-		fullInfo
+		fullInfo,
+		tables
 	};
 
 	return page;

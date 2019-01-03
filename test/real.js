@@ -220,4 +220,17 @@ describe('Live tests', () => {
       .page('Copper')
       .then(page => page.info().should.eventually.have.property('symbol', 'Cu'))
   });
+  it('should parse tables [Issue #94]', function() {
+    this.timeout(timeoutTime);
+    return wiki({
+      apiUrl: 'https://cod-esports.gamepedia.com/api.php'
+    }) 
+      .page('Team Envy')
+      .then(page => page.tables())
+      .then(tables => {
+        tables[0].heading.should.equal('Player Roster')
+        tables[0].subheading.should.equal('Active')
+        tables[0].rows[0].join(',').should.equal('Huke,sa,Cuyler Garland,SMG Slayer,joined=2017-11-04')
+      })
+  });
 });
