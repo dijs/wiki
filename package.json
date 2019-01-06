@@ -37,6 +37,7 @@
     "minami": "^1.1.0",
     "mocha": "^2.5.3",
     "nock": "^10.0.2",
+    "prettier": "1.15.3",
     "should": "^9.0.0"
   },
   "typings": "./index.d.ts",

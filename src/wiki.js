@@ -30,26 +30,28 @@ const defaultOptions = {
  * @namespace Wiki
  * @param  {Object} options
  * @return {Object} - wiki (for chaining methods)
-*/
+ */
 export default function wiki(options = {}) {
-
 	if (this instanceof wiki) {
-		console.log('Please do not use wikijs ^1.0.0 as a class. Please see the new README.'); // eslint-disable-line
+		// eslint-disable-next-line
+		console.log(
+			'Please do not use wikijs ^1.0.0 as a class. Please see the new README.'
+		);
 	}
 
 	const apiOptions = Object.assign({}, defaultOptions, options);
 
-  function handleRedirect(res) {
-    if (res.query.redirects && res.query.redirects.length === 1) {
-      return api(apiOptions, {
+	function handleRedirect(res) {
+		if (res.query.redirects && res.query.redirects.length === 1) {
+			return api(apiOptions, {
 				prop: 'info|pageprops',
 				inprop: 'url',
 				ppprop: 'disambiguation',
 				titles: res.query.redirects[0].to
 			});
-    }
-    return res;
-  }
+		}
+		return res;
+	}
 
 	/**
 	 * Search articles
@@ -65,12 +67,15 @@ export default function wiki(options = {}) {
 	 * @return {Promise} - pagination promise with results and next page function
 	 */
 	function search(query, limit = 50) {
-		return pagination(apiOptions, {
-			list: 'search',
-			srsearch: query,
-			srlimit: limit
-		}, res => res.query.search.map(article => article.title))
-		.catch(err => {
+		return pagination(
+			apiOptions,
+			{
+				list: 'search',
+				srsearch: query,
+				srlimit: limit
+			},
+			res => res.query.search.map(article => article.title)
+		).catch(err => {
 			if (err.message === '"text" search is disabled.') {
 				// Try backup search method
 				return opensearch(query, limit);
@@ -105,11 +110,10 @@ export default function wiki(options = {}) {
 	 */
 	function random(limit = 1) {
 		return api(apiOptions, {
-				list: 'random',
-				rnnamespace: 0,
-				rnlimit: limit
-			})
-			.then(res => res.query.random.map(article => article.title));
+			list: 'random',
+			rnnamespace: 0,
+			rnlimit: limit
+		}).then(res => res.query.random.map(article => article.title));
 	}
 
 	/**
@@ -122,12 +126,12 @@ export default function wiki(options = {}) {
 	 */
 	function page(title) {
 		return api(apiOptions, {
-				prop: 'info|pageprops',
-				inprop: 'url',
-				ppprop: 'disambiguation',
-				titles: title
-			})
-      .then(handleRedirect)
+			prop: 'info|pageprops',
+			inprop: 'url',
+			ppprop: 'disambiguation',
+			titles: title
+		})
+			.then(handleRedirect)
 			.then(res => {
 				const id = Object.keys(res.query.pages)[0];
 				if (!id || id === '-1') {
@@ -147,19 +151,19 @@ export default function wiki(options = {}) {
 	 */
 	function findById(pageid) {
 		return api(apiOptions, {
-				prop: 'info|pageprops',
-				inprop: 'url',
-				ppprop: 'disambiguation',
-				pageids: pageid
-			})
-		.then(handleRedirect)
+			prop: 'info|pageprops',
+			inprop: 'url',
+			ppprop: 'disambiguation',
+			pageids: pageid
+		})
+			.then(handleRedirect)
 			.then(res => {
 				const id = Object.keys(res.query.pages)[0];
 				if (!id || id === '-1') {
 					throw new Error('No article found');
 				}
 				return wikiPage(res.query.pages[id], apiOptions);
-			})
+			});
 	}
 
 	/**
@@ -173,8 +177,8 @@ export default function wiki(options = {}) {
 	 */
 	function find(query, predicate = results => results[0]) {
 		return search(query)
-      .then(res => predicate(res.results))
-      .then(name => page(name));
+			.then(res => predicate(res.results))
+			.then(name => page(name));
 	}
 
 	/**
@@ -189,11 +193,10 @@ export default function wiki(options = {}) {
 	 */
 	function geoSearch(lat, lon, radius = 1000) {
 		return api(apiOptions, {
-				list: 'geosearch',
-				gsradius: radius,
-				gscoord: `${lat}|${lon}`
-			})
-			.then(res => res.query.geosearch.map(article => article.title));
+			list: 'geosearch',
+			gsradius: radius,
+			gscoord: `${lat}|${lon}`
+		}).then(res => res.query.geosearch.map(article => article.title));
 	}
 
 	/**
@@ -221,9 +224,15 @@ export default function wiki(options = {}) {
 	 * @return {Array} Array of pages
 	 */
 	function pagesInCategory(category) {
-		return aggregate(apiOptions, {
-			cmtitle: category
-		}, 'categorymembers', 'title', 'cm');
+		return aggregate(
+			apiOptions,
+			{
+				cmtitle: category
+			},
+			'categorymembers',
+			'title',
+			'cm'
+		);
 	}
 
 	return {

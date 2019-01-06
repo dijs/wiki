@@ -19,7 +19,9 @@ describe('Live tests', () => {
       .page('Batman')
       .then(page => {
         page.mainImage().then(mainImage => {
-          mainImage.should.equal('https://upload.wikimedia.org/wikipedia/commons/0/07/Gotham_City_Saviour_%282430422247%29.jpg');
+          mainImage.should.equal(
+            'https://upload.wikimedia.org/wikipedia/commons/0/07/Gotham_City_Saviour_%282430422247%29.jpg'
+          );
           done();
         });
       });
@@ -30,7 +32,9 @@ describe('Live tests', () => {
       .page('Cristiano Ronaldo')
       .then(page => {
         return page.mainImage().then(mainImage => {
-          mainImage.should.equal('https://upload.wikimedia.org/wikipedia/commons/8/8c/Cristiano_Ronaldo_2018.jpg');
+          mainImage.should.equal(
+            'https://upload.wikimedia.org/wikipedia/commons/8/8c/Cristiano_Ronaldo_2018.jpg'
+          );
         });
       });
   });
@@ -40,7 +44,9 @@ describe('Live tests', () => {
       .page('FC Copenhagen')
       .then(page => {
         page.mainImage().then(mainImage => {
-          mainImage.should.equal('https://upload.wikimedia.org/wikipedia/en/9/93/FC_K%C3%B8benhavn.svg');
+          mainImage.should.equal(
+            'https://upload.wikimedia.org/wikipedia/en/9/93/FC_K%C3%B8benhavn.svg'
+          );
           done();
         });
       });
@@ -51,7 +57,9 @@ describe('Live tests', () => {
       .page('FC Santa Coloma')
       .then(page => {
         page.mainImage().then(mainImage => {
-          mainImage.should.equal('https://upload.wikimedia.org/wikipedia/en/a/ab/Santa-Coloma1.png');
+          mainImage.should.equal(
+            'https://upload.wikimedia.org/wikipedia/en/a/ab/Santa-Coloma1.png'
+          );
           done();
         });
       });
@@ -63,14 +71,17 @@ describe('Live tests', () => {
       origin: null
     })
       .search('Winterfell')
-      .should.eventually.have.property('results').containEql('Crypt of Winterfell');
+      .should.eventually.have.property('results')
+      .containEql('Crypt of Winterfell');
   });
   it('should handle Issue #57', function() {
     this.timeout(timeoutTime);
     return wiki({
       apiUrl: 'https://oldschoolrunescape.wikia.com/api.php',
       origin: null
-    }).search('Bob').catch(e => e.message.should.equal('text search is disabled'));
+    })
+      .search('Bob')
+      .catch(e => e.message.should.equal('text search is disabled'));
   });
   it('should handle Issue #59', function(done) {
     this.timeout(timeoutTime);
@@ -95,10 +106,12 @@ describe('Live tests', () => {
     const wi = wiki({
       apiUrl: 'http://fr.wikipedia.org/w/api.php'
     });
-    wi.search('royan') .then(data => {
+    wi.search('royan').then(data => {
       wi.page(data.results[0]).then(page => {
         page.mainImage().then(img => {
-          img.should.equal('https://upload.wikimedia.org/wikipedia/commons/1/18/Port_Royan.jpg');
+          img.should.equal(
+            'https://upload.wikimedia.org/wikipedia/commons/1/18/Port_Royan.jpg'
+          );
           done();
         });
       });
@@ -110,7 +123,9 @@ describe('Live tests', () => {
       .findById(250197)
       .then(page => {
         return page.mainImage().then(mainImage => {
-          mainImage.should.equal('https://upload.wikimedia.org/wikipedia/en/1/12/France_national_football_team_seal.svg');
+          mainImage.should.equal(
+            'https://upload.wikimedia.org/wikipedia/en/1/12/France_national_football_team_seal.svg'
+          );
         });
       });
   });
@@ -120,7 +135,9 @@ describe('Live tests', () => {
       .findById(3165)
       .then(page => {
         page.mainImage().then(mainImage => {
-          mainImage.should.equal('https://upload.wikimedia.org/wikipedia/en/b/ba/ACF_Fiorentina_2.svg');
+          mainImage.should.equal(
+            'https://upload.wikimedia.org/wikipedia/en/b/ba/ACF_Fiorentina_2.svg'
+          );
           done();
         });
       });
@@ -159,7 +176,9 @@ describe('Live tests', () => {
   it('should handle Issue #80 -> implement find method with predicate', function(done) {
     this.timeout(timeoutTime);
     wiki()
-      .find('kylie jenner', results => results.find(result => result.includes('Kim')))
+      .find('kylie jenner', results =>
+        results.find(result => result.includes('Kim'))
+      )
       .then(page => page.fullInfo())
       .then(info => {
         info.general.birthName.should.equal('Kimberly Noel Kardashian');
@@ -180,7 +199,7 @@ describe('Live tests', () => {
       apiUrl: 'http://batman.wikia.com/api.php'
     })
       .allCategories()
-      .then(cats => cats.should.containEql('Characters'))
+      .then(cats => cats.should.containEql('Characters'));
   });
   it('should fetch all pages in category', function() {
     this.timeout(timeoutTime);
@@ -188,15 +207,19 @@ describe('Live tests', () => {
       apiUrl: 'http://batman.wikia.com/api.php'
     })
       .pagesInCategory('Category:Characters')
-      .then(pages => pages.should.containEql('Robin (Damian Wayne)'))
+      .then(pages => pages.should.containEql('Robin (Damian Wayne)'));
   });
   it('should handle issue #83', function() {
     this.timeout(timeoutTime);
-    return wiki().page('athena').then(p => {
-      return p.mainImage().then(name => {
-        return name.should.equal('https://upload.wikimedia.org/wikipedia/commons/2/22/Mattei_Athena_Louvre_Ma530_n2.jpg');
+    return wiki()
+      .page('athena')
+      .then(p => {
+        return p.mainImage().then(name => {
+          return name.should.equal(
+            'https://upload.wikimedia.org/wikipedia/commons/2/22/Mattei_Athena_Louvre_Ma530_n2.jpg'
+          );
+        });
       });
-    });
   });
   it('should handle opensearch', function() {
     this.timeout(timeoutTime);
@@ -204,7 +227,7 @@ describe('Live tests', () => {
       apiUrl: 'https://lol.gamepedia.com/api.php'
     })
       .opensearch('Ashe')
-      .then(titles => titles.should.containEql('Ashe/Old Lore'))
+      .then(titles => titles.should.containEql('Ashe/Old Lore'));
   });
   it('should use opensearch as backup when text search is disabled', function() {
     this.timeout(timeoutTime);
@@ -212,25 +235,31 @@ describe('Live tests', () => {
       apiUrl: 'https://lol.gamepedia.com/api.php'
     })
       .search('Ashe')
-      .then(titles => titles.should.have.property('results').containEql('Ashe/Old Lore'))
+      .then(titles =>
+        titles.should.have.property('results').containEql('Ashe/Old Lore')
+      );
   });
   it('should fetch deep infoboxes [Issue #95]', function() {
     this.timeout(timeoutTime);
-    return wiki() 
+    return wiki()
       .page('Copper')
-      .then(page => page.info().should.eventually.have.property('symbol', 'Cu'))
+      .then(page =>
+        page.info().should.eventually.have.property('symbol', 'Cu')
+      );
   });
   it('should parse tables [Issue #94]', function() {
     this.timeout(timeoutTime);
     return wiki({
       apiUrl: 'https://cod-esports.gamepedia.com/api.php'
-    }) 
+    })
       .page('Team Envy')
       .then(page => page.tables())
       .then(tables => {
-        tables[0].heading.should.equal('Player Roster')
-        tables[0].subheading.should.equal('Active')
-        tables[0].rows[0].join(',').should.equal('Huke,sa,Cuyler Garland,SMG Slayer,joined=2017-11-04')
-      })
+        tables[0].heading.should.equal('Player Roster');
+        tables[0].subheading.should.equal('Active');
+        tables[0].rows[0]
+          .join(',')
+          .should.equal('Huke,sa,Cuyler Garland,SMG Slayer,joined=2017-11-04');
+      });
   });
 });

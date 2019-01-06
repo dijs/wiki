@@ -1,6 +1,6 @@
 import { aggregatePagination, pagination, api } from './util';
 import infoboxParser from 'infobox-parser';
-import {parseCoordinates} from './coordinates';
+import { parseCoordinates } from './coordinates';
 
 const get = (obj, first, ...rest) => {
 	if (obj === undefined || first === undefined) return obj;
@@ -11,7 +11,7 @@ const get = (obj, first, ...rest) => {
 };
 
 const firstValue = obj => {
-	if (typeof obj === 'object') return obj[Object.keys(obj)[0]]
+	if (typeof obj === 'object') return obj[Object.keys(obj)[0]];
 	return obj[0];
 };
 
@@ -40,13 +40,12 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 	 */
 	function html() {
 		return api(apiOptions, {
-				prop: 'revisions',
-				rvprop: 'content',
-				rvlimit: 1,
-				rvparse: '',
-				titles: raw.title
-			})
-			.then(res => res.query.pages[raw.pageid].revisions[0]['*']);
+			prop: 'revisions',
+			rvprop: 'content',
+			rvlimit: 1,
+			rvparse: '',
+			titles: raw.title
+		}).then(res => res.query.pages[raw.pageid].revisions[0]['*']);
 	}
 
 	/**
@@ -58,11 +57,10 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 	 */
 	function content() {
 		return api(apiOptions, {
-				prop: 'extracts',
-				explaintext: '',
-				titles: raw.title
-			})
-			.then(res => res.query.pages[raw.pageid].extract);
+			prop: 'extracts',
+			explaintext: '',
+			titles: raw.title
+		}).then(res => res.query.pages[raw.pageid].extract);
 	}
 
 	/**
@@ -74,12 +72,11 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 	 */
 	function summary() {
 		return api(apiOptions, {
-				prop: 'extracts',
-				explaintext: '',
-				exintro: '',
-				titles: raw.title
-			})
-			.then(res => res.query.pages[raw.pageid].extract);
+			prop: 'extracts',
+			explaintext: '',
+			exintro: '',
+			titles: raw.title
+		}).then(res => res.query.pages[raw.pageid].extract);
 	}
 
 	/**
@@ -91,18 +88,17 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 	 */
 	function rawImages() {
 		return api(apiOptions, {
-				generator: 'images',
-				gimlimit: 'max',
-				prop: 'imageinfo',
-				iiprop: 'url',
-				titles: raw.title
-			})
-			.then(res => {
-				if (res.query) {
-					return Object.keys(res.query.pages).map(id => res.query.pages[id]);
-				}
-				return [];
-			});
+			generator: 'images',
+			gimlimit: 'max',
+			prop: 'imageinfo',
+			iiprop: 'url',
+			titles: raw.title
+		}).then(res => {
+			if (res.query) {
+				return Object.keys(res.query.pages).map(id => res.query.pages[id]);
+			}
+			return [];
+		});
 	}
 
 	/**
@@ -113,39 +109,40 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 	 * @return {Promise}
 	 */
 	function mainImage() {
-		return Promise.all([rawImages(), info()])
-			.then(([images, info]) => {
-				// Handle different translations of "image" here
-				const mainImageName = getFileName(
-					info.image ||
+		return Promise.all([rawImages(), info()]).then(([images, info]) => {
+			// Handle different translations of "image" here
+			const mainImageName = getFileName(
+				info.image ||
 					info.bildname ||
 					info.imagen ||
 					info.Immagine ||
 					info.badge ||
 					info.logo
-				);
-				// Handle case where no info box exists
-				if (!mainImageName) {
-					return rawInfo().then(text => {
-						if (!images.length) return undefined;
-						// Sort images by what is seen first in page's info text
-						images.sort((a, b) => text.indexOf(b.title) - text.indexOf(a.title));
-						const image = images[0];
-						return image.imageinfo.length > 0
-							? image.imageinfo[0].url
-							: undefined;
-					});
-				}
-				const image = images.find(({ title }) => {
-					const filename = getFileName(title);
-					// Some wikis use underscores for spaces, some don't
-					return filename === mainImageName ||
-						filename.replace(/\s/g, '_') === mainImageName;
+			);
+			// Handle case where no info box exists
+			if (!mainImageName) {
+				return rawInfo().then(text => {
+					if (!images.length) return undefined;
+					// Sort images by what is seen first in page's info text
+					images.sort((a, b) => text.indexOf(b.title) - text.indexOf(a.title));
+					const image = images[0];
+					return image.imageinfo.length > 0
+						? image.imageinfo[0].url
+						: undefined;
 				});
-				return image && image.imageinfo.length > 0
-					? image.imageinfo[0].url
-					: undefined;
+			}
+			const image = images.find(({ title }) => {
+				const filename = getFileName(title);
+				// Some wikis use underscores for spaces, some don't
+				return (
+					filename === mainImageName ||
+					filename.replace(/\s/g, '_') === mainImageName
+				);
 			});
+			return image && image.imageinfo.length > 0
+				? image.imageinfo[0].url
+				: undefined;
+		});
 	}
 
 	/**
@@ -156,13 +153,12 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 	 * @return {Promise}
 	 */
 	function images() {
-		return rawImages()
-			.then(images => {
-				return images
-					.map(image => image.imageinfo)
-					.reduce((imageInfos, list) => [...imageInfos, ...list], [])
-					.map(info => info.url);
-			});
+		return rawImages().then(images => {
+			return images
+				.map(image => image.imageinfo)
+				.reduce((imageInfos, list) => [...imageInfos, ...list], [])
+				.map(info => info.url);
+		});
 	}
 
 	/**
@@ -174,11 +170,10 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 	 */
 	function references() {
 		return api(apiOptions, {
-				prop: 'extlinks',
-				ellimit: 'max',
-				titles: raw.title
-			})
-			.then(res => res.query.pages[raw.pageid].extlinks.map(link => link['*']));
+			prop: 'extlinks',
+			ellimit: 'max',
+			titles: raw.title
+		}).then(res => res.query.pages[raw.pageid].extlinks.map(link => link['*']));
 	}
 
 	/**
@@ -191,12 +186,16 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 	 * @return {Promise} - returns results if aggregated [and next function for more results if not aggregated]
 	 */
 	function links(aggregated = true, limit = 100) {
-		const _pagination = pagination(apiOptions, {
-			prop: 'links',
-			plnamespace: 0,
-			pllimit: limit,
-			titles: raw.title
-		}, res => res.query.pages[raw.pageid].links.map(link => link.title));
+		const _pagination = pagination(
+			apiOptions,
+			{
+				prop: 'links',
+				plnamespace: 0,
+				pllimit: limit,
+				titles: raw.title
+			},
+			res => res.query.pages[raw.pageid].links.map(link => link.title)
+		);
 		if (aggregated) {
 			return aggregatePagination(_pagination);
 		}
@@ -213,11 +212,16 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 	 * @return {Promise} - returns results if aggregated [and next function for more results if not aggregated]
 	 */
 	function categories(aggregated = true, limit = 100) {
-		const _pagination = pagination(apiOptions, {
-			prop: 'categories',
-			pllimit: limit,
-			titles: raw.title
-		}, res => res.query.pages[raw.pageid].categories.map(category => category.title));
+		const _pagination = pagination(
+			apiOptions,
+			{
+				prop: 'categories',
+				pllimit: limit,
+				titles: raw.title
+			},
+			res =>
+				res.query.pages[raw.pageid].categories.map(category => category.title)
+		);
 		if (aggregated) {
 			return aggregatePagination(_pagination);
 		}
@@ -233,27 +237,25 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 	 */
 	function coordinates() {
 		return api(apiOptions, {
-				prop: 'coordinates',
-				titles: raw.title
-			})
-			.then(res => {
-				const page = res.query.pages[raw.pageid];
-				if (page.coordinates) {
-					return page.coordinates[0];
-				}
-				// No coordinates for this page, check infobox for deprecated version
-				return info().then(data => parseCoordinates(data));
-			});
+			prop: 'coordinates',
+			titles: raw.title
+		}).then(res => {
+			const page = res.query.pages[raw.pageid];
+			if (page.coordinates) {
+				return page.coordinates[0];
+			}
+			// No coordinates for this page, check infobox for deprecated version
+			return info().then(data => parseCoordinates(data));
+		});
 	}
-	
+
 	function rawInfo(title) {
 		return api(apiOptions, {
-				prop: 'revisions',
-				rvprop: 'content',
-				rvsection: 0,
-				titles: title || raw.title
-			})
-			.then(res => get(res, 'query', 'pages', firstValue, 'revisions', 0, '*'));
+			prop: 'revisions',
+			rvprop: 'content',
+			rvsection: 0,
+			titles: title || raw.title
+		}).then(res => get(res, 'query', 'pages', firstValue, 'revisions', 0, '*'));
 	}
 
 	/**
@@ -262,10 +264,10 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 	 */
 	function tables() {
 		return api(apiOptions, {
-				prop: 'revisions',
-				rvprop: 'content',
-				titles: raw.title
-			})
+			prop: 'revisions',
+			rvprop: 'content',
+			titles: raw.title
+		})
 			.then(res => get(res, 'query', 'pages', firstValue, 'revisions', 0, '*'))
 			.then(wikitext => infoboxParser(wikitext, apiOptions.parser).tables);
 	}
@@ -286,8 +288,10 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 				const info = infoboxParser(wikitext, apiOptions.parser).general;
 				if (Object.keys(info).length === 0) {
 					// If empty, check to see if this page has a templated infobox
-					return rawInfo(`Template:Infobox ${raw.title.toLowerCase()}`)
-						.then(_wikitext => infoboxParser(_wikitext || '', apiOptions.parser).general)
+					return rawInfo(`Template:Infobox ${raw.title.toLowerCase()}`).then(
+						_wikitext =>
+							infoboxParser(_wikitext || '', apiOptions.parser).general
+					);
 				}
 				return info;
 			})
@@ -309,7 +313,9 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 	 * @return {Promise} - Parsed object of all infobox data
 	 */
 	function fullInfo() {
-		return rawInfo().then(wikitext => infoboxParser(wikitext, apiOptions.parser));
+		return rawInfo().then(wikitext =>
+			infoboxParser(wikitext, apiOptions.parser)
+		);
 	}
 
 	/**
@@ -320,17 +326,21 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 	 * @return {Promise} - includes results [and next function for more results if not aggregated]
 	 */
 	function backlinks(aggregated = true, limit = 100) {
-		const _pagination = pagination(apiOptions, {
-			list: 'backlinks',
-			bllimit: limit,
-			bltitle: raw.title
-		}, res => res.query.backlinks.map(link => link.title));
+		const _pagination = pagination(
+			apiOptions,
+			{
+				list: 'backlinks',
+				bllimit: limit,
+				bltitle: raw.title
+			},
+			res => res.query.backlinks.map(link => link.title)
+		);
 		if (aggregated) {
 			return aggregatePagination(_pagination);
 		}
 		return _pagination;
 	}
-	
+
 	/**
 	 * Get list of links to different translations
 	 * @method WikiPage#langlinks
@@ -338,16 +348,17 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 	 */
 	function langlinks() {
 		return api(apiOptions, {
-				prop: 'langlinks',
-				lllimit: 'max',
-				titles: raw.title
-			})
-			.then(res => res.query.pages[raw.pageid].langlinks.map(link => {
+			prop: 'langlinks',
+			lllimit: 'max',
+			titles: raw.title
+		}).then(res =>
+			res.query.pages[raw.pageid].langlinks.map(link => {
 				return {
 					lang: link.lang,
 					title: link['*']
-				}
-			}));
+				};
+			})
+		);
 	}
 
 	const page = {

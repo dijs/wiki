@@ -5,10 +5,10 @@
  * @returns {Object} - formatted object containing coordinates, or null object if none.
  */
 export function parseCoordinates(infoboxData) {
-	if(infoboxData.coordinates) {
+	if (infoboxData.coordinates) {
 		return parseInfoboxCoords(infoboxData.coordinates);
 	}
-	if(infoboxData.latd && infoboxData.longd) {
+	if (infoboxData.latd && infoboxData.longd) {
 		return parseDeprecatedCoords(infoboxData);
 	}
 	return {
@@ -19,7 +19,7 @@ export function parseCoordinates(infoboxData) {
 }
 
 /**
-	* @ignore
+ * @ignore
  * @description Parses coordinates which are in Wikipedia Deprecated Format.
  * @example
  * parseDeprecatedCoords('00 |latm=47 |lats=59 |latNS=S','100 |longm=39 |longs=58 |longEW=E');
@@ -40,7 +40,7 @@ function parseDeprecatedCoords(data) {
 		floatOrDefault(data.longs),
 		data.longEw
 	);
-	return wikiCoordinates(latitude,longitude);
+	return wikiCoordinates(latitude, longitude);
 }
 
 // regex to match coordinate string in infobox
@@ -57,13 +57,13 @@ const infoboxCoordinatePattern = /(\d{1,2})\|(\d{1,2})\|(\d{1,2})?\|?([NSEW])\|(
 function parseInfoboxCoords(coord) {
 	let matches, latitude, longitude;
 	matches = coord.match(infoboxCoordinatePattern);
-	latitude = convertCoordinatesFromStrings(matches.slice(0,4));
+	latitude = convertCoordinatesFromStrings(matches.slice(0, 4));
 	longitude = convertCoordinatesFromStrings(matches.slice(4));
-	return wikiCoordinates(latitude,longitude);
+	return wikiCoordinates(latitude, longitude);
 }
 
 /**
-	* @ignore
+ * @ignore
  * @description Converts coordinates after they've been separated into components by regex matching.
  * Missing or undefined elements in array will be treated as 0. Missing direction will
  * result in positive coordinate.
@@ -73,14 +73,16 @@ function parseInfoboxCoords(coord) {
  * @returns {Number} - coordinate in decimal form, with proper positive / negative sign applied.
  */
 function convertCoordinatesFromStrings(matches) {
-	return dmsToDecimal(floatOrDefault(matches[1]),
+	return dmsToDecimal(
+		floatOrDefault(matches[1]),
 		floatOrDefault(matches[2]),
 		floatOrDefault(matches[3]),
-		matches[4]);
+		matches[4]
+	);
 }
 
 // simplifies positive / negative calculation in decimal conversion
-const directions = {'N': 1, 'S': -1, 'E': 1, 'W': -1};
+const directions = { N: 1, S: -1, E: 1, W: -1 };
 
 /**
  * @ignore
@@ -89,8 +91,11 @@ const directions = {'N': 1, 'S': -1, 'E': 1, 'W': -1};
  * dmsToDecimal(100,39,58,'W') == -100.6661111
  * @returns {Number} - coordinate in decimal form, with proper positive / negative sign applied.
  */
-function dmsToDecimal(degrees,minutes,seconds,direction) {
-	return (degrees + (1/60)*minutes + (1/3600)*seconds) * (directions[direction] || 1);
+function dmsToDecimal(degrees, minutes, seconds, direction) {
+	return (
+		(degrees + (1 / 60) * minutes + (1 / 3600) * seconds) *
+		(directions[direction] || 1)
+	);
 }
 
 /**
@@ -101,7 +106,7 @@ function dmsToDecimal(degrees,minutes,seconds,direction) {
  * @param  {Number} longitude - longitude in decimal form
  * @returns {Object} - {lat: latitude, lon: longitude}
  */
-function wikiCoordinates(latitude,longitude) {
+function wikiCoordinates(latitude, longitude) {
 	return {
 		lat: Number(latitude.toFixed(4)),
 		lon: Number(longitude.toFixed(4))
@@ -118,5 +123,5 @@ function wikiCoordinates(latitude,longitude) {
  */
 function floatOrDefault(numStr) {
 	const num = Number(numStr);
-	return (!isNaN(num) ? num : 0);
+	return !isNaN(num) ? num : 0;
 }
