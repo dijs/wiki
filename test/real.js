@@ -20,7 +20,7 @@ describe('Live tests', () => {
       .then(page => {
         page.mainImage().then(mainImage => {
           mainImage.should.equal(
-            'https://upload.wikimedia.org/wikipedia/commons/0/07/Gotham_City_Saviour_%282430422247%29.jpg'
+            'https://upload.wikimedia.org/wikipedia/commons/2/2b/MCM_2013_-_Batman_%288979342250%29.jpg'
           );
           done();
         });
