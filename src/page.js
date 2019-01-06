@@ -260,7 +260,8 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 
 	/**
 	 * Fetch and parse tables within page
-	 * @return {Array} Collection of tables
+	 * @method WikiPage#tables
+	 * @return {Promise} Resolves to a collection of tables
 	 */
 	function tables() {
 		return api(apiOptions, {
