@@ -20,7 +20,7 @@
   },
   "main": "./dist/wiki.js",
   "dependencies": {
-    "infobox-parser": "3.1.0",
+    "infobox-parser": "3.1.1",
     "isomorphic-fetch": "^2.2.1"
   },
   "devDependencies": {
