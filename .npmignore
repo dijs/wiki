@@ -13,3 +13,6 @@ TODO.md
 npm-debug.log
 coverage/
 wallaby.js
+.babelrc
+.prettierrc
+*.png
