@@ -55,5 +55,8 @@
   "repository": {
     "type": "git",
     "url": "git://github.com/dijs/wiki.git"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

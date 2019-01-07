@@ -1,8 +1,16 @@
 language: node_js
-node_js:
-  - "6.9.5"
+node_js: 8.13.0
 before_script:
   - npm run build
   - npm run cover
 after_script:
   - npm run coveralls
+before_deploy:
+  - npm run build
+deploy:
+  provider: npm
+  email: richard.vanderdys@gmail.com
+  on:
+    branch: master
+  api_key:
+    secure: c1b9qwR7xgoflkzhBEZD3Ec+OfcbfA99aAGqLWToQE9uPdmIRzT7hxYNzB+Njds8AUGUvzqNogu0QTtnLF/asFq0sTcm1dDrl10y2eD9HkeV/6Wn/SYr0+/JlT0L/AaPnb0kfig643IQUMRmIoTvl/rCxv/PKxr0R04i2XlCjAc=
