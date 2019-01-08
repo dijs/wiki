@@ -262,4 +262,15 @@ describe('Live tests', () => {
           .should.equal('Huke,sa,Cuyler Garland,SMG Slayer,joined=2017-11-04');
       });
   });
+  it('should parse structured content data [Issue #102]', function() {
+    this.timeout(timeoutTime);
+    return wiki({
+      apiUrl: 'https://cod-esports.gamepedia.com/api.php'
+    })
+      .page('OpTic Gaming')
+      .then(page => page.content())
+      .then(content => {
+        content[0].items[0].title.should.equal('Organization');
+      });
+  });
 });

@@ -387,7 +387,7 @@ describe('Page Methods', () => {
 				200,
 				JSON.parse(fs.readFileSync('./test/data/1463865890274.json'))
 			);
-		return luke.content().should.eventually.containEql('Star Wars');
+		return luke.rawContent().should.eventually.containEql('Star Wars');
 	});
 
 	it('should get summary from an article', () => {
