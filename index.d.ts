@@ -6,14 +6,14 @@ declare module 'wikijs' {
      * 
      * @interface Options
      */
-    interface Options {
+	interface Options {
         /**
         * URL of Wikipedia API
         * 
         * @type {string}
         * @memberof Options
         */
-        apiUrl?: string;
+		apiUrl?: string;
         /**
          * When accessing the API using a cross-domain AJAX request (CORS), set this to the originating domain. 
          * This must be included in any pre-flight request, and therefore must be part of the request URI (not the POST body). 
@@ -24,57 +24,57 @@ declare module 'wikijs' {
          * @type {string}
          * @memberof Options
          */
-        origin?: string;
-    }
+		origin?: string;
+	}
 
     /**
      * Coordinate object
      * 
      * @interface Coordinates
      */
-    interface Coordinates {
-        lat: number;
-        lon: number;
-        primary: string;
-        globe: string;
-    }
+	interface Coordinates {
+		lat: number;
+		lon: number;
+		primary: string;
+		globe: string;
+	}
 
     /**
      * Link object { lang, title }
      * 
      * @interface Link
      */
-    interface Link {
-        lang: string;
-        title: string;
-    }
+	interface Link {
+		lang: string;
+		title: string;
+	}
 
     /**
      * Image container
      * 
      * @interface Image
      */
-    interface Image {
-        ns: number;
-        title: string;
-        missing: string;
-        known: string;
-        imagerepository: string;
-        imageinfo: object[];
-    }
+	interface Image {
+		ns: number;
+		title: string;
+		missing: string;
+		known: string;
+		imagerepository: string;
+		imageinfo: object[];
+	}
 
-    interface Result {
-        results: string[];
-        query: string;
-        next(): Promise<Result>
-    }
+	interface Result {
+		results: string[];
+		query: string;
+		next(): Promise<Result>
+	}
 
     /**
      * WikiPage
      * 
      * @interface Page
      */
-    interface Page {
+	interface Page {
         /**
          * Paginated backlinks from page
          * 
@@ -83,7 +83,7 @@ declare module 'wikijs' {
          * @returns {Promise<string[]>} 
          * @memberof Page
          */
-        backlinks(aggregated?: boolean, limit?: number): Promise<string[]>
+		backlinks(aggregated?: boolean, limit?: number): Promise<string[]>
 
         /**
          * Paginated categories from page
@@ -93,15 +93,15 @@ declare module 'wikijs' {
          * @returns {Promise<string[]>} 
          * @memberof Page
          */
-        categories(aggregated?: boolean, limit?: number): Promise<string[]>
-    
+		categories(aggregated?: boolean, limit?: number): Promise<string[]>
+
         /**
          * Text content from page
          * 
          * @returns {Promise<string>} 
          * @memberof Page
          */
-        content(): Promise<string>
+		content(): Promise<string>
 
         /**
          * Geographical coordinates from page
@@ -109,7 +109,15 @@ declare module 'wikijs' {
          * @returns {Promise<Coordinates>} 
          * @memberof Page
          */
-        coordinates(): Promise<Coordinates>
+		coordinates(): Promise<Coordinates>
+
+		/**
+         * Get full information from page
+         * 
+         * @returns {Promise<object>} 
+         * @memberof Page
+         */
+		fullInfo(): Promise<object>
 
         /**
          * HTML from page
@@ -117,7 +125,7 @@ declare module 'wikijs' {
          * @returns {Promise<string>} 
          * @memberof Page
          */
-        html(): Promise<string>
+		html(): Promise<string>
 
         /**
          * Image URL's from page
@@ -126,7 +134,7 @@ declare module 'wikijs' {
          * @returns {Promise<string[]>} 
          * @memberof Page
          */
-        images(): Promise<string[]>
+		images(): Promise<string[]>
 
         /**
          * Get information from page
@@ -136,7 +144,7 @@ declare module 'wikijs' {
          * @returns {Promise<object>} 
          * @memberof Page
          */
-        info(key?: string): Promise<object>
+		info(key?: string): Promise<object>
 
         /**
          * Get list of links to different translations
@@ -144,7 +152,7 @@ declare module 'wikijs' {
          * @returns {Promise<Link[]>} 
          * @memberof Page
          */
-        langlinks(): Promise<Link[]>
+		langlinks(): Promise<Link[]>
 
         /**
          * Paginated links from page
@@ -156,7 +164,7 @@ declare module 'wikijs' {
          * @returns {Promise<string[]>} 
          * @memberof Page
          */
-        links(aggregated?: boolean, limit?: number): Promise<string[]>
+		links(aggregated?: boolean, limit?: number): Promise<string[]>
 
         /**
          * Main image URL from infobox on page
@@ -164,7 +172,7 @@ declare module 'wikijs' {
          * @returns {Promise<string>} 
          * @memberof Page
          */
-        mainImage(): Promise<string>
+		mainImage(): Promise<string>
 
         /**
          * Raw data from images from page
@@ -172,7 +180,7 @@ declare module 'wikijs' {
          * @returns {Promise<Image[]>} 
          * @memberof Page
          */
-        rawImages(): Promise<Image[]>
+		rawImages(): Promise<Image[]>
 
         /**
          * References from page
@@ -180,7 +188,7 @@ declare module 'wikijs' {
          * @returns {Promise<string[]>} 
          * @memberof Page
          */
-        references(): Promise<string[]>
+		references(): Promise<string[]>
 
         /**
          * Text summary from page
@@ -188,8 +196,16 @@ declare module 'wikijs' {
          * @returns {Promise<string>} 
          * @memberof Page
          */
-        summary(): Promise<string>
-    }
+		summary(): Promise<string>
+
+		/**
+         * Tables from page
+         * 
+         * @returns {Promise<any>} 
+         * @memberof Page
+         */
+		tables(): Promise<any>
+	}
 
 
     /**
@@ -197,7 +213,7 @@ declare module 'wikijs' {
      * 
      * @param {Options} [options] 
      */
-    export default function WikiJS (options?: Options): {
+	export default function WikiJS(options?: Options): {
         /**
          * Get Page by PageId
          * 
@@ -205,7 +221,7 @@ declare module 'wikijs' {
          * id of the page
          * @returns {Promise<Page>} 
          */
-        findById(pageID: string): Promise<Page>
+		findById(pageID: string): Promise<Page>
 
         /**
          * Geographical Search
@@ -218,7 +234,7 @@ declare module 'wikijs' {
          * search radius in kilometers (default: 1km)
          * @returns {Promise<string[]>}
          */
-        geoSearch(lat: number, lon: number, radius?: number): Promise<string[]>
+		geoSearch(lat: number, lon: number, radius?: number): Promise<string[]>
 
         /**
          * Get Page
@@ -227,7 +243,7 @@ declare module 'wikijs' {
          * title of article
          * @returns {Promise<Page>} 
          */
-        page(title: string): Promise<Page>
+		page(title: string): Promise<Page>
 
         /**
          * Random articles
@@ -236,7 +252,7 @@ declare module 'wikijs' {
          * limits the number of random articles
          * @returns {Promise<string[]>} 
          */
-        random(limit?: number): Promise<string[]>
+		random(limit?: number): Promise<string[]>
 
         /**
          * Search articles
@@ -247,6 +263,6 @@ declare module 'wikijs' {
          * limits the number of results
          * @returns {Promise<Result>} 
          */
-        search(query: string, limit?: number): Promise<Result>
-    }
+		search(query: string, limit?: number): Promise<Result>
+	}
 }
