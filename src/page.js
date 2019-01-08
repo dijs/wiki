@@ -1,4 +1,4 @@
-import { aggregatePagination, pagination, api } from './util';
+import { aggregatePagination, pagination, api, parseContent } from './util';
 import infoboxParser from 'infobox-parser';
 import { parseCoordinates } from './coordinates';
 
@@ -49,13 +49,24 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 	}
 
 	/**
-	 * Text content from page
+	 * Structured content from page
 	 * @example
 	 * wiki.page('batman').then(page => page.content()).then(console.log);
 	 * @method WikiPage#content
 	 * @return {Promise}
 	 */
 	function content() {
+		return rawContent().then(parseContent);
+	}
+
+	/**
+	 * Raw content from page
+	 * @example
+	 * wiki.page('batman').then(page => page.rawContent()).then(console.log);
+	 * @method WikiPage#rawContent
+	 * @return {Promise}
+	 */
+	function rawContent() {
 		return api(apiOptions, {
 			prop: 'extracts',
 			explaintext: '',
@@ -365,6 +376,7 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 	const page = {
 		raw,
 		html,
+		rawContent,
 		content,
 		summary,
 		images,
