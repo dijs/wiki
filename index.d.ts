@@ -222,6 +222,18 @@ declare module 'wikijs' {
          * @returns {Promise<Page>} 
          */
 		findById(pageID: string): Promise<Page>
+		
+
+	/**
+	 * Find page by query and optional predicate
+	 * @example
+	 * wiki.find('luke skywalker').then(page => console.log(page.title));
+	 * @method Wiki#find
+	 * @param {string} search query
+	 * @param {function} [predicate] - testing function for choosing which page result to fetch. Default is first result.
+	 * @return {Promise}
+	 */
+		find (query : string, predicate? : (pages : Page[]) => Page) : Promise<Page>;
 
         /**
          * Geographical Search
