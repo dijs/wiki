@@ -253,13 +253,25 @@ describe('Live tests', () => {
       apiUrl: 'https://cod-esports.gamepedia.com/api.php'
     })
       .page('Team Envy')
-      .then(page => page.tables())
-      .then(tables => {
-        tables[0].heading.should.equal('Player Roster');
-        tables[0].subheading.should.equal('Active');
-        tables[0].rows[0]
+      .then(page => page.lists())
+      .then(lists => {
+        lists[0].heading.should.equal('Player Roster');
+        lists[0].subheading.should.equal('Active');
+        lists[0].rows[0]
           .join(',')
           .should.equal('Huke,sa,Cuyler Garland,SMG Slayer,joined=2017-11-04');
+      });
+  });
+  it('should parse tables [Issue #109]', function() {
+    this.timeout(timeoutTime);
+    return wiki()
+      .page('List of English animal nouns')
+      .then(page => page.tables())
+      .then(tables => {
+        tables[0][76].animalName.should.equal('locust');
+        tables[0][76].collective.should.equal(
+          'swarm, cloud, horde, plague, host'
+        );
       });
   });
 });

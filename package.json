@@ -2,7 +2,7 @@
   "name": "wikijs",
   "description": "Wikipedia interface for Node and Web",
   "author": "Richard van der Dys",
-  "version": "4.11.2",
+  "version": "4.12.0",
   "keywords": [
     "wiki",
     "wikipedia",
@@ -20,7 +20,7 @@
   },
   "main": "./dist/wiki.js",
   "dependencies": {
-    "infobox-parser": "3.1.1",
+    "infobox-parser": "3.2.0",
     "isomorphic-fetch": "^2.2.1"
   },
   "devDependencies": {
