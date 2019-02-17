@@ -17,14 +17,17 @@ WikiJs is a node.js library which serves as an interface to Wikipedia (or any Me
 - and much more!
 
 ## Documentation
+
 <https://dijs.github.io/wiki>
 
 ## Install
+
 ```bash
 npm install wikijs
 ```
 
 ## Build yourself
+
 You can run these commands in order to build and test WikiJs:
 
 ```bash
@@ -36,16 +39,29 @@ npm test
 ```
 
 ## Usage
+
 ```javascript
 import wiki from 'wikijs';
 // const wiki = require('wikijs').default;
 
-wiki().page('Batman')
-	.then(page => page.info('alterEgo'))
-	.then(console.log); // Bruce Wayne
+wiki()
+  .page('Batman')
+  .then(page => page.info('alterEgo'))
+  .then(console.log); // Bruce Wayne
+```
+
+Or use with async/await
+
+```js
+(async function() {
+  const page = await wiki().page('Batman');
+  const { alterEgo } = await page.info();
+  console.log(alterEgo);
+})();
 ```
 
 ## Usage with webpack
+
 In order for webpack to build wikijs properly, you must add an option to
 your webpack configuration file. [Documentation](https://webpack.github.io/docs/configuration.html#externals)
 
@@ -56,16 +72,18 @@ externals: {
 ```
 
 ## Usage with other MediaWiki's
+
 You can use the API options configuration:
 
 ```js
 wiki({
-	apiUrl: 'https://awoiaf.westeros.org/api.php',
-	origin: null
+  apiUrl: 'https://awoiaf.westeros.org/api.php',
+  origin: null
 }).search('Winterfell');
 ```
 
 ## Usage with other languages
+
 You just need to change the API to the proper URL. This is normally just changing the subdomain of wikipedia.
 
 ```js
@@ -78,24 +96,28 @@ wiki({ apiUrl: 'https://es.wikipedia.org/w/api.php' })
 Read more about Cross Domain Requests [here](https://www.mediawiki.org/wiki/API:Main_module)
 
 ## Usage with custom headers
+
 If you need to pass authentication headers or anything else.
 
 ```js
 wiki({
-	headers: {
-		Cookie: 'name=value; name2=value2; name3=value3'
-	}
+  headers: {
+    Cookie: 'name=value; name2=value2; name3=value3'
+  }
 }).search('Winterfell');
 ```
 
 ## Parsing Wiki Infobox Data
+
 The code Wikipedia uses for infobox data is strange and complex. So I have split the parsing code into another library. You can find it [here](https://github.com/dijs/infobox-parser).
 [![NPM Version](https://img.shields.io/npm/v/wikijs.svg)](https://www.npmjs.com/package/infobox-parser)
 
 We not only parse out the information, but also try to transform the data into a convenient structure for data processing.
 
 ## Contribute!
+
 I always welcome help. Please just stick to the lint rules and write tests with each feature/fix.
 
 ## Artwork
+
 Thanks to [Heather van der Dys](http://heathervanderdys.com/) for the awesome logo!
