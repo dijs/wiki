@@ -87,7 +87,7 @@ export function aggregate(apiOptions, params, list, key, prefix, results = []) {
 	});
 }
 
-const headingPattern = /(=+)\s?([\w\s-]+)\s?=+/g;
+const headingPattern = /(==+)((?!\n)\s?)(((?!==|\n)[^])+)((?!\n)\s?)(==+)/g;
 
 function getHeadings(text) {
 	let match;
