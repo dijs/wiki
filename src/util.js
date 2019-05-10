@@ -95,7 +95,7 @@ function getHeadings(text) {
 	while ((match = headingPattern.exec(text)) !== null) {
 		matches.push({
 			level: match[1].trim().length,
-			text: match[2].trim(),
+			text: match[3].trim(),
 			start: match.index,
 			end: match.index + match[0].length
 		});

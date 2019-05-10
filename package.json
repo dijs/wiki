@@ -1,62 +1,62 @@
 {
-  "name": "wikijs",
-  "description": "Wikipedia interface for Node and Web",
-  "author": "Richard van der Dys",
-  "version": "5.0.0-alpha.1",
-  "keywords": [
-    "wiki",
-    "wikipedia",
-    "interface",
-    "search",
-    "client",
-    "article",
-    "node",
-    "api",
-    "mediawiki"
-  ],
-  "license": "MIT",
-  "engines": {
-    "node": ">=0.10.4"
-  },
-  "main": "./dist/wiki.js",
-  "dependencies": {
-    "infobox-parser": "3.1.1",
-    "isomorphic-fetch": "^2.2.1"
-  },
-  "devDependencies": {
-    "babel": "^6.23.0",
-    "babel-cli": "^6.24.0",
-    "babel-preset-babili": "0.0.12",
-    "babel-preset-latest": "^6.24.0",
-    "babel-register": "^6.24.0",
-    "coveralls": "^2.11.9",
-    "eslint": "^2.10.2",
-    "gh-pages": "^1.0.0",
-    "istanbul": "^1.0.0-alpha.2",
-    "jsdoc": "^3.3.0-beta3",
-    "minami": "^1.1.0",
-    "mocha": "^2.5.3",
-    "nock": "^10.0.2",
-    "prettier": "1.15.3",
-    "should": "^9.0.0"
-  },
-  "typings": "./index.d.ts",
-  "scripts": {
-    "build": "babel src --out-dir dist --source-maps true",
-    "test": "node_modules/.bin/_mocha --no-colors --compilers js:babel-register",
-    "cover": "babel-node ./node_modules/istanbul/lib/cli cover node_modules/.bin/_mocha",
-    "docs": "node_modules/.bin/jsdoc --configure .jsdoc.json --verbose",
-    "lint": "eslint src",
-    "publish-docs": "PACKAGE_VERSION=$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]') && gh-pages -d docs/wikijs/$PACKAGE_VERSION ",
-    "coveralls": "cat ./coverage/lcov.info | coveralls"
-  },
-  "homepage": "https://github.com/dijs/wiki",
-  "bugs": "https://github.com/dijs/wiki/issues",
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/dijs/wiki.git"
-  },
-  "publishConfig": {
-    "access": "public"
-  }
+	"name": "wikijs",
+	"description": "Wikipedia interface for Node and Web",
+	"author": "Richard van der Dys",
+	"version": "5.0.0-alpha.1",
+	"keywords": [
+		"wiki",
+		"wikipedia",
+		"interface",
+		"search",
+		"client",
+		"article",
+		"node",
+		"api",
+		"mediawiki"
+	],
+	"license": "MIT",
+	"engines": {
+		"node": ">=0.10.4"
+	},
+	"main": "./dist/wiki.js",
+	"dependencies": {
+		"infobox-parser": "3.1.1",
+		"isomorphic-fetch": "^2.2.1"
+	},
+	"devDependencies": {
+		"babel": "^6.23.0",
+		"babel-cli": "^6.24.0",
+		"babel-preset-babili": "0.0.12",
+		"babel-preset-latest": "^6.24.0",
+		"babel-register": "^6.24.0",
+		"coveralls": "^2.11.9",
+		"eslint": "^2.10.2",
+		"gh-pages": "^1.0.0",
+		"istanbul": "^1.0.0-alpha.2",
+		"jsdoc": "^3.3.0-beta3",
+		"minami": "^1.1.0",
+		"mocha": "^2.5.3",
+		"nock": "^10.0.2",
+		"prettier": "1.15.3",
+		"should": "^9.0.0"
+	},
+	"typings": "./index.d.ts",
+	"scripts": {
+		"build": "babel src --out-dir dist --source-maps true",
+		"test": "node_modules/.bin/_mocha --no-colors --compilers js:babel-register",
+		"cover": "babel-node ./node_modules/istanbul/lib/cli cover node_modules/.bin/_mocha",
+		"docs": "node_modules/.bin/jsdoc --configure .jsdoc.json --verbose",
+		"lint": "eslint src",
+		"publish-docs": "PACKAGE_VERSION=$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]') && gh-pages -d docs/wikijs/$PACKAGE_VERSION ",
+		"coveralls": "cat ./coverage/lcov.info | coveralls"
+	},
+	"homepage": "https://github.com/dijs/wiki",
+	"bugs": "https://github.com/dijs/wiki/issues",
+	"repository": {
+		"type": "git",
+		"url": "git://github.com/dijs/wiki.git"
+	},
+	"publishConfig": {
+		"access": "public"
+	}
 }
