@@ -275,4 +275,14 @@ describe('Live tests', () => {
 				content[0].items[0].title.should.equal('Organization');
 			});
 	});
+
+	it('should parse info from zh wiki', function() {
+		this.timeout(timeoutTime);
+		let term = '林淑如';
+		let apiUrl = 'https://zh.wikipedia.org/w/api.php';
+		wiki({ apiUrl: apiUrl })
+			.page(term)
+			.then(page => page.info())
+			.then(info => info.deathDate.should.have.property('age', 55));
+	});
 });

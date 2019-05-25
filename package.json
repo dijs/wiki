@@ -2,7 +2,7 @@
 	"name": "wikijs",
 	"description": "Wikipedia interface for Node and Web",
 	"author": "Richard van der Dys",
-	"version": "5.1.0",
+	"version": "5.1.1",
 	"keywords": [
 		"wiki",
 		"wikipedia",
@@ -21,7 +21,7 @@
 	"main": "./dist/wiki.js",
 	"dependencies": {
 		"cross-fetch": "^3.0.2",
-		"infobox-parser": "3.1.1"
+		"infobox-parser": "3.2.1"
 	},
 	"devDependencies": {
 		"babel": "^6.23.0",
