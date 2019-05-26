@@ -286,6 +286,6 @@ declare module 'wikijs' {
 		 * limits the number of results
 		 * @returns {Promise<Result>}
 		 */
-		prefixsearch(query: string, limit?: number): Promise<Result>;
+		prefixSearch(query: string, limit?: number): Promise<Result>;
 	};
 }

@@ -114,7 +114,7 @@ describe('Wiki Methods', () => {
 			.reply(200, JSON.parse(fs.readFileSync('./test/data/prefixsearch.json')));
 
 		return wiki()
-			.prefixsearch('mic')
+			.prefixSearch('mic')
 			.should.eventually.have.property('results')
 			.containEql('Michael Jordan');
 	});

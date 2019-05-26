@@ -242,7 +242,7 @@ describe('Live tests', () => {
 	it('should handle fuzzy prefix searches', function() {
 		this.timeout(timeoutTime);
 		return wiki()
-			.prefixsearch('mic')
+			.prefixSearch('mic')
 			.then(titles =>
 				titles.should.have.property('results').containEql('Michael Jordan')
 			);
