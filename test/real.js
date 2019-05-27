@@ -239,6 +239,14 @@ describe('Live tests', () => {
 				titles.should.have.property('results').containEql('Ashe/Old Lore')
 			);
 	});
+	it('should handle fuzzy prefix searches', function() {
+		this.timeout(timeoutTime);
+		return wiki()
+			.prefixSearch('mic')
+			.then(titles =>
+				titles.should.have.property('results').containEql('Michael Jordan')
+			);
+	});
 	it('should fetch deep infoboxes [Issue #95]', function() {
 		this.timeout(timeoutTime);
 		return wiki()

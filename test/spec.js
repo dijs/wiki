@@ -97,6 +97,28 @@ describe('Wiki Methods', () => {
 		]);
 	});
 
+	it('Prefix search should find an article', () => {
+		nock('http://en.wikipedia.org')
+			.get('/w/api.php')
+			.query({
+				list: 'prefixsearch',
+				pssearch: 'mic',
+				pslimit: '50',
+				psprofile: 'fuzzy',
+				format: 'json',
+				action: 'query',
+				redirects: '',
+				origin: '*'
+			})
+			.once()
+			.reply(200, JSON.parse(fs.readFileSync('./test/data/prefixsearch.json')));
+
+		return wiki()
+			.prefixSearch('mic')
+			.should.eventually.have.property('results')
+			.containEql('Michael Jordan');
+	});
+
 	it('Search should limit properly', () => {
 		nock('http://en.wikipedia.org')
 			.get('/w/api.php')

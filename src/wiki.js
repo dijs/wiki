@@ -85,6 +85,32 @@ export default function wiki(options = {}) {
 	}
 
 	/**
+	 * Search articles using "fuzzy" prefixsearch
+	 * @example
+	 * wiki.prefixSearch('star wars').then(data => console.log(data.results.length));
+	 * @example
+	 * wiki.prefixSearch('star wars').then(data => {
+	 * 	data.next().then(...);
+	 * });
+	 * @method Wiki#prefixSearch
+	 * @param  {string} query - keyword query
+	 * @param  {Number} [limit] - limits the number of results
+	 * @return {Promise} - pagination promise with results and next page function
+	 */
+	function prefixSearch(query, limit = 50) {
+		return pagination(
+			apiOptions,
+			{
+				list: 'prefixsearch',
+				pslimit: limit,
+				psprofile: 'fuzzy',
+				pssearch: query
+			},
+			res => res.query.prefixsearch.map(article => article.title)
+		);
+	}
+
+	/**
 	 * Opensearch (mainly used as a backup to normal text search)
 	 * @param  {string} query - keyword query
 	 * @param  {Number} limit - limits the number of results
@@ -246,6 +272,7 @@ export default function wiki(options = {}) {
 		allPages,
 		allCategories,
 		pagesInCategory,
-		opensearch
+		opensearch,
+		prefixSearch
 	};
 }
