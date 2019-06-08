@@ -16,6 +16,7 @@ const firstValue = obj => {
 };
 
 const getFileName = text => {
+	if (Array.isArray(text)) text = text[0];
 	if (!text) return undefined;
 	if (text.indexOf(':') !== -1) {
 		const [, name] = text.split(':');

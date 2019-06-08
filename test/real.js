@@ -293,4 +293,17 @@ describe('Live tests', () => {
 			.then(page => page.info())
 			.then(info => info.deathDate.should.have.property('age', 55));
 	});
+
+	it('should use first main image if there are multiple', function() {
+		this.timeout(timeoutTime);
+		return wiki()
+			.page('Wikipedia')
+			.then(page => {
+				return page
+					.mainImage()
+					.should.eventually.equal(
+						'https://upload.wikimedia.org/wikipedia/commons/8/80/Wikipedia-logo-v2.svg'
+					);
+			});
+	});
 });
