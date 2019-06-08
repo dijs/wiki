@@ -337,4 +337,12 @@ describe('Live tests', () => {
 				});
 			});
 	});
+
+	it('should parse wiki url', () => {
+		return wiki()
+			.page('djinn')
+			.then(page => {
+				return page.url().should.equal('https://en.wikipedia.org/wiki/Jinn');
+			});
+	});
 });

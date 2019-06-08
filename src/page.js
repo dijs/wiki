@@ -374,6 +374,15 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 		);
 	}
 
+	/**
+	 * Get URL for wiki page
+	 * @method WikiPage#url
+	 * @return {URL}
+	 */
+	function url() {
+		return raw.canonicalurl;
+	}
+
 	const page = {
 		raw,
 		html,
@@ -392,7 +401,8 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 		langlinks,
 		rawInfo,
 		fullInfo,
-		tables
+		tables,
+		url
 	};
 
 	return page;
