@@ -320,4 +320,21 @@ describe('Live tests', () => {
 					);
 			});
 	});
+
+	it('should parse Dublin data', () => {
+		const opts = {
+			parser: {
+				simplifyDataValues: false
+			}
+		};
+		return wiki(opts)
+			.page('Dublin')
+			.then(page => {
+				return page.info().then(info => {
+					info.name.should.equal('Dublin');
+					info.gdp.should.equal('€106 billion');
+					info.populationTotal.should.equal(554554);
+				});
+			});
+	});
 });
