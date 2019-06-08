@@ -16,3 +16,4 @@ wallaby.js
 .babelrc
 .prettierrc
 *.png
+recordings/

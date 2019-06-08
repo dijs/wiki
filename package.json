@@ -24,6 +24,9 @@
 		"infobox-parser": "3.3.0"
 	},
 	"devDependencies": {
+		"@pollyjs/adapter-node-http": "^2.5.0",
+		"@pollyjs/core": "^2.5.0",
+		"@pollyjs/persister-fs": "^2.1.0",
 		"babel": "^6.23.0",
 		"babel-cli": "^6.24.0",
 		"babel-preset-babili": "0.0.12",

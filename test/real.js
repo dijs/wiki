@@ -1,9 +1,23 @@
 import should from 'should';
 import wiki from '../src/wiki';
 
+import { Polly, setupMocha as setupPolly } from '@pollyjs/core';
+import NodeHttpAdapter from '@pollyjs/adapter-node-http';
+import FSPersister from '@pollyjs/persister-fs';
+
+Polly.register(NodeHttpAdapter);
+Polly.register(FSPersister);
+
 const timeoutTime = 30000;
 
 describe('Live tests', () => {
+	setupPolly.beforeEach({
+		adapters: ['node-http'],
+		persister: 'fs'
+		// recordFailedRequests: true
+	});
+	setupPolly.afterEach();
+
 	it('should handle non existent pages properly', function(done) {
 		this.timeout(timeoutTime);
 		wiki()
