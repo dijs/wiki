@@ -13,8 +13,8 @@ const timeoutTime = 30000;
 describe('Live tests', () => {
 	setupPolly.beforeEach({
 		adapters: ['node-http'],
-		persister: 'fs'
-		// recordFailedRequests: true
+		persister: 'fs',
+		recordFailedRequests: true
 	});
 	setupPolly.afterEach();
 
@@ -343,6 +343,15 @@ describe('Live tests', () => {
 			.page('djinn')
 			.then(page => {
 				return page.url().should.equal('https://en.wikipedia.org/wiki/Jinn');
+			});
+	});
+
+	it('should use sections alias', () => {
+		return wiki()
+			.page('batman')
+			.then(page => page.sections())
+			.then(content => {
+				return content[0].title.should.equal('Publication history');
 			});
 	});
 });
