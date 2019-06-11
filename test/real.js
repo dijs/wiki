@@ -354,4 +354,13 @@ describe('Live tests', () => {
 				return content[0].title.should.equal('Publication history');
 			});
 	});
+
+	it('should allow API query', () => {
+		return wiki()
+			.api({
+				action: 'parse',
+				page: 'Pet_door'
+			})
+			.then(res => res.parse.title.should.equal('Pet door'));
+	});
 });

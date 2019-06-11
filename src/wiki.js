@@ -261,6 +261,21 @@ export default function wiki(options = {}) {
 		);
 	}
 
+	/**
+	 * @summary Helper function to query API directly
+	 * @method Wiki#api
+	 * @param {Object} params [https://www.mediawiki.org/wiki/API:Parsing_wikitext](https://www.mediawiki.org/wiki/API:Parsing_wikitext)
+	 * @returns {Promise} Query Response
+	 * @example
+	 * wiki().api({
+	 *	action: 'parse',
+	 *	page: 'Pet_door'
+	 * }).then(res => res.parse.title.should.equal('Pet door'));
+	 */
+	function rawApi(params) {
+		return api(apiOptions, params);
+	}
+
 	return {
 		search,
 		random,
@@ -273,6 +288,7 @@ export default function wiki(options = {}) {
 		allCategories,
 		pagesInCategory,
 		opensearch,
-		prefixSearch
+		prefixSearch,
+		api: rawApi
 	};
 }
