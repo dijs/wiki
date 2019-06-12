@@ -363,4 +363,13 @@ describe('Live tests', () => {
 			})
 			.then(res => res.parse.title.should.equal('Pet door'));
 	});
+
+	it('should fetch most viewed pages in wiki', () => {
+		return wiki()
+			.mostViewed()
+			.then(list => {
+				list[4].title.should.equal('Keanu Reeves');
+				list[4].count.should.equal(279774);
+			});
+	});
 });
