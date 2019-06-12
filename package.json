@@ -1,6 +1,6 @@
 {
 	"name": "wikijs",
-	"description": "Wikipedia interface for Node and Web",
+	"description": "Mediawiki interface for Node and Web",
 	"author": "Richard van der Dys",
 	"version": "5.5.0",
 	"keywords": [
@@ -8,7 +8,7 @@
 		"wikipedia",
 		"interface",
 		"search",
-		"client",
+		"page",
 		"article",
 		"node",
 		"api",
