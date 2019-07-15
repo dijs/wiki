@@ -1,15 +1,12 @@
 {
-  "env": {
-    "node": true,
-    "es6": true,
-    "mocha": true
-  },
-  "parserOptions": {
-    "ecmaVersion": 6,
-    "sourceType": "module"
-  },
-  "ecmaFeatures": {
-    "modules": true
-  },
-  "extends": "eslint:recommended"
+	"env": {
+		"node": true,
+		"es6": true,
+		"mocha": true
+	},
+	"parserOptions": {
+		"ecmaVersion": 6,
+		"sourceType": "module"
+	},
+	"extends": "eslint:recommended"
 }
