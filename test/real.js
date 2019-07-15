@@ -305,7 +305,7 @@ describe('Live tests', () => {
 		wiki({ apiUrl: apiUrl })
 			.page(term)
 			.then(page => page.info())
-			.then(info => info.deathDate.should.have.property('age', 55));
+			.then(info => info.deathDate.should.have.property('age', 54));
 	});
 
 	it('should use first main image if there are multiple', function() {
