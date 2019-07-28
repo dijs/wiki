@@ -13,8 +13,8 @@ const timeoutTime = 30000;
 describe('Wiki Methods', () => {
 	setupPolly.beforeEach({
 		adapters: ['node-http'],
-		persister: 'fs'
-		// recordFailedRequests: true
+		persister: 'fs',
+		recordFailedRequests: true
 	});
 	setupPolly.afterEach();
 
@@ -95,8 +95,8 @@ describe('Page Methods', () => {
 
 	setupPolly.beforeEach({
 		adapters: ['node-http'],
-		persister: 'fs'
-		// recordFailedRequests: true
+		persister: 'fs',
+		recordFailedRequests: true
 	});
 	setupPolly.afterEach();
 

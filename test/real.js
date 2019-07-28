@@ -17,6 +17,8 @@ describe('Live tests', () => {
 		recordFailedRequests: true
 	});
 	setupPolly.afterEach();
+	// 	recordFailedRequests: true
+	// });
 
 	it('should handle non existent pages properly', function(done) {
 		this.timeout(timeoutTime);
@@ -370,6 +372,24 @@ describe('Live tests', () => {
 			.then(list => {
 				list[4].title.should.equal('Keanu Reeves');
 				list[4].count.should.equal(279774);
+			});
+	});
+
+	it('should return references in correct order', function() {
+		return wiki()
+			.page('Elon Musk')
+			.then(page => page.references())
+			.then(refs => {
+				refs[0].should.equal(
+					'https://www.forbes.com/sites/trulia/2013/11/01/billionaire-tesla-ceo-elon-musk-buys-home/'
+				);
+				refs[1].should.equal(
+					'https://web.archive.org/web/20150207033543/http://www.bloomberg.com/news/videos/b/6e27fcba-309d-494e-b87d-c73fb8bb1750'
+				);
+				refs[2].should.equal(
+					'https://www.bloomberg.com/news/videos/b/6e27fcba-309d-494e-b87d-c73fb8bb1750'
+				);
+				refs[3].should.equal('https://www.forbes.com/profile/elon-musk/');
 			});
 	});
 });

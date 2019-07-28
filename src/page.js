@@ -1,5 +1,6 @@
 import { aggregatePagination, pagination, api, parseContent } from './util';
 import infoboxParser from 'infobox-parser';
+import cheerio from 'cheerio';
 import { parseCoordinates } from './coordinates';
 
 const get = (obj, first, ...rest) => {
@@ -175,6 +176,21 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 	}
 
 	/**
+	 * External links from page
+	 * @example
+	 * wiki.page('batman').then(page => page.externalLinks()).then(console.log);
+	 * @method WikiPage#externalLinks
+	 * @return {Promise}
+	 */
+	function externalLinks() {
+		return api(apiOptions, {
+			prop: 'extlinks',
+			ellimit: 'max',
+			titles: raw.title
+		}).then(res => res.query.pages[raw.pageid].extlinks.map(link => link['*']));
+	}
+
+	/**
 	 * References from page
 	 * @example
 	 * wiki.page('batman').then(page => page.references()).then(console.log);
@@ -182,11 +198,15 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 	 * @return {Promise}
 	 */
 	function references() {
-		return api(apiOptions, {
-			prop: 'extlinks',
-			ellimit: 'max',
-			titles: raw.title
-		}).then(res => res.query.pages[raw.pageid].extlinks.map(link => link['*']));
+		return html()
+			.then(cheerio.load)
+			.then($ => {
+				return $('.references cite a.external')
+					.map(function() {
+						return $(this).attr('href');
+					})
+					.get();
+			});
 	}
 
 	/**
@@ -394,6 +414,7 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 		images,
 		references,
 		links,
+		externalLinks,
 		categories,
 		coordinates,
 		info,

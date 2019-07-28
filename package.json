@@ -2,7 +2,7 @@
 	"name": "wikijs",
 	"description": "Mediawiki interface for Node and Web",
 	"author": "Richard van der Dys",
-	"version": "5.5.1",
+	"version": "6.0.0",
 	"keywords": [
 		"wiki",
 		"wikipedia",
@@ -20,6 +20,7 @@
 	},
 	"main": "./dist/wiki.js",
 	"dependencies": {
+		"cheerio": "^1.0.0-rc.3",
 		"cross-fetch": "^3.0.2",
 		"infobox-parser": "3.3.1"
 	},
