@@ -205,6 +205,14 @@ declare module 'wikijs' {
 		 * @memberof Page
 		 */
 		tables(): Promise<any>;
+
+		/**
+		 * Get URL for wiki page
+		 *
+		 * @return {URL}
+		 * @memberof Page
+		 */
+		url(): URL;
 	}
 
 	/**
