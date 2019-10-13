@@ -149,7 +149,7 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 				const filename = getFileName(title);
 				// Some wikis use underscores for spaces, some don't
 				return (
-					filename === mainImageName ||
+					filename.toUpperCase() === mainImageName.toUpperCase() ||
 					filename.replace(/\s/g, '_') === mainImageName
 				);
 			});

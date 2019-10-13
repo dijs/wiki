@@ -392,4 +392,15 @@ describe('Live tests', () => {
 				refs[3].should.equal('https://www.forbes.com/profile/elon-musk/');
 			});
 	});
+
+	it('should fetch main image #128', () => {
+		return wiki()
+			.page('Microsoft')
+			.then(page => page.mainImage())
+			.then(img => {
+				img.should.equal(
+					'https://upload.wikimedia.org/wikipedia/commons/3/30/Building92microsoft.jpg'
+				);
+			});
+	});
 });
