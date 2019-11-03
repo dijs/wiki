@@ -209,10 +209,10 @@ declare module 'wikijs' {
 		/**
 		 * Get URL for wiki page
 		 *
-		 * @return {URL}
+		 * @return {String}
 		 * @memberof Page
 		 */
-		url(): URL;
+		url(): string;
 	}
 
 	/**

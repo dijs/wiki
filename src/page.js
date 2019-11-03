@@ -398,7 +398,7 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 	/**
 	 * Get URL for wiki page
 	 * @method WikiPage#url
-	 * @return {URL}
+	 * @return {String}
 	 */
 	function url() {
 		return raw.canonicalurl;
