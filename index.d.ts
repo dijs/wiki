@@ -25,6 +25,13 @@ declare module 'wikijs' {
 		 * @memberof Options
 		 */
 		origin?: string;
+		/**
+		 * The Headers sent to be sent along with the request 
+		 *
+		 * @type {HeadersInit}
+		 * @memberof Options
+		 */
+		headers: HeadersInit;
 	}
 
 	/**
