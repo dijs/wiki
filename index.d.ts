@@ -215,6 +215,36 @@ declare module 'wikijs' {
 		url(): URL;
 	}
 
+  /**
+   * List of possible query props. See: https://www.mediawiki.org/wiki/API:Query
+   */
+  type QueryProp = "categories" | "categoryinfo" | "cirrusbuilddoc" | "cirruscompsuggestbuilddoc" | "cirrusdoc" | "contributors" | "deletedrevisions" | "duplicatefiles" | "extlinks" | "extracts" | "fileusage" | "globalusage" | "imageinfo" | "images" | "info" | "iwlinks" | "langlinks" | "links" | "linkshere" | "pageimages" | "pageprops" | "pageterms" | "pageviews" | "redirects" | "revisions" | "stashimageinfo" | "templates" | "transcludedin" | "transcodestatus" | "videoinfo" | "wbentityusage" | "flowinfo" | "description" | "mapdata";
+
+  /**
+   * Parameters to pass to query actions
+   * 
+   * @interface QueryActionParams
+   */
+  interface QueryActionParams {
+    action: "query";
+    prop: QueryProp;
+    iiprop?: "extmetadata";
+    titles?: string;
+    format?: "json" | "none";
+    // TODO: add more options here
+  }
+
+  /**
+   * Parameters to pass to parse actions
+   * 
+   * @interface ParseActionParams
+   */
+  interface ParseActionParams {
+    action: "parse";
+    format: "json" | "none";
+    // TODO: add more options here
+  }
+
 	/**
 	 * WikiJs is a node.js library which serves as an interface to Wikipedia (or any MediaWiki).
 	 *
@@ -223,6 +253,14 @@ declare module 'wikijs' {
 	export default function WikiJS(
 		options?: Options
 	): {
+    /**
+     * Helper function to query API directly
+     *
+     * @param {Object} params https://www.mediawiki.org/wiki/API:Parsing_wikitext
+     * @returns {Promise<unknown>}
+     */
+    api(params: QueryActionParams | ParseActionParams): Promise<unknown>;
+
 		/**
 		 * Get Page by PageId
 		 *
