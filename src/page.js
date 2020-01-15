@@ -378,18 +378,20 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 	/**
 	 * Get list of links to different translations
 	 * @method WikiPage#langlinks
-	 * @return {Promise} - includes link objects { lang, title }
+	 * @return {Promise} - includes link objects { lang, title, url }
 	 */
 	function langlinks() {
 		return api(apiOptions, {
 			prop: 'langlinks',
 			lllimit: 'max',
+			llprop: 'url',
 			titles: raw.title
 		}).then(res =>
 			res.query.pages[raw.pageid].langlinks.map(link => {
 				return {
 					lang: link.lang,
-					title: link['*']
+					title: link['*'],
+					url: link.url
 				};
 			})
 		);

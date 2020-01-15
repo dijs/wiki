@@ -107,11 +107,14 @@ describe('Live tests', () => {
 				page.langlinks().then(links => {
 					links.should.containEql({
 						lang: 'ru',
-						title: 'Бэтмен'
+						title: 'Бэтмен',
+						url:
+							'https://ru.wikipedia.org/wiki/%D0%91%D1%8D%D1%82%D0%BC%D0%B5%D0%BD'
 					});
 					links.should.containEql({
 						lang: 'az',
-						title: 'Betmen'
+						title: 'Betmen',
+						url: 'https://az.wikipedia.org/wiki/Betmen'
 					});
 					done();
 				});
