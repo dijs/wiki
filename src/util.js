@@ -30,7 +30,12 @@ export function api(apiOptions, params = {}) {
 		url,
 		Object.assign({ headers: apiOptions.headers }, fetchOptions)
 	)
-		.then(res => res.json())
+		.then(res => {
+			if(res.ok) {
+				return res.json();
+			}
+			throw new Error(`${res.status}: ${res.statusText}`);
+		})
 		.then(res => {
 			if (res.error) {
 				throw new Error(res.error.info);

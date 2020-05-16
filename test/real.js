@@ -20,6 +20,17 @@ describe('Live tests', () => {
 	// 	recordFailedRequests: true
 	// });
 
+	it('should handle error response', function(done) {
+		this.timeout(timeoutTime);
+		wiki()
+			// The status code is 200 normally,
+			// but overrided to 400 in recordings/Live-tests_4163164458/should-handle-error-response_922613357/recording.har.
+			.random()
+			.catch(e => {
+				e.message.should.equal('400: Bad Request');
+				done();
+			});
+	});
 	it('should handle non existent pages properly', function(done) {
 		this.timeout(timeoutTime);
 		wiki()
