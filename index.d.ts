@@ -25,6 +25,10 @@ declare module 'wikijs' {
 		 * @memberof Options
 		 */
 		origin?: string;
+		/**
+		 * Headers to add to Wikipedia API requests
+		 */
+		headers?: Record<string, string>;
 	}
 
 	/**
