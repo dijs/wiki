@@ -215,13 +215,15 @@ export default function wiki(options = {}) {
 	 * @param  {Number} lat - latitude
 	 * @param  {Number} lon - longitude
 	 * @param  {Number} [radius=1000] - search radius in kilometers (default: 1km)
+	 * @param  {Number} [limit=10] - number of results (default: 10 results)
 	 * @return {Promise} - List of page titles
 	 */
-	function geoSearch(lat, lon, radius = 1000) {
+	function geoSearch(lat, lon, radius = 1000, limit = 10) {
 		return api(apiOptions, {
 			list: 'geosearch',
 			gsradius: radius,
-			gscoord: `${lat}|${lon}`
+			gscoord: `${lat}|${lon}`,
+			gslimit: limit
 		}).then(res => res.query.geosearch.map(article => article.title));
 	}
 
