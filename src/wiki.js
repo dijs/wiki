@@ -64,6 +64,7 @@ export default function wiki(options = {}) {
 	 * @method Wiki#search
 	 * @param  {string} query - keyword query
 	 * @param  {Number} [limit] - limits the number of results
+	 * @param  {Boolean} [all] - returns entire article objects instead of just titles
 	 * @return {Promise} - pagination promise with results and next page function
 	 */
 	function search(query, limit = 50, all = false) {
@@ -74,9 +75,10 @@ export default function wiki(options = {}) {
 				srsearch: query,
 				srlimit: limit
 			},
-			res => res.query.search.map(article => {
-				return all ? article : article.title;
-			})
+			res =>
+				res.query.search.map(article => {
+					return all ? article : article.title;
+				})
 		).catch(err => {
 			if (err.message === '"text" search is disabled.') {
 				// Try backup search method
