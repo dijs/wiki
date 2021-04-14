@@ -66,7 +66,7 @@ export default function wiki(options = {}) {
 	 * @param  {Number} [limit] - limits the number of results
 	 * @return {Promise} - pagination promise with results and next page function
 	 */
-	function search(query, limit = 50) {
+	function search(query, limit = 50, all = false) {
 		return pagination(
 			apiOptions,
 			{
@@ -74,7 +74,9 @@ export default function wiki(options = {}) {
 				srsearch: query,
 				srlimit: limit
 			},
-			res => res.query.search.map(article => article.title)
+			res => res.query.search.map(article => {
+				return all ? article : article.title;
+			})
 		).catch(err => {
 			if (err.message === '"text" search is disabled.') {
 				// Try backup search method
