@@ -417,4 +417,12 @@ describe('Live tests', () => {
 				);
 			});
 	});
+
+	it('should fetch title #150', () => {
+		return wiki()
+			.find('Alphabet')
+			.then(page => {
+				page.title.should.equal('Alphabet');
+			});
+	});
 });
