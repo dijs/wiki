@@ -78,6 +78,7 @@ export function aggregate(apiOptions, params, list, key, prefix, results = []) {
 		if (continueWith) {
 			const nextFromKey =
 				(continueWith[list] && continueWith[list][prefix + 'from']) ||
+				(continueWith[list] && continueWith[list][prefix + 'continue']) ||
 				continueWith[prefix + 'continue'];
 			params[prefix + 'continue'] = nextFromKey;
 			params[prefix + 'from'] = nextFromKey;

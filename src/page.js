@@ -187,7 +187,7 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 			prop: 'extlinks',
 			ellimit: 'max',
 			titles: raw.title
-		}).then(res => res.query.pages[raw.pageid].extlinks.map(link => link['*']));
+		}).then(res => (res.query.pages[raw.pageid].extlinks || []).map(link => link['*']));
 	}
 
 	/**
@@ -227,7 +227,7 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 				pllimit: limit,
 				titles: raw.title
 			},
-			res => res.query.pages[raw.pageid].links.map(link => link.title)
+			res => (res.query.pages[raw.pageid].links || []).map(link => link.title)
 		);
 		if (aggregated) {
 			return aggregatePagination(_pagination);
@@ -253,7 +253,7 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 				titles: raw.title
 			},
 			res =>
-				res.query.pages[raw.pageid].categories.map(category => category.title)
+				(res.query.pages[raw.pageid].categories || []).map(category => category.title)
 		);
 		if (aggregated) {
 			return aggregatePagination(_pagination);
@@ -367,7 +367,7 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 				bllimit: limit,
 				bltitle: raw.title
 			},
-			res => res.query.backlinks.map(link => link.title)
+			res => (res.query.backlinks || []).map(link => link.title)
 		);
 		if (aggregated) {
 			return aggregatePagination(_pagination);

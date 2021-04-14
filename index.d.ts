@@ -69,12 +69,25 @@ declare module 'wikijs' {
 		next(): Promise<Result>;
 	}
 
+	interface RawPage {
+		pageid: number;
+		ns: number;
+		title: string;
+		touched: string;
+		lastrevid: number;
+		counter: number;
+		length: number;
+		fullurl: string;
+		editurl: string;
+	}
+
 	/**
 	 * WikiPage
 	 *
 	 * @interface Page
 	 */
 	interface Page {
+		raw: RawPage;
 		/**
 		 * Paginated backlinks from page
 		 *
@@ -266,6 +279,13 @@ declare module 'wikijs' {
 		page(title: string): Promise<Page>;
 
 		/**
+		 * Fetch all page titles in wiki
+		 * @method Wiki#allPages
+		 * @return {Array} Array of pages
+		 */
+		allPages(): Promise<string[]>;
+
+		/**
 		 * Random articles
 		 *
 		 * @param {number} [limit]
@@ -286,6 +306,14 @@ declare module 'wikijs' {
 		search(query: string, limit?: number): Promise<Result>;
 
 		/**
+		 * Opensearch (mainly used as a backup to normal text search)
+		 * @param  {string} query - keyword query
+		 * @param  {Number} limit - limits the number of results
+		 * @return {Promise<string[]>}       List of page title results
+		 */
+		opensearch(query: string, limit?: number): Promise<string[]>;
+
+		/**
 		 * Search articles using "fuzzy" prefixsearch
 		 *
 		 * @param {string} query
@@ -295,5 +323,36 @@ declare module 'wikijs' {
 		 * @returns {Promise<Result>}
 		 */
 		prefixSearch(query: string, limit?: number): Promise<Result>;
+
+		/**
+		 * @summary Find the most viewed pages with counts
+		 * @example
+		 * wiki.mostViewed().then(list => console.log(`${list[0].title}: ${list[0].count}`))
+		 * @method Wiki#mostViewed
+		 * @returns {Promise} - Array of {title,count}
+		 */
+		mostViewed(): Promise<{ title: string; count: number }[]>;
+
+	  /**
+		 * Fetch all page titles in wiki
+		 * @method Wiki#allPages
+		 * @return {Promise<string[]>} Array of pages
+		 */
+		allPages(): Promise<string[]>;
+
+		/**
+		 * Fetch all categories in wiki
+		 * @method Wiki#allCategories
+		 * @return {Promise<string[]>} Array of categories
+		 */
+		allCategories(): Promise<string[]>;
+
+		/**
+		 * Fetch all pages in category
+		 * @method Wiki#pagesInCategory
+		 * @param  {String} category Category to fetch from
+		 * @return {Promise<string[]>} Array of pages
+		 */
+		pagesInCategory(category: string): Promise<string[]>;
 	};
 }
