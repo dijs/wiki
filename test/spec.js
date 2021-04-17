@@ -117,7 +117,7 @@ describe('Page Methods', () => {
 	});
 
 	it('should get html from an article', function() {
-		this.timeout(timeoutTime);
+		// this.timeout(timeoutTime);
 		return luke.html().should.eventually.containEql('<b>Luke Skywalker</b>');
 	});
 
@@ -162,14 +162,6 @@ describe('Page Methods', () => {
 			);
 	});
 
-	it('should get references from an article', () => {
-		return luke
-			.references()
-			.should.eventually.containEql(
-				'http://www.starwars.com/databank/luke-skywalker'
-			);
-	});
-
 	it('should get links from an article', () => {
 		return luke.links().should.eventually.containEql('Jedi');
 	});
@@ -195,7 +187,6 @@ describe('Page Methods', () => {
 	});
 
 	it('should get backlinks from an article', function() {
-		this.timeout(timeoutTime);
 		return luke.backlinks().should.eventually.containEql('Jedi');
 	});
 

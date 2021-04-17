@@ -1,6 +1,6 @@
 import { aggregatePagination, pagination, api, parseContent } from './util';
 import infoboxParser from 'infobox-parser';
-import cheerio from 'cheerio';
+import { tokenize, constructTree } from 'hyntax';
 import { parseCoordinates } from './coordinates';
 
 const get = (obj, first, ...rest) => {
@@ -192,6 +192,39 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 		);
 	}
 
+	function hasClass(node, className) {
+		return (
+			node.content.attributes &&
+			node.content.attributes.some(
+				attr =>
+					attr.key.content === 'class' &&
+					attr.value.content.indexOf(className) !== -1
+			)
+		);
+	}
+
+	function isTag(node) {
+		return node.nodeType === 'tag';
+	}
+
+	function hasName(node, name) {
+		return node.content.name === name;
+	}
+
+	function findNode(node, predicate) {
+		if (predicate(node)) return node;
+		// search through children as well
+		if (node.content.children) {
+			for (let child of node.content.children) {
+				const found = findNode(child, predicate);
+				if (found) {
+					return found;
+				}
+			}
+		}
+		return null;
+	}
+
 	/**
 	 * References from page
 	 * @example
@@ -201,13 +234,36 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 	 */
 	function references() {
 		return html()
-			.then(cheerio.load)
-			.then($ => {
-				return $('.references cite a.external')
-					.map(function() {
-						return $(this).attr('href');
-					})
-					.get();
+			.then(inputHTML => {
+				const { tokens } = tokenize(inputHTML);
+				const { ast } = constructTree(tokens);
+				return ast;
+			})
+			.then(ast => {
+				const links = [];
+				const refs = findNode(
+					ast,
+					node => isTag(node) && hasClass(node, 'references')
+				);
+				if (refs) {
+					for (let ref of refs.content.children[0].content.children) {
+						const cite = findNode(
+							ref,
+							node => isTag(node) && hasName(node, 'cite')
+						);
+						if (cite) {
+							for (let el of cite.content.children) {
+								if (isTag(el) && hasName(el, 'a') && hasClass(el, 'external')) {
+									const linkAttr = el.content.attributes.find(
+										attr => attr.key.content === 'href'
+									);
+									links.push(linkAttr.value.content);
+								}
+							}
+						}
+					}
+				}
+				return links;
 			});
 	}
 
