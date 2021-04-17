@@ -425,4 +425,16 @@ describe('Live tests', () => {
 				page.title.should.equal('Alphabet');
 			});
 	});
+
+	it('should parse external references', function() {
+		return wiki()
+			.page('Batman')
+			.then(page => page.references())
+			.then(refs => {
+				refs.should.containEql(
+					'http://www.behindthevoiceactors.com/characters/Batman/Batman/'
+				);
+				refs.length.should.equal(140);
+			});
+	});
 });
