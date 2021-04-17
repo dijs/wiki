@@ -27,18 +27,6 @@ WikiJs is a node.js library which serves as an interface to Wikipedia (or any Me
 npm install wikijs
 ```
 
-## Build yourself
-
-You can run these commands in order to build and test WikiJs:
-
-```bash
-git clone git@github.com:dijs/wiki.git
-cd wiki
-npm install
-npm run build
-npm test
-```
-
 ## Usage
 
 ```javascript
@@ -49,6 +37,18 @@ wiki()
 	.page('Batman')
 	.then(page => page.info('alterEgo'))
 	.then(console.log); // Bruce Wayne
+```
+
+## Build yourself
+
+You can run these commands in order to build and test WikiJs:
+
+```bash
+git clone git@github.com:dijs/wiki.git
+cd wiki
+npm install
+npm run build
+npm test
 ```
 
 ## Usage with webpack
