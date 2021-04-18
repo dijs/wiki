@@ -31,7 +31,7 @@ declare module 'wikijs' {
 		 * @type {HeadersInit}
 		 * @memberof Options
 		 */
-		headers: HeadersInit;
+		headers?: HeadersInit;
 	}
 
 	/**
