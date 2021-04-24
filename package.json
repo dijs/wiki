@@ -2,7 +2,7 @@
 	"name": "wikijs",
 	"description": "Mediawiki interface for Node and Web",
 	"author": "Richard van der Dys",
-	"version": "6.1.3",
+	"version": "6.2.0",
 	"keywords": [
 		"wiki",
 		"wikipedia",
@@ -26,7 +26,7 @@
 	"dependencies": {
 		"cross-fetch": "^3.0.2",
 		"hyntax": "^1.1.9",
-		"infobox-parser": "3.4.3"
+		"infobox-parser": "3.6.0"
 	},
 	"devDependencies": {
 		"@pollyjs/adapter-node-http": "^2.5.0",
