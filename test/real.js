@@ -437,4 +437,15 @@ describe('Live tests', () => {
 				refs.length.should.equal(140);
 			});
 	});
+
+	it('should allow calling rawContent #153', () => {
+		this.timeout(timeoutTime);
+		return wiki()
+			.find('Alphabet')
+			.then(page => {
+				page.rawContent().then(rawContent => {
+					rawContent.length.should.equal(10);
+				})
+			});
+	});
 });

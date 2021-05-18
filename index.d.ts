@@ -195,6 +195,14 @@ declare module 'wikijs' {
 		mainImage(): Promise<string>;
 
 		/**
+		 * Raw content from page
+		 * 
+		 * @returns {Promise<string>}
+		 * @memberof Page
+		 */
+		rawContent(): Promise<string>;
+
+		/**
 		 * Raw data from images from page
 		 *
 		 * @returns {Promise<Image[]>}
@@ -340,11 +348,11 @@ declare module 'wikijs' {
 		 */
 		mostViewed(): Promise<{ title: string; count: number }[]>;
 
-	  /**
-		 * Fetch all page titles in wiki
-		 * @method Wiki#allPages
-		 * @return {Promise<string[]>} Array of pages
-		 */
+		/**
+		   * Fetch all page titles in wiki
+		   * @method Wiki#allPages
+		   * @return {Promise<string[]>} Array of pages
+		   */
 		allPages(): Promise<string[]>;
 
 		/**
