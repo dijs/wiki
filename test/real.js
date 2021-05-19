@@ -438,14 +438,14 @@ describe('Live tests', () => {
 			});
 	});
 
-	it('should allow calling rawContent #153', () => {
+	it('should allow calling rawContent #153', function() {
 		this.timeout(timeoutTime);
 		return wiki()
 			.find('Alphabet')
 			.then(page => {
-				page.rawContent().then(rawContent => {
-					rawContent.length.should.equal(10);
-				})
+				return page
+					.rawContent()
+					.then(rawContent => rawContent.length.should.equal(33277));
 			});
 	});
 });
