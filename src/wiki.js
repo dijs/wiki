@@ -218,7 +218,7 @@ export default function wiki(options = {}) {
 	 * @method Wiki#geoSearch
 	 * @param  {Number} lat - latitude
 	 * @param  {Number} lon - longitude
-	 * @param  {Number} [radius=1000] - search radius in kilometers (default: 1km)
+	 * @param  {Number} [radius=1000] - search radius in meters (default: 1km)
 	 * @param  {Number} [limit=10] - number of results (default: 10 results)
 	 * @return {Promise} - List of page titles
 	 */
