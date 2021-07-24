@@ -2,7 +2,7 @@
 	"name": "wikijs",
 	"description": "Mediawiki interface for Node and Web",
 	"author": "Richard van der Dys",
-	"version": "6.2.2",
+	"version": "6.2.3",
 	"keywords": [
 		"wiki",
 		"wikipedia",
