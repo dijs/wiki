@@ -448,4 +448,16 @@ describe('Live tests', () => {
 					.then(rawContent => rawContent.length.should.equal(33277));
 			});
 	});
+
+	it('should load main image #157', function() {
+		this.timeout(timeoutTime);
+		return wiki()
+			.page('Lisa_(rapper)')
+			.then(page => page.mainImage())
+			.then(mainImage =>
+				mainImage.should.equal(
+					'https://upload.wikimedia.org/wikipedia/commons/8/85/Blackpink_Lisa_Vogue_2021.png'
+				)
+			);
+	});
 });

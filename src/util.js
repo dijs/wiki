@@ -31,7 +31,7 @@ export function api(apiOptions, params = {}) {
 		Object.assign({ headers: apiOptions.headers }, fetchOptions)
 	)
 		.then(res => {
-			if(res.ok) {
+			if (res.ok) {
 				return res.json();
 			}
 			throw new Error(`${res.status}: ${res.statusText}`);
