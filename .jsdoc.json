@@ -1,39 +1,36 @@
 {
-    "tags": {
-        "allowUnknownTags": true,
-        "dictionaries": ["jsdoc"]
-    },
-    "source": {
-        "include": [
-          "src/coordinates.js",
-          "src/page.js",
-          "src/util.js",
-          "src/wiki.js",
-          "package.json",
-          "README.md"
-        ],
-        "includePattern": ".js$",
-        "excludePattern": "(node_modules/|docs)"
-    },
-    "plugins": [
-        "plugins/markdown"
-    ],
-    "templates": {
-        "cleverLinks": false,
-        "monospaceLinks": true,
-        "default": {
-          "staticFiles": {
-            "include": [
-                "./static"
-            ]
-          }
-        }
-    },
-    "opts": {
-        "destination": "./docs",
-        "encoding": "utf8",
-        "private": true,
-        "recurse": true,
-        "template": "./node_modules/minami"
-    }
+	"tags": {
+		"allowUnknownTags": true,
+		"dictionaries": ["jsdoc"]
+	},
+	"source": {
+		"include": [
+			"src/coordinates.js",
+			"src/page.js",
+			"src/util.js",
+			"src/chain.js",
+			"src/wiki.js",
+			"package.json",
+			"README.md"
+		],
+		"includePattern": ".js$",
+		"excludePattern": "(node_modules/|docs)"
+	},
+	"plugins": ["plugins/markdown"],
+	"templates": {
+		"cleverLinks": false,
+		"monospaceLinks": true,
+		"default": {
+			"staticFiles": {
+				"include": ["./static"]
+			}
+		}
+	},
+	"opts": {
+		"destination": "./docs",
+		"encoding": "utf8",
+		"private": true,
+		"recurse": true,
+		"template": "./node_modules/minami"
+	}
 }

@@ -26,6 +26,13 @@ const processors = {
 	}
 };
 
+/**
+ * Chain API requests together
+ * @example
+ * // Get page summary and images in same request
+ * wiki.page('batman').then(page => page.chain().summary().image().request()).then(console.log);
+ * @namespace QueryChain
+ */
 export default class QueryChain {
 	constructor(apiOptions, id) {
 		this.id = id;
@@ -37,6 +44,7 @@ export default class QueryChain {
 	/**
 	 * Make combined API request
 	 * @param {Object} params - Extra params to pass to the API
+	 * @method QueryChain#request
 	 * @returns {Object}
 	 */
 	request(params = {}) {
@@ -60,12 +68,22 @@ export default class QueryChain {
 
 	// TODO: add geo
 
+	/**
+	 * @summary Useful for extracting structured section content
+	 * @method QueryChain#content
+	 * @returns {QueryChain}
+	 */
 	content() {
 		return this.chain('extracts', {
 			explaintext: '1'
 		});
 	}
 
+	/**
+	 * @summary Useful for extracting summary content
+	 * @method QueryChain#summary
+	 * @returns {QueryChain}
+	 */
 	summary() {
 		return this.chain('extracts', {
 			explaintext: '1',
@@ -73,7 +91,12 @@ export default class QueryChain {
 		});
 	}
 
-	images(types = { thumbnail: true, original: false, name: true }) {
+	/**
+	 * @summary Extract image
+	 * @method QueryChain#image
+	 * @returns {QueryChain}
+	 */
+	image(types = { thumbnail: true, original: false, name: true }) {
 		return this.chain('pageimages', {
 			piprop: Object.keys(types)
 				.filter(k => types[k])
@@ -81,12 +104,22 @@ export default class QueryChain {
 		});
 	}
 
+	/**
+	 * @summary Extract external links
+	 * @method QueryChain#extlinks
+	 * @returns {QueryChain}
+	 */
 	extlinks() {
 		return this.chain('extlinks', {
 			ellimit: 'max'
 		});
 	}
 
+	/**
+	 * @summary Extract page links
+	 * @method QueryChain#links
+	 * @returns {QueryChain}
+	 */
 	links(limit = 100) {
 		return this.chain('links', {
 			plnamespace: 0,
@@ -94,23 +127,31 @@ export default class QueryChain {
 		});
 	}
 
+	/**
+	 * @summary Extract categories
+	 * @method QueryChain#categories
+	 * @returns {QueryChain}
+	 */
 	categories(limit = 100) {
 		return this.chain('categories', {
 			pllimit: limit
 		});
 	}
 
+	/**
+	 * @summary Extract coordinates
+	 * @method QueryChain#coordinates
+	 * @returns {QueryChain}
+	 */
 	coordinates() {
 		return this.chain('coordinates');
 	}
 
-	info() {
-		return this.chain('revisions', {
-			rvprop: 'content',
-			rvsection: 0
-		});
-	}
-
+	/**
+	 * @summary Extract language links
+	 * @method QueryChain#langlinks
+	 * @returns {QueryChain}
+	 */
 	langlinks() {
 		return this.chain('langlinks', {
 			lllimit: 'max',

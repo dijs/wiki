@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>chain.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <li class="nav-link nav-home-link"><a href="index.html">Home</a></li><li class="nav-heading">Namespaces</li><li class="nav-heading"><span class="nav-item-type type-namespace">N</span><span class="nav-item-name"><a href="QueryChain.html">QueryChain</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="QueryChain.html#categories">categories</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="QueryChain.html#content">content</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="QueryChain.html#coordinates">coordinates</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="QueryChain.html#extlinks">extlinks</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="QueryChain.html#image">image</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="QueryChain.html#langlinks">langlinks</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="QueryChain.html#links">links</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="QueryChain.html#request">request</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="QueryChain.html#summary">summary</a></span></li><li class="nav-heading"><span class="nav-item-type type-namespace">N</span><span class="nav-item-name"><a href="Wiki.html">Wiki</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Wiki.html#allCategories">allCategories</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Wiki.html#allPages">allPages</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Wiki.html#api">api</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Wiki.html#find">find</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Wiki.html#findById">findById</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Wiki.html#geoSearch">geoSearch</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Wiki.html#mostViewed">mostViewed</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Wiki.html#page">page</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Wiki.html#pagesInCategory">pagesInCategory</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Wiki.html#prefixSearch">prefixSearch</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Wiki.html#random">random</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Wiki.html#search">search</a></span></li><li class="nav-heading"><span class="nav-item-type type-namespace">N</span><span class="nav-item-name"><a href="WikiPage.html">WikiPage</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="WikiPage.html#backlinks">backlinks</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="WikiPage.html#categories">categories</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="WikiPage.html#chain">chain</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="WikiPage.html#content">content</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="WikiPage.html#coordinates">coordinates</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="WikiPage.html#externalLinks">externalLinks</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="WikiPage.html#fullInfo">fullInfo</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="WikiPage.html#html">html</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="WikiPage.html#images">images</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="WikiPage.html#info">info</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="WikiPage.html#langlinks">langlinks</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="WikiPage.html#links">links</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="WikiPage.html#mainImage">mainImage</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="WikiPage.html#rawContent">rawContent</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="WikiPage.html#rawImages">rawImages</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="WikiPage.html#references">references</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="WikiPage.html#summary">summary</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="WikiPage.html#tables">tables</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="WikiPage.html#url">url</a></span></li><li class="nav-heading"><a href="global.html">Globals</a></li><li class="nav-item"><span class="nav-item-type type-member">M</span><span class="nav-item-name"><a href="global.html#defaultOptions">defaultOptions</a></span></li>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">chain.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { api } from './util';
+
+const processors = {
+	extracts: data => {
+		return { extract: data.extract };
+	},
+	links: data => {
+		return { links: data.links.map(e => e.title) };
+	},
+	extlinks: data => {
+		return { extlinks: data.extlinks.map(e => e['*']) };
+	},
+	langlinks: data => {
+		return { langlinks: data.langlinks };
+	},
+	categories: data => {
+		return { categories: data.categories.map(e => e.title) };
+	},
+	pageimages: data => {
+		return {
+			image: {
+				name: data.pageimage,
+				thumbnail: data.thumbnail
+			}
+		};
+	}
+};
+
+/**
+ * Chain API requests together
+ * @example
+ * // Get page summary and images in same request
+ * wiki.page('batman').then(page => page.chain().summary().image().request()).then(console.log);
+ * @namespace QueryChain
+ */
+export default class QueryChain {
+	constructor(apiOptions, id) {
+		this.id = id;
+		this.apiOptions = apiOptions;
+		this.params = { pageids: id };
+		this.props = new Set();
+	}
+
+	/**
+	 * Make combined API request
+	 * @param {Object} params - Extra params to pass to the API
+	 * @method QueryChain#request
+	 * @returns {Object}
+	 */
+	request(params = {}) {
+		const props = [...this.props];
+		const prop = props.join('|');
+		return api(this.apiOptions, Object.assign(this.params, { prop }, params))
+			.then(res => res.query.pages[this.id])
+			.then(data => {
+				return props.reduce((memo, prop) => {
+					if (processors[prop]) Object.assign(memo, processors[prop](data));
+					return memo;
+				}, {});
+			});
+	}
+
+	chain(prop, params = {}) {
+		this.props.add(prop);
+		Object.assign(this.params, params);
+		return this;
+	}
+
+	// TODO: add geo
+
+	/**
+	 * @summary Useful for extracting structured section content
+	 * @method QueryChain#content
+	 * @returns {QueryChain}
+	 */
+	content() {
+		return this.chain('extracts', {
+			explaintext: '1'
+		});
+	}
+
+	/**
+	 * @summary Useful for extracting summary content
+	 * @method QueryChain#summary
+	 * @returns {QueryChain}
+	 */
+	summary() {
+		return this.chain('extracts', {
+			explaintext: '1',
+			exintro: '1'
+		});
+	}
+
+	/**
+	 * @summary Extract image
+	 * @method QueryChain#image
+	 * @returns {QueryChain}
+	 */
+	image(types = { thumbnail: true, original: false, name: true }) {
+		return this.chain('pageimages', {
+			piprop: Object.keys(types)
+				.filter(k => types[k])
+				.join('|')
+		});
+	}
+
+	/**
+	 * @summary Extract external links
+	 * @method QueryChain#extlinks
+	 * @returns {QueryChain}
+	 */
+	extlinks() {
+		return this.chain('extlinks', {
+			ellimit: 'max'
+		});
+	}
+
+	/**
+	 * @summary Extract page links
+	 * @method QueryChain#links
+	 * @returns {QueryChain}
+	 */
+	links(limit = 100) {
+		return this.chain('links', {
+			plnamespace: 0,
+			pllimit: limit
+		});
+	}
+
+	/**
+	 * @summary Extract categories
+	 * @method QueryChain#categories
+	 * @returns {QueryChain}
+	 */
+	categories(limit = 100) {
+		return this.chain('categories', {
+			pllimit: limit
+		});
+	}
+
+	/**
+	 * @summary Extract coordinates
+	 * @method QueryChain#coordinates
+	 * @returns {QueryChain}
+	 */
+	coordinates() {
+		return this.chain('coordinates');
+	}
+
+	/**
+	 * @summary Extract language links
+	 * @method QueryChain#langlinks
+	 * @returns {QueryChain}
+	 */
+	langlinks() {
+		return this.chain('langlinks', {
+			lllimit: 'max',
+			llprop: 'url'
+		});
+	}
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.7</a> on Thu Aug 12 2021 22:48:04 GMT+0300 (Eastern European Summer Time) using the Minami theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>

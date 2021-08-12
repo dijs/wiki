@@ -469,7 +469,7 @@ describe('Live tests', () => {
 				page
 					.chain()
 					.summary()
-					.images()
+					.image()
 					.links()
 					.categories()
 					.extlinks()
