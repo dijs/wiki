@@ -13,6 +13,9 @@ const processors = {
 	langlinks: data => {
 		return { langlinks: data.langlinks };
 	},
+	coordinates: data => {
+		return { coordinates: data.coordinates };
+	},
 	categories: data => {
 		return { categories: data.categories.map(e => e.title) };
 	},
@@ -25,6 +28,14 @@ const processors = {
 		};
 	}
 };
+
+function process(props, rawPageData) {
+	const data = { title: rawPageData.title };
+	return props.reduce((memo, prop) => {
+		if (processors[prop]) Object.assign(memo, processors[prop](rawPageData));
+		return memo;
+	}, data);
+}
 
 /**
  * Chain API requests together
@@ -45,28 +56,48 @@ export default class QueryChain {
 	 * Make combined API request
 	 * @param {Object} params - Extra params to pass to the API
 	 * @method QueryChain#request
-	 * @returns {Object}
+	 * @returns {Object|Array} - Data object(s) depending on where the chain was created from
 	 */
 	request(params = {}) {
 		const props = [...this.props];
 		const prop = props.join('|');
 		return api(this.apiOptions, Object.assign(this.params, { prop }, params))
-			.then(res => res.query.pages[this.id])
+			.then(res => {
+				if (this.id) {
+					return res.query.pages[this.id];
+				} else {
+					return Object.values(res.query.pages);
+				}
+			})
 			.then(data => {
-				return props.reduce((memo, prop) => {
-					if (processors[prop]) Object.assign(memo, processors[prop](data));
-					return memo;
-				}, {});
+				if (Array.isArray(data)) {
+					return data.map(e => process(props, e));
+				} else {
+					return process(props, data);
+				}
 			});
 	}
 
 	chain(prop, params = {}) {
-		this.props.add(prop);
+		if (prop) {
+			this.props.add(prop);
+		}
 		Object.assign(this.params, params);
 		return this;
 	}
 
-	// TODO: add geo
+	/**
+	 * @summary Finds pages near a specific point
+	 * @method QueryChain#geosearch
+	 * @returns {QueryChain}
+	 */
+	geosearch(latitude, longitude, radius) {
+		return this.chain(undefined, {
+			generator: 'geosearch',
+			ggsradius: radius,
+			ggscoord: `${latitude}|${longitude}`
+		});
+	}
 
 	/**
 	 * @summary Useful for extracting structured section content

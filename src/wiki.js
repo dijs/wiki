@@ -2,6 +2,7 @@
 
 import { pagination, api, aggregate } from './util';
 import wikiPage from './page';
+import QueryChain from './chain';
 
 /**
  * @namespace
@@ -298,6 +299,24 @@ export default function wiki(options = {}) {
 		return api(apiOptions, params);
 	}
 
+	/**
+	 * @summary Returns a QueryChain to efficiently query specific data
+	 * @method Wiki#chain
+	 * @returns {QueryChain}
+	 * @example
+	 * // Find summaries and images of places near a specific location
+	 * wiki()
+	 *	.chain()
+	 *	.geosearch(52.52437, 13.41053)
+	 *	.summary()
+	 *	.image()
+	 *	.coordinates()
+	 *	.request()
+	 */
+	function chain() {
+		return new QueryChain(apiOptions);
+	}
+
 	return {
 		search,
 		random,
@@ -312,6 +331,7 @@ export default function wiki(options = {}) {
 		opensearch,
 		prefixSearch,
 		mostViewed,
-		api: rawApi
+		api: rawApi,
+		chain
 	};
 }

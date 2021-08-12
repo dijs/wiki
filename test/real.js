@@ -485,4 +485,22 @@ describe('Live tests', () => {
 				data.langlinks[0].lang.should.equal('ab');
 			});
 	});
+
+	it('should support chaining from root', function() {
+		// Source: https://stackoverflow.com/questions/35826469/how-to-combine-two-wikipedia-api-calls-into-one/35830161
+		this.timeout(timeoutTime);
+		return wiki()
+			.chain()
+			.geosearch(52.52437, 13.41053)
+			.summary()
+			.image()
+			.coordinates()
+			.request()
+			.then(data => {
+				data[0].title.should.equal('Volksbühne');
+				data[0].extract.should.containEql('theater');
+				data[0].image.thumbnail.source.should.containEql('BChBerlJan08.JPG');
+				data[0].coordinates[0].lat.should.equal(52.52694444);
+			});
+	});
 });
