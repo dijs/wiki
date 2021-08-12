@@ -98,6 +98,35 @@ wiki({
 }).search('Winterfell');
 ```
 
+## Chain data requests together for more efficient applications
+
+Query a specific page:
+
+```js
+wiki()
+	.page('albert einstein')
+	.then(page =>
+		page
+			.chain()
+			.summary()
+			.image()
+			.links()
+			.request()
+	);
+```
+
+Or query many pages at once:
+
+```js
+wiki()
+	.chain()
+	.geosearch(52.52437, 13.41053)
+	.summary()
+	.image()
+	.coordinates()
+	.request();
+```
+
 ## Parsing Wiki Infobox Data
 
 The code Wikipedia uses for infobox data is strange and complex. So I have split the parsing code into another library. You can find it [here](https://github.com/dijs/infobox-parser).
