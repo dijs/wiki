@@ -460,4 +460,29 @@ describe('Live tests', () => {
 				)
 			);
 	});
+
+	it('should chain requests #159', function() {
+		this.timeout(timeoutTime);
+		return wiki()
+			.page('albert einstein')
+			.then(page =>
+				page
+					.chain()
+					.summary()
+					.images()
+					.links()
+					.categories()
+					.extlinks()
+					.langlinks()
+					.request()
+			)
+			.then(data => {
+				data.extract.should.containEql('physicist');
+				data.image.thumbnail.source.should.containEql('restoration.jpg');
+				data.links.should.containEql('1921 Nobel Peace Prize');
+				data.categories.should.containEql('Category:1879 births');
+				data.extlinks.should.containEql('http://einstein.biz/');
+				data.langlinks[0].lang.should.equal('ab');
+			});
+	});
 });

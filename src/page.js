@@ -2,6 +2,7 @@ import { aggregatePagination, pagination, api, parseContent } from './util';
 import infoboxParser from 'infobox-parser';
 import { tokenize, constructTree } from 'hyntax';
 import { parseCoordinates } from './coordinates';
+import QueryChain from './chain';
 
 const get = (obj, first, ...rest) => {
 	if (obj === undefined || first === undefined) return obj;
@@ -468,6 +469,15 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 
 	const page = Object.assign({}, raw);
 
+	/**
+	 * Returns a QueryChain for the page
+	 * @method WikiPage#chain
+	 * @returns {QueryChain}
+	 */
+	function chain() {
+		return new QueryChain(apiOptions, raw.pageid);
+	}
+
 	Object.assign(page, {
 		raw,
 		html,
@@ -489,7 +499,8 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 		rawInfo,
 		fullInfo,
 		tables,
-		url
+		url,
+		chain
 	});
 
 	return page;

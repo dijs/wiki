@@ -12,7 +12,7 @@ export function api(apiOptions, params = {}) {
 		{
 			format: 'json',
 			action: 'query',
-			redirects: ''
+			redirects: '1'
 		},
 		params
 	);
