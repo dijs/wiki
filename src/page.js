@@ -71,11 +71,10 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 	 * @return {Promise}
 	 */
 	function rawContent() {
-		return api(apiOptions, {
-			prop: 'extracts',
-			explaintext: '',
-			titles: raw.title
-		}).then(res => res.query.pages[raw.pageid].extract);
+		return chain()
+			.content()
+			.request()
+			.then(res => res.extract);
 	}
 
 	/**
@@ -86,12 +85,22 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 	 * @return {Promise}
 	 */
 	function summary() {
-		return api(apiOptions, {
-			prop: 'extracts',
-			explaintext: '',
-			exintro: '',
-			titles: raw.title
-		}).then(res => res.query.pages[raw.pageid].extract);
+		return chain()
+			.summary()
+			.request()
+			.then(res => res.extract);
+	}
+
+	/**
+	 * Main page image directly from API
+	 * @method WikiPage#pageImage
+	 * @returns URL
+	 */
+	function pageImage() {
+		return chain()
+			.image({ original: true, name: true })
+			.request()
+			.then(res => get(res, 'image', 'original', 'source'));
 	}
 
 	/**
@@ -141,9 +150,14 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 					// Sort images by what is seen first in page's info text
 					images.sort((a, b) => text.indexOf(b.title) - text.indexOf(a.title));
 					const image = images[0];
-					return image.imageinfo.length > 0
-						? image.imageinfo[0].url
-						: undefined;
+
+					const fallback =
+						image && image.imageinfo.length > 0
+							? image.imageinfo[0].url
+							: undefined;
+
+					// If no image could be found, fallback to page image api result
+					return pageImage().then(url => url || fallback);
 				});
 			}
 			const image = images.find(({ title }) => {
@@ -154,9 +168,14 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 					filename.replace(/\s/g, '_') === mainImageName
 				);
 			});
-			return image && image.imageinfo.length > 0
-				? image.imageinfo[0].url
-				: undefined;
+
+			const fallback =
+				image && image.imageinfo.length > 0
+					? image.imageinfo[0].url
+					: undefined;
+
+			// If no image could be found, fallback to page image api result
+			return pageImage().then(url => url || fallback);
 		});
 	}
 
@@ -179,18 +198,14 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 	/**
 	 * External links from page
 	 * @example
-	 * wiki.page('batman').then(page => page.externalLinks()).then(console.log);
+	 * wiki().page('batman').then(page => page.externalLinks()).then(console.log);
+	 * // or
+	 * wiki().chain().search('batman').extlinks().request()
 	 * @method WikiPage#externalLinks
 	 * @return {Promise}
 	 */
 	function externalLinks() {
-		return api(apiOptions, {
-			prop: 'extlinks',
-			ellimit: 'max',
-			titles: raw.title
-		}).then(res =>
-			(res.query.pages[raw.pageid].extlinks || []).map(link => link['*'])
-		);
+		return chain().direct('extlinks');
 	}
 
 	function hasClass(node, className) {
@@ -229,7 +244,7 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 	/**
 	 * References from page
 	 * @example
-	 * wiki.page('batman').then(page => page.references()).then(console.log);
+	 * wiki().page('batman').then(page => page.references()).then(console.log);
 	 * @method WikiPage#references
 	 * @return {Promise}
 	 */
@@ -271,7 +286,7 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 	/**
 	 * Paginated links from page
 	 * @example
-	 * wiki.page('batman').then(page => page.links()).then(console.log);
+	 * wiki().page('batman').then(page => page.links()).then(console.log);
 	 * @method WikiPage#links
 	 * @param  {Boolean} [aggregated] - return all links (default is true)
 	 * @param  {Number} [limit] - number of links per page
@@ -297,7 +312,7 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 	/**
 	 * Paginated categories from page
 	 * @example
-	 * wiki.page('batman').then(page => page.categories()).then(console.log);
+	 * wiki().page('batman').then(page => page.categories()).then(console.log);
 	 * @method WikiPage#categories
 	 * @param  {Boolean} [aggregated] - return all categories (default is true)
 	 * @param  {Number} [limit] - number of categories per page
@@ -306,11 +321,9 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 	function categories(aggregated = true, limit = 100) {
 		const _pagination = pagination(
 			apiOptions,
-			{
-				prop: 'categories',
-				pllimit: limit,
-				titles: raw.title
-			},
+			chain()
+				.categories(limit)
+				.params(),
 			res =>
 				(res.query.pages[raw.pageid].categories || []).map(
 					category => category.title
@@ -330,17 +343,13 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 	 * @return {Promise}
 	 */
 	function coordinates() {
-		return api(apiOptions, {
-			prop: 'coordinates',
-			titles: raw.title
-		}).then(res => {
-			const page = res.query.pages[raw.pageid];
-			if (page.coordinates) {
-				return page.coordinates[0];
-			}
-			// No coordinates for this page, check infobox for deprecated version
-			return info().then(data => parseCoordinates(data));
-		});
+		return chain()
+			.direct('coordinates')
+			.then(coords => {
+				if (coords) return coords;
+				// No coordinates for this page, check infobox for deprecated version
+				return info().then(data => parseCoordinates(data));
+			});
 	}
 
 	function rawInfo(title) {
@@ -371,7 +380,7 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 	 * Get general information from page, with optional specifc property
 	 * @deprecated This method will be dropped and replaced with the `fullInfo` implementation in v5
 	 * @example
-	 * new Wiki().page('Batman').then(page => page.info('alter_ego'));
+	 * wiki().page('Batman').then(page => page.info('alter_ego'));
 	 * @method WikiPage#info
 	 * @param  {String} [key] - Information key. Falsy keys are ignored
 	 * @return {Promise} - info Object contains key/value pairs of infobox data, or specific value if key given
@@ -442,20 +451,7 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 	 * @return {Promise} - includes link objects { lang, title, url }
 	 */
 	function langlinks() {
-		return api(apiOptions, {
-			prop: 'langlinks',
-			lllimit: 'max',
-			llprop: 'url',
-			titles: raw.title
-		}).then(res =>
-			res.query.pages[raw.pageid].langlinks.map(link => {
-				return {
-					lang: link.lang,
-					title: link['*'],
-					url: link.url
-				};
-			})
-		);
+		return chain().direct('langlinks');
 	}
 
 	/**
@@ -498,6 +494,7 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 		langlinks,
 		rawInfo,
 		fullInfo,
+		pageImage,
 		tables,
 		url,
 		chain

@@ -100,6 +100,13 @@ describe('Page Methods', () => {
 	});
 	setupPolly.afterEach();
 
+	beforeEach(function(done) {
+		this.timeout(timeoutTime);
+		setTimeout(() => {
+			done();
+		}, 1000);
+	});
+
 	before(done => {
 		wiki()
 			.page('Luke Skywalker')
@@ -117,7 +124,7 @@ describe('Page Methods', () => {
 	});
 
 	it('should get html from an article', function() {
-		// this.timeout(timeoutTime);
+		this.timeout(timeoutTime);
 		return luke.html().should.eventually.containEql('<b>Luke Skywalker</b>');
 	});
 
@@ -140,7 +147,7 @@ describe('Page Methods', () => {
 	it('should get raw images from an article', () => {
 		return luke.rawImages().then(images => {
 			const lightsaber = images.find(
-				image => image.title === 'File:Lightsaber blue.svg'
+				image => image.title === 'File:Luke Skywalker.png'
 			);
 			lightsaber.should.exist;
 		});
@@ -162,7 +169,8 @@ describe('Page Methods', () => {
 			);
 	});
 
-	it('should get links from an article', () => {
+	it('should get links from an article', function() {
+		this.timeout(timeoutTime);
 		return luke.links().should.eventually.containEql('Jedi');
 	});
 
@@ -173,7 +181,8 @@ describe('Page Methods', () => {
 			.containEql('A-wing');
 	});
 
-	it('should get categories from an article', () => {
+	it('should get categories from an article', function() {
+		this.timeout(timeoutTime);
 		return luke
 			.categories()
 			.should.eventually.containEql('Category:Fictional farmers');
@@ -183,10 +192,11 @@ describe('Page Methods', () => {
 		return luke
 			.categories(false, 1)
 			.should.eventually.have.property('results')
-			.containEql('Category:Fictional aviators');
+			.containEql('Category:Characters created by George Lucas');
 	});
 
 	it('should get backlinks from an article', function() {
+		this.timeout(timeoutTime);
 		return luke.backlinks().should.eventually.containEql('Jedi');
 	});
 
@@ -214,8 +224,8 @@ describe('Page Methods', () => {
 			.page('Texas')
 			.then(texas => texas.coordinates())
 			.should.eventually.have.properties({
-				lat: 31,
-				lon: -100
+				lat: 31.4757,
+				lon: -99.3312
 			});
 	});
 
@@ -256,14 +266,6 @@ describe('Page Methods', () => {
 			.then(father => {
 				father.should.equal('George VI');
 			});
-	});
-
-	it('should handle empty images properly', () => {
-		const searchImages = term =>
-			wiki()
-				.page(term)
-				.then(page => page.images());
-		return searchImages('Drangue').should.eventually.have.property('length', 0);
 	});
 
 	it('should pass headers to API', () => {

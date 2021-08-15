@@ -241,11 +241,10 @@ export default function wiki(options = {}) {
 	 */
 	function mostViewed() {
 		return api(apiOptions, {
-			action: 'query',
 			list: 'mostviewed'
-		}).then(res =>
-			res.query.mostviewed.map(({ title, count }) => ({ title, count }))
-		);
+		}).then(res => {
+			return res.query.mostviewed.map(({ title, count }) => ({ title, count }));
+		});
 	}
 
 	/**

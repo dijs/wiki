@@ -11,10 +11,22 @@ const processors = {
 		return { extlinks: data.extlinks.map(e => e['*']) };
 	},
 	langlinks: data => {
-		return { langlinks: data.langlinks };
+		return {
+			langlinks: data.langlinks.map(link => {
+				return {
+					lang: link.lang,
+					title: link['*'],
+					url: link.url
+				};
+			})
+		};
 	},
 	coordinates: data => {
-		return { coordinates: data.coordinates };
+		if (data.coordinates) {
+			return { coordinates: data.coordinates[0] };
+		} else {
+			return {};
+		}
 	},
 	categories: data => {
 		return { categories: data.categories.map(e => e.title) };
@@ -23,7 +35,8 @@ const processors = {
 		return {
 			image: {
 				name: data.pageimage,
-				thumbnail: data.thumbnail
+				thumbnail: data.thumbnail,
+				original: data.original
 			}
 		};
 	}
@@ -48,20 +61,33 @@ export default class QueryChain {
 	constructor(apiOptions, id) {
 		this.id = id;
 		this.apiOptions = apiOptions;
-		this.params = { pageids: id };
+		this._params = { pageids: id };
 		this.props = new Set();
 	}
 
+	params() {
+		const prop = [...this.props].join('|');
+		return Object.assign({}, this._params, { prop });
+	}
+
+	direct(key, ...args) {
+		return this[key](...args)
+			.request()
+			.then(res => res[key]);
+	}
+
+	// TODO: Add page searches for root calls - generators
+
+	// TODO: Add pagination helper method
+
 	/**
 	 * Make combined API request
-	 * @param {Object} params - Extra params to pass to the API
 	 * @method QueryChain#request
 	 * @returns {Object|Array} - Data object(s) depending on where the chain was created from
 	 */
-	request(params = {}) {
+	request() {
 		const props = [...this.props];
-		const prop = props.join('|');
-		return api(this.apiOptions, Object.assign(this.params, { prop }, params))
+		return api(this.apiOptions, this.params())
 			.then(res => {
 				if (this.id) {
 					return res.query.pages[this.id];
@@ -82,7 +108,7 @@ export default class QueryChain {
 		if (prop) {
 			this.props.add(prop);
 		}
-		Object.assign(this.params, params);
+		Object.assign(this._params, params);
 		return this;
 	}
 
@@ -96,6 +122,14 @@ export default class QueryChain {
 			generator: 'geosearch',
 			ggsradius: radius,
 			ggscoord: `${latitude}|${longitude}`
+		});
+	}
+
+	search(query, limit = 50) {
+		return this.chain(undefined, {
+			list: 'search',
+			srsearch: query,
+			srlimit: limit
 		});
 	}
 
@@ -179,7 +213,7 @@ export default class QueryChain {
 	}
 
 	/**
-	 * @summary Extract language links
+	 * @summary Get list of links to different translations
 	 * @method QueryChain#langlinks
 	 * @returns {QueryChain}
 	 */

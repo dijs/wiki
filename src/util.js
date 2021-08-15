@@ -26,10 +26,11 @@ export function api(apiOptions, params = {}) {
 		qs.origin = apiOptions.origin;
 	}
 	const url = `${apiOptions.apiUrl}?${querystring.stringify(qs)}`;
-	return fetch(
-		url,
-		Object.assign({ headers: apiOptions.headers }, fetchOptions)
-	)
+	const headers = Object.assign(
+		{ 'User-Agent': 'WikiJS Bot v1.0' },
+		apiOptions.headers
+	);
+	return fetch(url, Object.assign({ headers }, fetchOptions))
 		.then(res => {
 			if (res.ok) {
 				return res.json();
