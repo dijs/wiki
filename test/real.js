@@ -24,7 +24,7 @@ describe('Live tests', () => {
 		this.timeout(timeoutTime);
 		setTimeout(() => {
 			done();
-		}, 1000);
+		}, 100);
 	});
 
 	it.skip('should handle error response', function(done) {
@@ -396,23 +396,18 @@ describe('Live tests', () => {
 			});
 	});
 
-	// Not parsing...
-	it.skip('should return references in correct order', function() {
+	it('should return references in correct order', function() {
 		this.timeout(timeoutTime);
 		return wiki()
 			.page('Elon Musk')
 			.then(page => page.references())
 			.then(refs => {
 				refs[0].should.equal(
-					'https://www.forbes.com/sites/trulia/2013/11/01/billionaire-tesla-ceo-elon-musk-buys-home/'
+					'https://www.independent.co.uk/life-style/elon-musk-son-grimes-childcare-interview-a9638321.html'
 				);
-				refs[1].should.equal(
-					'https://web.archive.org/web/20150207033543/http://www.bloomberg.com/news/videos/b/6e27fcba-309d-494e-b87d-c73fb8bb1750'
+				refs[3].should.equal(
+					'https://www.fastcompany.com/1367866/tesla-lawsuit-drama-ends-five-company-founders-emerge'
 				);
-				refs[2].should.equal(
-					'https://www.bloomberg.com/news/videos/b/6e27fcba-309d-494e-b87d-c73fb8bb1750'
-				);
-				refs[3].should.equal('https://www.forbes.com/profile/elon-musk/');
 			});
 	});
 
@@ -437,8 +432,7 @@ describe('Live tests', () => {
 			});
 	});
 
-	// TODO: new html parsing is NOT working
-	it.skip('should parse external references', function() {
+	it('should parse external references', function() {
 		this.timeout(timeoutTime);
 		return wiki()
 			.page('Batman')
@@ -447,7 +441,7 @@ describe('Live tests', () => {
 				refs.should.containEql(
 					'http://www.behindthevoiceactors.com/characters/Batman/Batman/'
 				);
-				refs.length.should.equal(140);
+				refs.length.should.equal(143);
 			});
 	});
 

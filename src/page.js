@@ -241,6 +241,17 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 		return null;
 	}
 
+	function findNodes(node, predicate, nodes) {
+		if (predicate(node)) {
+			nodes.push(node);
+		}
+		if (node.content.children) {
+			for (let child of node.content.children) {
+				findNodes(child, predicate, nodes);
+			}
+		}
+	}
+
 	/**
 	 * References from page
 	 * @example
@@ -257,14 +268,23 @@ export default function wikiPage(rawPageInfo, apiOptions) {
 			})
 			.then(ast => {
 				const links = [];
-				const refs = findNode(
+				const refs = [];
+				// There can be mulitple reference sections
+				findNodes(
 					ast,
-					node => isTag(node) && hasClass(node, 'references')
+					node =>
+						isTag(node) && hasName(node, 'ol') && hasClass(node, 'references'),
+					refs
 				);
-				if (refs) {
-					for (let ref of refs.content.children[0].content.children) {
+				for (let ref of refs) {
+					const items = ref.content.children.filter(
+						el => isTag(el) && hasName(el, 'li') && el.content.children
+					);
+					for (let item of items) {
+						// The reference was moved under a span under li
+						const span = item.content.children[2];
 						const cite = findNode(
-							ref,
+							span,
 							node => isTag(node) && hasName(node, 'cite')
 						);
 						if (cite) {

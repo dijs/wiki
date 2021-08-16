@@ -104,7 +104,7 @@ describe('Page Methods', () => {
 		this.timeout(timeoutTime);
 		setTimeout(() => {
 			done();
-		}, 1000);
+		}, 100);
 	});
 
 	before(done => {
