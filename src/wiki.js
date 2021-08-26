@@ -20,7 +20,7 @@ import QueryChain from './chain';
  * will be set.
  */
 const defaultOptions = {
-	apiUrl: 'http://en.wikipedia.org/w/api.php',
+	apiUrl: '//en.wikipedia.org/w/api.php',
 	origin: '*'
 };
 
