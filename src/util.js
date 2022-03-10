@@ -27,7 +27,7 @@ export function api(apiOptions, params = {}) {
 	}
 	const url = `${apiOptions.apiUrl}?${querystring.stringify(qs)}`;
 	const headers = Object.assign(
-		{ 'User-Agent': 'WikiJS Bot v1.0' },
+		{},
 		apiOptions.headers
 	);
 	return fetch(url, Object.assign({ headers }, fetchOptions))
