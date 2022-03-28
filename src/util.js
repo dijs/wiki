@@ -30,7 +30,7 @@ export function api(apiOptions, params = {}) {
 		{ 'User-Agent': 'WikiJS Bot v1.0' },
 		apiOptions.headers
 	);
-	return fetch(url, Object.assign({ headers }, fetchOptions))
+	return fetch(url, Object.assign({ headers }, fetchOptions, {agent: apiOptions.agent}))
 		.then(res => {
 			if (res.ok) {
 				return res.json();

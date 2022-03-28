@@ -98,6 +98,18 @@ wiki({
 }).search('Winterfell');
 ```
 
+## Usage with Proxy
+You can use proxy with `https-proxy-agent`
+```js
+const HttpsProxyAgent = require('https-proxy-agent')
+
+wiki({agent: new HttpsProxyAgent('http://address:port')})
+    .page('Batman')
+    .then(page => page.info('alterEgo'))
+    .then(console.log) // Bruce Wayne
+
+```
+
 ## Chain data requests together for more efficient applications
 
 Query a specific page:
