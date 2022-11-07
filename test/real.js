@@ -525,4 +525,23 @@ describe('Live tests', () => {
 					);
 			});
 	});
+
+	it('general api query should be available for use #172', function() {
+		this.timeout(timeoutTime);
+		return wiki({ apiUrl: 'https://starcitizen.tools/api.php' })
+			.api({
+				format: 'json',
+				prop: '',
+				list: 'categorymembers',
+				cmtitle: 'Category:Ships',
+				cmprop: 'ids|title',
+				cmnamespace: '0',
+				cmlimit: '500'
+			})
+			.then(data => {
+				return data.query.categorymembers[13].title.should.equal(
+					'A2 Hercules Starlifter'
+				);
+			});
+	});
 });
