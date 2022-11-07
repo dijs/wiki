@@ -544,4 +544,15 @@ describe('Live tests', () => {
 				);
 			});
 	});
+
+	it('should be able to export page as XML', function() {
+		this.timeout(timeoutTime);
+		return wiki()
+			.exportXml('Elizabeth_II')
+			.then(data => {
+				return data
+					.indexOf('Queen of the United Kingdom from 1952 to 2022')
+					.should.equal(3113);
+			});
+	});
 });

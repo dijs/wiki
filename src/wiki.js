@@ -1,5 +1,8 @@
 'use strict';
 
+import fetch from 'cross-fetch';
+import querystring from 'querystring';
+
 import { pagination, api, aggregate } from './util';
 import wikiPage from './page';
 import QueryChain from './chain';
@@ -316,6 +319,31 @@ export default function wiki(options = {}) {
 		return new QueryChain(apiOptions);
 	}
 
+	/**
+	 * @summary Returns the Export XML for a page to be used for importing into another MediaWiki
+	 * @method Wiki#exportXml
+	 * @param {string} pageName
+	 * @returns {Promise<string>} Export XML
+	 */
+	function exportXml(pageName) {
+		const qs = {
+			title: 'Special:Export',
+			pages: pageName
+		};
+		// The replace here is kinda hacky since
+		// the export action does not use
+		// the normal api endpoint.
+		const url = `${apiOptions.apiUrl.replace(
+			'api',
+			'index'
+		)}?${querystring.stringify(qs)}`;
+		const headers = Object.assign(
+			{ 'User-Agent': 'WikiJS Bot v1.0' },
+			apiOptions.headers
+		);
+		return fetch(url, { headers }).then(res => res.text());
+	}
+
 	return {
 		search,
 		random,
@@ -331,6 +359,7 @@ export default function wiki(options = {}) {
 		prefixSearch,
 		mostViewed,
 		api: rawApi,
-		chain
+		chain,
+		exportXml
 	};
 }
