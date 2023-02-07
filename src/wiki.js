@@ -3,9 +3,9 @@
 import fetch from 'cross-fetch';
 import querystring from 'querystring';
 
-import { pagination, api, aggregate } from './util';
-import wikiPage from './page';
-import QueryChain from './chain';
+import { pagination, api, aggregate } from './util.js';
+import wikiPage from './page.js';
+import QueryChain from './chain.js';
 
 /**
  * @namespace

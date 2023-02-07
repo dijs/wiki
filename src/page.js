@@ -1,8 +1,8 @@
-import { aggregatePagination, pagination, api, parseContent } from './util';
 import infoboxParser from 'infobox-parser';
 import { tokenize, constructTree } from 'hyntax';
-import { parseCoordinates } from './coordinates';
-import QueryChain from './chain';
+import { aggregatePagination, pagination, api, parseContent } from './util.js';
+import { parseCoordinates } from './coordinates.js';
+import QueryChain from './chain.js';
 
 const get = (obj, first, ...rest) => {
 	if (obj === undefined || first === undefined) return obj;

@@ -2,7 +2,7 @@
 	"name": "wikijs",
 	"description": "Mediawiki interface for Node and Web",
 	"author": "Richard van der Dys",
-	"version": "6.4.0",
+	"version": "6.4.1",
 	"keywords": [
 		"wiki",
 		"wikipedia",
@@ -18,7 +18,6 @@
 	"engines": {
 		"node": ">=0.10.4"
 	},
-	"main": "./dist/wiki.js",
 	"funding": {
 		"type": "individual",
 		"url": "https://www.buymeacoffee.com/2tmRKi9"
@@ -32,26 +31,22 @@
 		"@pollyjs/adapter-node-http": "^2.5.0",
 		"@pollyjs/core": "^2.5.0",
 		"@pollyjs/persister-fs": "^2.1.0",
-		"babel": "^6.23.0",
-		"babel-cli": "^6.24.0",
-		"babel-preset-babili": "0.0.12",
-		"babel-preset-latest": "^6.24.0",
-		"babel-register": "^6.24.0",
 		"coveralls": "^2.11.9",
 		"eslint": "^4.19.1",
 		"gh-pages": "^1.0.0",
 		"istanbul": "^1.0.0-alpha.2",
 		"jsdoc": "^3.3.0-beta3",
 		"minami": "^1.1.0",
-		"mocha": "^2.5.3",
+		"mocha": "^10.2.0",
 		"nock": "^10.0.2",
 		"prettier": "1.15.3",
-		"should": "^9.0.0"
+		"should": "^9.0.0",
+		"typescript": "^4.9.5"
 	},
 	"typings": "./index.d.ts",
 	"scripts": {
-		"build": "babel src --out-dir dist --source-maps true",
-		"test": "node_modules/.bin/_mocha --no-colors --compilers js:babel-register",
+		"build": "rm -fr dist/* && tsc -p tsconfig.json && tsc -p tsconfig-cjs.json && bash fixup.sh",
+		"test": "mocha",
 		"cover": "babel-node ./node_modules/istanbul/lib/cli cover node_modules/.bin/_mocha",
 		"docs": "node_modules/.bin/jsdoc --configure .jsdoc.json --verbose",
 		"lint": "eslint src",
@@ -66,5 +61,14 @@
 	},
 	"publishConfig": {
 		"access": "public"
+	},
+	"type": "module",
+	"main": "dist/cjs/wiki.js",
+	"module": "dist/mjs/wiki.js",
+	"exports": {
+		".": {
+			"import": "./dist/mjs/wiki.js",
+			"require": "./dist/cjs/wiki.js"
+		}
 	}
 }

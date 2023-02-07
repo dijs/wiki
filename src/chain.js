@@ -1,4 +1,4 @@
-import { api } from './util';
+import { api } from './util.js';
 
 const processors = {
 	extracts: data => {

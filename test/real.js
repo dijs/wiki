@@ -1,9 +1,9 @@
 import should from 'should';
-import wiki from '../src/wiki';
-
 import { Polly, setupMocha as setupPolly } from '@pollyjs/core';
 import NodeHttpAdapter from '@pollyjs/adapter-node-http';
 import FSPersister from '@pollyjs/persister-fs';
+
+import wiki from '../src/wiki.js';
 
 Polly.register(NodeHttpAdapter);
 Polly.register(FSPersister);
