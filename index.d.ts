@@ -70,6 +70,17 @@ declare module 'wikijs' {
 		imageinfo: object[];
 	}
 
+	/**
+	 * Page section object
+	 *
+	 * @interface PageSection
+	 */
+	interface PageSection {
+		title: string;
+		content: string;
+		items?: PageSection[];
+	}
+
 	interface Result {
 		results: string[];
 		query: string;
@@ -116,12 +127,12 @@ declare module 'wikijs' {
 		categories(aggregated?: boolean, limit?: number): Promise<string[]>;
 
 		/**
-		 * Text content from page
+		 * Array of page sections
 		 *
-		 * @returns {Promise<string>}
+		 * @returns {Promise<PageSection[]>}
 		 * @memberof Page
 		 */
-		content(): Promise<string>;
+		content(): Promise<PageSection[]>;
 
 		/**
 		 * Geographical coordinates from page
